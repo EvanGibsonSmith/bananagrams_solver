@@ -5,7 +5,7 @@ import java.util.Random;
 public class TileBag {
     Tile[] tiles;
     int maxSize;
-    int nextIndex = 0;
+    int nextIndex;
     Random r = new Random();
 
     /**
@@ -17,6 +17,8 @@ public class TileBag {
     public TileBag(Tile[] tiles) {
         this.tiles = tiles;
         this.maxSize = tiles.length;
+        // since bag begins full nextIndex is the length
+        this.nextIndex = tiles.length;
     }
 
     /**
@@ -54,8 +56,9 @@ public class TileBag {
         int tileIndex = r.nextInt(tiles.length);
         Tile grabbedTile = tiles[tileIndex];
         // to fill gap made place last tile in this spot
-        tiles[tileIndex] = tiles[nextIndex];
+        tiles[tileIndex] = tiles[tiles.length-1]; // take final spot and place it here to leave array compact
         tiles[tiles.length-1] = null;
+        --nextIndex; // end is cleared so the next index decrements
         return grabbedTile;
     }
 
@@ -63,9 +66,13 @@ public class TileBag {
         return (maxSize==nextIndex);
     }
 
+    public Boolean isEmpty() {
+        return (nextIndex==0);
+    }
+
     public void addTile(Tile t) {
         tiles[nextIndex] = t;
-        ++this.nextIndex;
         if (isFull()) {throw new ArrayIndexOutOfBoundsException("Bag is full, cannot add another tile");}
+        ++this.nextIndex;
     }
 }

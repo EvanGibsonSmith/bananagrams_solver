@@ -2,6 +2,8 @@
 package test;
 import java.util.HashSet;
 
+import org.junit.*;
+
 import src.main.Grid;
 import src.main.Location;
 import src.main.Tile;

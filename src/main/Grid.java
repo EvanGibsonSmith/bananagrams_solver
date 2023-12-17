@@ -250,7 +250,7 @@ public class Grid {
             Location[] adj = {new Location(sq.getRow()+1, sq.getColumn()),
                               new Location(sq.getRow()-1, sq.getColumn()),
                               new Location(sq.getRow(),   sq.getColumn()+1),
-                              new Location(sq.getRow(),   sq.getColumn()-1)}
+                              new Location(sq.getRow(),   sq.getColumn()-1)};
 
             for (Location tile: adj) {
                 if (filledSquares.containsKey(adj)) { // check if the tile is blank
