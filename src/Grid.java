@@ -8,19 +8,109 @@ import java.util.Set;
 import java.util.HashMap;
 
 public class Grid {
-    private ArrayList<ArrayList<Tile>> grid = new ArrayList<>(); // TODO needed at all?
+    private Location topLeft = null;
+    private Location bottomRight = null;
     private HashSet<String> wordsSet; 
-    private HashMap<Location, Tile> filledSquares = new HashMap<>();
+    public HashMap<Location, Tile> filledSquares = new HashMap<>(); // TODO make private later
 
     public Grid(HashSet<String> wordsSet) {
         this.wordsSet = wordsSet;
     }
 
+    /**
+     * Gets the top left location bounding the letters
+     * @return Location topLeft
+     */
+    public Location getTopLeft() {
+        return topLeft;
+    }
+
+    /**
+     * Gets the bottonRight location bounding the letters
+     * @return Location bottomRight
+     */
+    public Location getBottomRight() {
+        return bottomRight;
+    }
+
+    /**
+     * Updates the topLeft and bottomRight if the location given is outside of those ranges. 
+     * This function should be called when a new location is added and needs to check the bounding box
+     */
+    private void updateBoundingBox(Location loc) {
+        // edge case: if they are null (nothing placed). 
+        // Technically both should get set at the same time but I have them seperate
+        if (this.topLeft==null) {this.topLeft=loc;} if (this.bottomRight==null) {this.bottomRight=loc;}
+
+        // update topLeft
+        if (loc.getRow() < this.topLeft.getRow() && loc.getColumn() < this.topLeft.getColumn()) {
+            this.topLeft = loc;
+        }
+        else if (loc.getRow() < this.topLeft.getRow()) {
+            this.topLeft = new Location(loc.getRow(), this.topLeft.getColumn()); // new row, but column remains the same
+        }
+        else if (loc.getColumn() < this.topLeft.getColumn()) {
+            this.topLeft = new Location(this.topLeft.getRow(), loc.getColumn()); // new column, but row remains the same
+        }
+
+        // update bottomRight
+        if (loc.getRow() > this.bottomRight.getRow() && loc.getColumn() > this.bottomRight.getColumn()) {
+            this.bottomRight = loc;
+        }
+        else if (loc.getRow() > this.bottomRight.getRow()) {
+            this.bottomRight = new Location(loc.getRow(), this.bottomRight.getColumn()); // new row, but column remains the same
+        }
+        else if (loc.getColumn() > this.bottomRight.getColumn()) {
+            this.bottomRight = new Location(this.bottomRight.getRow(), loc.getColumn()); // new column, but row remains the same
+        }
+    }
+
+    /**
+     * Takes the tiles and gives a bounding box of the locations with tiles actually within them.
+     * TODO TEST THIS AND DOCUMENT
+     * @return
+     */
+    /**public Location[] boundingBox() {
+        int maxX = 0; int minX = 0;
+        int maxY = 0; int minY = 0;
+        for (Location loc: filledSquares.keySet()) {
+            if (loc.getRow() > maxX) {maxX = loc.getRow();}
+            else if (loc.getRow() < minX) {minX = loc.getRow();}
+
+            if (loc.getRow() > maxY) {maxY = loc.getRow();}
+            else if (loc.getRow() > maxY) {maxY = loc.getRow();}
+        }
+
+        return {new Location(maxX, minY); new Location(maxX, minY);};
+    }**/
+
+    @Override
+    public String toString() {
+        String out = "";
+        if (topLeft==null || bottomRight==null) {return "";}
+
+        int rowMin = topLeft.row; int rowMax = bottomRight.row;
+        int colMin = topLeft.column; int colMax = bottomRight.column;
+        for (int row=rowMin; row<=rowMax; ++row) {
+            for (int col=colMin; col<=colMax; ++col) {
+                Location thisLoc = new Location(row, col);
+                if (filledSquares.containsKey(thisLoc)) {
+                    out += " " + filledSquares.get(thisLoc).toString().toUpperCase();
+                }
+                else {out += " _";}
+            }
+            out += "\n";
+        }
+        return out;
+    }
+
     /** Places a tile on the grid, does not check if it is valid (could be "floating", invalid words, etc)
      * Does not check if the square already has a tile on it. If tile is replaced, that tile placed on may "dissapear"
     */
-    private void placeUnsafe(Location loc, Tile tile) {
+    // TODO make private?
+    public void placeUnsafe(Location loc, Tile tile) {
         filledSquares.put(loc, tile);
+        updateBoundingBox(loc);
     }
     
 

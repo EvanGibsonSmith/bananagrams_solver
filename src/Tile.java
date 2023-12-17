@@ -6,6 +6,11 @@ public class Tile {
         this.letter = letter;
     }
 
+    @Override
+    public String toString() {
+        return Character.toString(letter);
+    }
+
     public char getLetter() {
         return letter;
     }
