@@ -122,15 +122,18 @@ public class Grid {
      * @return null if this tile is not the start of a word, the word if it is
      */
     private String getWordRight(Location loc) { // TODO TEST ME
-        if (!filledSquares.get(loc.left()).isEmpty() || filledSquares.get(loc).isEmpty()) {
+        if (!(filledSquares.get(loc)!=null && filledSquares.get(loc.left())==null)) { // if NOT conditions making location START of a word
             return null; // if left of this tile not empty or this tile is empty no word can be formed
         }
         String word = ""; // build word from letter now
         Location cursor = loc;
-        while (!filledSquares.get(cursor).isEmpty()) { // if cursor not empty add to word
+        while (filledSquares.get(cursor)!=null) { // if cursor not empty add to word
             word += filledSquares.get(cursor).getLetter();
             cursor = cursor.right();
         }
+        
+        // if the length of the word is 1, is doesn't need to be checked with the dictionary because it's already connected somewhere else
+        if (word.length()==1) {return null;} 
         return word;
     }
 
@@ -140,15 +143,18 @@ public class Grid {
      * @return null if this tile is not the start of a word, the word if it is
      */
     private String getWordDown(Location loc) {
-        if (!filledSquares.get(loc.below()).isEmpty() || filledSquares.get(loc).isEmpty()) {
+        if (!(filledSquares.get(loc)!=null && filledSquares.get(loc.above())==null)) { // if NOT conditions making location START of a word
             return null; // if left of this tile not empty or this tile is empty no word can be formed
         }
-         String word = ""; // build word from letter now
+        String word = ""; // build word from letter now
         Location cursor = loc;
-        while (!filledSquares.get(cursor).isEmpty()) { // if cursor not empty add to word
+        while (filledSquares.get(cursor)!=null) { // if cursor not empty add to word
             word += filledSquares.get(cursor).getLetter();
-            cursor = cursor.right();
+            cursor = cursor.below();
         }
+
+        // if the length of the word is 1, is doesn't need to be checked with the dictionary because it's already connected somewhere else
+        if (word.length()==1) {return null;} 
         return word;
     }
 
@@ -157,7 +163,7 @@ public class Grid {
      * In a valid board these should all be acceptable words.
      * @return
      */
-    private ArrayList<String> getWordsPlayed() {  // TODO TEST ME
+    public ArrayList<String> getWordsPlayed() {  // TODO TEST ME  MAKE PRIVATE LATER?
         ArrayList<String> words = new ArrayList<>();
         for (Location loc: filledSquares.keySet()) {
             String downWord = getWordDown(loc);
@@ -178,7 +184,7 @@ public class Grid {
      * Does not check for disconnected island. Just iterates through the letter and each of their words
      * @return True if all of the words are valid, False is not 
      */
-    private Boolean validWords() {
+    public Boolean validWords() { // TODO make private again, for testing.
         ArrayList<String> words = getWordsPlayed();
         for (String word: words) {
             if (!this.wordsSet.contains(word)) { // if one of the words is not valid then board is not valid.
@@ -192,7 +198,7 @@ public class Grid {
      * TODO fill this documentation including big O
      * @return
      */
-    private Boolean validIslands() {
+    public Boolean validIslands() { // TODO make this private again, this is for testing.
         if (filledSquares.keySet().iterator().hasNext()==false) {return true;} // base case. If nothing placed, everything is connected        
         
         Location rootLocation = filledSquares.keySet().iterator().next(); // guarenteed to exist because base case covers if not
