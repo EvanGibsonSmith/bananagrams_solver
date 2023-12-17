@@ -1,4 +1,4 @@
-package src;
+package src.main;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -184,7 +184,7 @@ public class Grid {
      * Does not check for disconnected island. Just iterates through the letter and each of their words
      * @return True if all of the words are valid, False is not 
      */
-    public Boolean validWords() { // TODO make private again, for testing.
+    public Boolean validWords() { // TODO make private again/ for testing. Or make __validWords instead?
         ArrayList<String> words = getWordsPlayed();
         for (String word: words) {
             if (!this.wordsSet.contains(word)) { // if one of the words is not valid then board is not valid.

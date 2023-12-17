@@ -1,6 +1,6 @@
 package test;
 
-import src.Location;
+import src.main.Location;
 
 public class LocationTest {
     
