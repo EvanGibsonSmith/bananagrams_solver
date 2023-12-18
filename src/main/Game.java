@@ -10,7 +10,9 @@ public class Game {
     }
 
     public Boolean gameComplete() {
-        return true; // STUB
+        for (Grid g: this.grids) {
+
+        }
     }
     
 }

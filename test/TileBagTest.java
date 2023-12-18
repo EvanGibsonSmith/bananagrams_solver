@@ -6,7 +6,6 @@ import src.main.Tile;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,8 +23,8 @@ class TileBagTest {
 
         assertTrue(bag.isFull());
 
-        bag.grabNextTile();
-        bag.grabNextTile();
+        bag.grabTile();
+        bag.grabTile();
 
         assertFalse(bag.isFull());
 
@@ -49,15 +48,15 @@ class TileBagTest {
 
         assertFalse(bag.isEmpty());
 
-        bag.grabNextTile();
-        bag.grabNextTile();
+        bag.grabTile();
+        bag.grabTile();
 
         assertFalse(bag.isEmpty());
 
-        bag.grabNextTile();
-        bag.grabNextTile();
-        bag.grabNextTile();
-        bag.grabNextTile();
+        bag.grabTile();
+        bag.grabTile();
+        bag.grabTile();
+        bag.grabTile();
 
         assertTrue(bag.isEmpty());
 
@@ -65,7 +64,7 @@ class TileBagTest {
 
         assertFalse(bag.isEmpty());
 
-        bag.grabNextTile();
+        bag.grabTile();
 
         assertTrue(bag.isEmpty());
 
@@ -82,13 +81,13 @@ class TileBagTest {
         assertTrue(bag.isFull()); // bag has only one element made so it begins full
 
         Tile nextTile;
-        nextTile = bag.grabNextTile();
+        nextTile = bag.grabTile();
         assertEquals(nextTile.getLetter(), 'a'); // always grabs A (only item in bag, so while random this is guarenteed)
         assertEquals(nextTile, new Tile('a')); // testing if tile object equals works (more of tile test) 
 
         bag.addTile(new Tile('b')); // now bag only has b
 
-        nextTile = bag.grabNextTile(); // always will be b, despite randomness
+        nextTile = bag.grabTile(); // always will be b, despite randomness
 
         assertEquals(nextTile.getLetter(), 'b'); // always grabs A (only item in bag, so while random this is guarenteed)
         assertEquals(nextTile, new Tile('b')); // testing if tile object equals works (more of tile test) 

@@ -52,7 +52,7 @@ public class TileBag {
         return out;
     }
 
-    public Tile grabNextTile() {
+    public Tile grabTile() {
         int tileIndex = r.nextInt(tiles.length);
         Tile grabbedTile = tiles[tileIndex];
         // to fill gap made place last tile in this spot

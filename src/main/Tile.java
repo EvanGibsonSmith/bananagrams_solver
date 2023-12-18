@@ -19,6 +19,12 @@ public class Tile {
         return (((Tile) obj).getLetter() == this.getLetter());
     }
 
+    
+    @Override 
+    public int hashCode() {
+        return ((Character) this.letter).hashCode();
+    }
+
     public char getLetter() {
         return letter;
     }
