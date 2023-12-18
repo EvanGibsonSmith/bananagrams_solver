@@ -1,10 +1,8 @@
 package src.main;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.HashMap;
 
 public class Grid {
@@ -65,6 +63,13 @@ public class Grid {
         }
     }
 
+    /**
+     * @param loc
+     * @return if the location full
+     */
+    public boolean locationFilled(Location loc) {
+        return filledSquares.containsKey(loc);
+    }
     
     /** Places a tile on the grid, does not check if it is valid (could be "floating", invalid words, etc)
      * Does not check if the square already has a tile on it. If tile is replaced, that tile placed on may "dissapear"

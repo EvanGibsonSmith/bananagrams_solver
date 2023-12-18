@@ -52,6 +52,18 @@ public class TileBag {
         return out;
     }
 
+    public int size() {
+        return nextIndex;
+    }
+
+    public Boolean isFull() {
+        return (maxSize==size());
+    }
+
+    public Boolean isEmpty() {
+        return (size()==0);
+    }
+
     public Tile grabTile() {
         int tileIndex = r.nextInt(tiles.length);
         Tile grabbedTile = tiles[tileIndex];
@@ -60,14 +72,6 @@ public class TileBag {
         tiles[tiles.length-1] = null;
         --nextIndex; // end is cleared so the next index decrements
         return grabbedTile;
-    }
-
-    public Boolean isFull() {
-        return (maxSize==nextIndex);
-    }
-
-    public Boolean isEmpty() {
-        return (nextIndex==0);
     }
 
     public void addTile(Tile t) {

@@ -27,7 +27,10 @@ public class Player {
     
     /**
      * Grabs a tile from the bag and adds it to the players hand.
-     * In the context of a game, this is essentially a one player peel
+     * In the context of a game, this is essentially a one player peel.
+     * There are no checks to see if the player can actually do this, (i.e) 
+     * another player is done or this player is done. That is the responsibility of the 
+     * game
      * @return Tile grabbed, null if no tile could be grabbed (bag empty)
      */
     public Tile grabTile() {
@@ -46,12 +49,34 @@ public class Player {
      */
     public boolean dropTile(Tile dropTile) { // TODO maybe make private? Should be ok because game will only ever use dump? Don't know borderline case
         return tiles.remove(dropTile);
-        /*if (tiles.contains(dropTile)) { // TODO I believe tiles.remove already works this way so this extra stuff isn't needed?
-            tiles.remove(dropTile);
-            return true;
-        }
-        return false;*/
     }
+
+    /**
+     * @param t the tile to check if it is within the hand
+     * @return if the tile is within the hand
+     */
+    public boolean inHand(Tile t) {
+        return this.tiles.contains(t);
+    }
+
+    // TODO make unsafe version to save time for AI?
+    /**
+     * Places the tile placeTile from the hand into the given location on the grid.
+     * If the tile doesn't exists in the hand or location is already full, an error 
+     * is thrown.
+     * @param placeTile
+     * @param loc
+     * @throws IllegalArgumentException If location is already full or tile not in hand
+     */
+    public void placeTile(Location loc, Tile tile) throws IllegalArgumentException {
+        if (this.grid.locationFilled(loc)) {
+            throw new IllegalArgumentException("Location is already filled with a tile"); //
+        }
+        if (!inHand(tile)) {
+            throw new IllegalArgumentException("Tile was not within hand");
+        }
+        this.grid.placeUnsafe(loc, tile); // now that checks have been done we can place this
+    }   
 
     /**
      * The action within the game of dumping one tile to get three in return.
@@ -76,8 +101,8 @@ public class Player {
      * else to place.
      * @return boolean if the players has used all their tiles properly
      */
-    public boolean usedTiles() {
-        return (this.handEmpty() && this.grid.valid())
+    public boolean gridDone() {
+        return (this.handEmpty() && this.grid.valid());
     }
 
 }
