@@ -18,6 +18,14 @@ public class Player {
     }
 
     /**
+     * If player has no tiles left in their "hand". This means all the tiles are on the Grid
+     * @return boolean of tiles left
+     */
+    public boolean handEmpty() {
+        return this.tiles.isEmpty();
+    }
+    
+    /**
      * Grabs a tile from the bag and adds it to the players hand.
      * In the context of a game, this is essentially a one player peel
      * @return Tile grabbed, null if no tile could be grabbed (bag empty)
@@ -61,4 +69,15 @@ public class Player {
         grabTile();
         return true;
     }
+
+    /**
+     * If all of the tiles the player has have been made into a proper 
+     * set of words on the Grid. In other words, they have a valid grid and nothing 
+     * else to place.
+     * @return boolean if the players has used all their tiles properly
+     */
+    public boolean usedTiles() {
+        return (this.handEmpty() && this.grid.valid())
+    }
+
 }
