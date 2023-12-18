@@ -69,7 +69,7 @@ class TileBagTest {
 
         assertTrue(bag.isEmpty());
 
-    }-
+    }
 
     @Test
     void smallBagTest() {
@@ -103,4 +103,5 @@ class TileBagTest {
             assertEquals(e.getClass(), ArrayIndexOutOfBoundsException.class);
         }
     }
+
 }

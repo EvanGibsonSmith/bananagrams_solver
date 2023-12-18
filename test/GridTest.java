@@ -1,56 +1,127 @@
 
 package test;
 import java.util.HashSet;
+import java.util.Arrays;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import src.main.Grid;
 import src.main.Location;
 import src.main.Tile;
+
 public class GridTest {
-    
-    public static void main(String[] args) {
-        // TODO use actual junit and make the tests useful and nice
+
+    // TODO add more tests sometime
+    @Test 
+    void placeableLocations() {
+        Grid g = new Grid(null); // no words need for this test
+        g.placeUnsafe(new Location(0,0), new Tile("a".charAt(0)));
+        
+        System.out.println(g.placeableLocations());
+        assertEquals(g.placeableLocations(), new HashSet<Location> (Arrays.asList(new Location(1,0),
+                                                                                  new Location(-1,0),
+                                                                                  new Location(0,1),
+                                                                                  new Location(0,-1))));
+
+        
+        g.placeUnsafe(new Location(0,1), new Tile("b".charAt(0))); // second location (this location should be blocked from output)
+        assertEquals(g.placeableLocations(), new HashSet<Location> (Arrays.asList(new Location(1,0),
+                                                                                  new Location(-1,0),
+                                                                                  //new Location(0,1), now filled with tile
+                                                                                  new Location(0, -1),
+                                                                                  new Location(1,1),
+                                                                                  new Location(0, 2),
+                                                                                  //new Location(0,0), filled with first tile
+                                                                                  new Location(-1, 1))));   
+        
+        g.placeUnsafe(new Location(3, 3), new Tile("c".charAt(0))); // island location
+        assertEquals(g.placeableLocations().size(), 10); // island adds 4 new placable locations, so 10 in total
+
+        System.out.println(g);
+    }
+
+    @Test 
+    void removeLocations() {
+        Grid g = new Grid(null); // words not needed for this test
+
+        assertEquals(g.filledSquares.size(), 0);
+
+        g.placeUnsafe(new Location(0, 0), new Tile("a".charAt(0)));
+        g.placeUnsafe(new Location(1, 0), new Tile("b".charAt(0)));
+        g.placeUnsafe(new Location(2, 0), new Tile("c".charAt(0)));
+         g.placeUnsafe(new Location(3, 2), new Tile("d".charAt(0)));
+
+        assertEquals(g.filledSquares.size(), 4);
+
+        Tile removed = g.remove(new Location(2, 0));
+        assertEquals(removed, new Tile("c".charAt(0)));
+        assertEquals(g.filledSquares.size(), 3);
+
+        removed = g.remove(new Location(-1, -1)); // no tile present
+        assertNull(removed);
+        assertEquals(g.filledSquares.size(), 3);
+
+        System.out.println(g);
+
+    }
+
+    @Test
+    void buildSmallGrid () {
         HashSet<String> wordsSet = new HashSet<String>();
         wordsSet.add("pan");
         wordsSet.add("par");
         wordsSet.add("part");
         wordsSet.add("pane");
         wordsSet.add("met");
-        Grid g = new Grid(wordsSet); // just putting the specific words used into manual set
+        Grid g = new Grid(wordsSet); // highly specific words for testing added
 
-        System.out.println("Starting");
         g.placeUnsafe(new Location(0, 0), new Tile("p".charAt(0)));
         g.placeUnsafe(new Location(0, 1), new Tile("a".charAt(0)));
         g.placeUnsafe(new Location(0, 2), new Tile("n".charAt(0)));
+        
+        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan")));
+
+        assertNotEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan", "a"))); // single letter is not a word that needs to be checked
 
         g.placeUnsafe(new Location(1, 0), new Tile("a".charAt(0)));
         g.placeUnsafe(new Location(2, 0), new Tile("r".charAt(0)));
         
-        System.out.println(g.getWordsPlayed());
-        System.out.println(g.validWords());
-        System.out.println(g.validIslands());
+        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan", "par")));
+        assertTrue(g.validWords()); // all words are within the small word set created
+        assertTrue(g.validIslands());
+
         System.out.println(g);
 
         g.placeUnsafe(new Location(3, 0), new Tile("t".charAt(0)));
+
+        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pan")));
+
         g.placeUnsafe(new Location(0, 3), new Tile("e".charAt(0)));
 
-        System.out.println(g.getWordsPlayed());
-        System.out.println(g.validWords());
-        System.out.println(g.validIslands());
+        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pane"))); // note old words are gone now
+        
+        assertTrue(g.validWords()); // still a valid configuration
+        assertTrue(g.validIslands());
         System.out.println(g);
-        System.out.println("DONE");
 
-        g.placeUnsafe(new Location(-1, 3), new Tile("m".charAt(0)));
         g.placeUnsafe(new Location(1, 3), new Tile("t".charAt(0)));
+        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pane", "part", "et")));
+        assertFalse(g.validWords()); // et is not a valid word
+        assertTrue(g.validIslands()); // still portion is still fine though
+        g.placeUnsafe(new Location(-1, 3), new Tile("m".charAt(0))); // now all words are fine (with met)
 
 
-        System.out.println(g.getWordsPlayed());
-        System.out.println(g.validWords());
-        System.out.println(g.validIslands());
+        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pane", "met")));
+        assertTrue(g.validWords()); // et is not a valid word
+        assertTrue(g.validIslands()); // still portion is still fine though
         System.out.println(g);
-        System.out.println("DONE");
-
-        // TODO add a bounding box test. I found an small error, I think they are all fixed but there are quite a few components so it would be nice to test.
     } 
+
+    // TODO add a bounding box test. I found an small error, I think they are all fixed but there are quite a few components so it would be nice to test.
 }

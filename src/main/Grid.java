@@ -65,6 +65,30 @@ public class Grid {
         }
     }
 
+    
+    /** Places a tile on the grid, does not check if it is valid (could be "floating", invalid words, etc)
+     * Does not check if the square already has a tile on it. If tile is replaced, that tile placed on may "dissapear"
+     * @param loc TODO document
+     * @param tile TODO document
+    */
+    // TODO make private?
+    public void placeUnsafe(Location loc, Tile tile) {
+        filledSquares.put(loc, tile);
+        updateBoundingBox(loc);
+    }
+
+    /**
+     * Removes the tile from the given locations. Returns null if that location didn't have anything in it
+     * @param loc the location to remove
+     * @return the removed tile
+     */
+    public Tile remove(Location loc) {
+        if (this.filledSquares.get(loc)==null) {return null;}
+        Tile removedTile = this.filledSquares.get(loc);
+        this.filledSquares.remove(loc); 
+        return removedTile;
+    }
+
     /**
      * Takes the tiles and gives a bounding box of the locations with tiles actually within them.
      * TODO TEST THIS AND DOCUMENT
@@ -102,15 +126,6 @@ public class Grid {
             out += "\n";
         }
         return out;
-    }
-
-    /** Places a tile on the grid, does not check if it is valid (could be "floating", invalid words, etc)
-     * Does not check if the square already has a tile on it. If tile is replaced, that tile placed on may "dissapear"
-    */
-    // TODO make private?
-    public void placeUnsafe(Location loc, Tile tile) {
-        filledSquares.put(loc, tile);
-        updateBoundingBox(loc);
     }
     
 
@@ -163,8 +178,8 @@ public class Grid {
      * In a valid board these should all be acceptable words.
      * @return
      */
-    public ArrayList<String> getWordsPlayed() {  // TODO TEST ME  MAKE PRIVATE LATER?
-        ArrayList<String> words = new ArrayList<>();
+    public HashSet<String> getWordsPlayed() {  // TODO TEST ME  MAKE PRIVATE LATER?
+        HashSet<String> words = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
             String downWord = getWordDown(loc);
             if (downWord!=null) {
@@ -185,7 +200,7 @@ public class Grid {
      * @return True if all of the words are valid, False is not 
      */
     public Boolean validWords() { // TODO make private again/ for testing. Or make __validWords instead?
-        ArrayList<String> words = getWordsPlayed();
+        HashSet<String> words = getWordsPlayed();
         for (String word: words) {
             if (!this.wordsSet.contains(word)) { // if one of the words is not valid then board is not valid.
                 return false;
@@ -244,8 +259,8 @@ public class Grid {
      * THIS DOES NOT TAKE INTO ACCOUNT IF WORD CAN BE MADE, just if it is connected
      * @return array of locations
      */
-    public ArrayList<Location> placeableLocations() {  // TODO TEST ME
-        ArrayList<Location> tilePlaceLocations = new ArrayList<>();
+    public HashSet<Location> placeableLocations() {  // TODO TEST ME
+        HashSet<Location> tilePlaceLocations = new HashSet<>();
         for (Location sq: filledSquares.keySet()) {
             Location[] adj = {new Location(sq.getRow()+1, sq.getColumn()),
                               new Location(sq.getRow()-1, sq.getColumn()),
@@ -253,11 +268,11 @@ public class Grid {
                               new Location(sq.getRow(),   sq.getColumn()-1)};
 
             for (Location tile: adj) {
-                if (filledSquares.containsKey(adj)) { // check if the tile is blank
+                if (!filledSquares.containsKey(tile)) { // check if the tile is blank
                     tilePlaceLocations.add(tile);
                 }
             }
         }
-        return tilePlaceLocations; // STUB
+        return tilePlaceLocations; 
     }
 }
