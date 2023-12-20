@@ -6,7 +6,7 @@ public class TileBag {
     Tile[] tiles;
     int maxSize;
     int nextIndex;
-    Random r = new Random();
+    Random random;
 
     /**
      * Takes in the initial tiles in the bag and the max size,
@@ -19,7 +19,17 @@ public class TileBag {
         this.maxSize = tiles.length;
         // since bag begins full nextIndex is the length
         this.nextIndex = tiles.length;
+        this.random = new Random();
     }
+
+    public TileBag(Tile[] tiles, int seed) {
+        this.tiles = tiles;
+        this.maxSize = tiles.length;
+        // since bag begins full nextIndex is the length
+        this.nextIndex = tiles.length;
+        this.random = new Random(seed);
+    }
+
 
     /**
      * Takes in the initial tiles in the bag and the max size,
@@ -65,11 +75,11 @@ public class TileBag {
     }
 
     public Tile grabTile() {
-        int tileIndex = r.nextInt(tiles.length);
+        int tileIndex = random.nextInt(tiles.length);
         Tile grabbedTile = tiles[tileIndex];
         // to fill gap made place last tile in this spot
-        tiles[tileIndex] = tiles[tiles.length-1]; // take final spot and place it here to leave array compact
-        tiles[tiles.length-1] = null;
+        tiles[nextIndex-1] = tiles[tileIndex]; // take final spot and place it here to leave array compact
+        tiles[nextIndex-1] = null;
         --nextIndex; // end is cleared so the next index decrements
         return grabbedTile;
     }

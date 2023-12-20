@@ -94,25 +94,6 @@ public class Grid {
         return removedTile;
     }
 
-    /**
-     * Takes the tiles and gives a bounding box of the locations with tiles actually within them.
-     * TODO TEST THIS AND DOCUMENT
-     * @return
-     */
-    /**public Location[] boundingBox() {
-        int maxX = 0; int minX = 0;
-        int maxY = 0; int minY = 0;
-        for (Location loc: filledSquares.keySet()) {
-            if (loc.getRow() > maxX) {maxX = loc.getRow();}
-            else if (loc.getRow() < minX) {minX = loc.getRow();}
-
-            if (loc.getRow() > maxY) {maxY = loc.getRow();}
-            else if (loc.getRow() > maxY) {maxY = loc.getRow();}
-        }
-
-        return {new Location(maxX, minY); new Location(maxX, minY);};
-    }**/
-
     @Override
     public String toString() {
         String out = "";

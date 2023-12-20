@@ -4,18 +4,40 @@ import java.util.HashSet;
 
 public class Player {
     Grid grid;
+    Game game;
     TileBag bag;
     HashSet<Tile> tiles = new HashSet<>(); // represents tiles player has
 
-    public Player(Grid grid, TileBag bag) {
+    public Player(Game game, Grid grid, TileBag bag) {
         this.grid = grid;
         this.bag = bag;
     }
 
-    public Player(HashSet<String> wordsSet, TileBag bag) {
+    public Player(Game game, HashSet<String> wordsSet, TileBag bag) {
         this.grid = new Grid(wordsSet);
         this.bag = bag;
     }
+
+    // TODO make get function return immutable versions
+    // TODO do we want this function facing outward or exiwting at all
+    public Grid getGrid() {
+        return this.grid;
+    }
+
+    // TODO do we want this function facing outward or exiwting at all
+    public TileBag getBag() {
+        return this.bag;
+    }
+
+    // TODO shoudl this exist? Make immutable if so, and rename to hand within class
+    public HashSet<Tile> getHand() {
+        return this.tiles;
+    }
+
+    @Override
+    public String toString() {
+        return ""; // TODO STUB
+    }   
 
     /**
      * If player has no tiles left in their "hand". This means all the tiles are on the Grid
@@ -96,13 +118,21 @@ public class Player {
     }
 
     /**
+     * If the grid is valid
+     * @return boolean true or false if the grid 
+     */
+    public boolean gridValid() {
+        return this.grid.valid();
+    }
+
+    /**
      * If all of the tiles the player has have been made into a proper 
      * set of words on the Grid. In other words, they have a valid grid and nothing 
      * else to place.
      * @return boolean if the players has used all their tiles properly
      */
     public boolean gridDone() {
-        return (this.handEmpty() && this.grid.valid());
+        return (this.handEmpty() && this.gridValid());
     }
 
 }

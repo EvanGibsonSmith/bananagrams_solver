@@ -103,4 +103,6 @@ class TileBagTest {
         }
     }
 
+    // TODO do more testing on the ins and outs of the randomness with seeds and with the swapping/nulling behavior.
+
 }
