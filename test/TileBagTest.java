@@ -4,6 +4,7 @@ import src.main.TileBag;
 import src.main.Tile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,6 +101,29 @@ class TileBagTest {
             bag.addTile(new Tile('d'));
         } catch (Exception e) {
             assertEquals(e.getClass(), ArrayIndexOutOfBoundsException.class);
+        }
+    }
+
+    @Test 
+    void grabbedTileInBag() {
+        String letters = "abcde";
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (char letter: letters.toCharArray()) {
+            tiles.add(new Tile(letter));
+        }
+        TileBag bag = new TileBag(tiles.toArray(new Tile[tiles.size()]), 31415);
+
+        while (!bag.isEmpty()) {
+            Tile tile = bag.grabTile();
+            
+            // tile should not be in bag
+            boolean tileInBag = false;
+            for (Tile bagTile: bag.getTiles()) {
+                if (bagTile==tile) {tileInBag=true;}
+            }   
+            System.out.println(bag);
+            System.out.println(tile);
+            assertFalse(tileInBag);
         }
     }
 

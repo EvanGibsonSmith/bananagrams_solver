@@ -62,6 +62,11 @@ public class TileBag {
         return out;
     }
 
+    // TODO should this exist eventually? It's useful for testing. If so make it return immutable version
+    public Tile[] getTiles() {
+        return this.tiles;
+    }   
+
     public int size() {
         return nextIndex;
     }
@@ -75,10 +80,10 @@ public class TileBag {
     }
 
     public Tile grabTile() {
-        int tileIndex = random.nextInt(tiles.length);
+        int tileIndex = random.nextInt(nextIndex);
         Tile grabbedTile = tiles[tileIndex];
         // to fill gap made place last tile in this spot
-        tiles[nextIndex-1] = tiles[tileIndex]; // take final spot and place it here to leave array compact
+        tiles[tileIndex] = tiles[nextIndex-1]; // take final spot and place it here to leave array compact
         tiles[nextIndex-1] = null;
         --nextIndex; // end is cleared so the next index decrements
         return grabbedTile;

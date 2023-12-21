@@ -31,11 +31,10 @@ class GameTest {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 31415);
+        TileBag tileBag = new TileBag(tiles, 3314159);
         assertEquals(tileBag.toString(), " a b c d e");
-        Game game = new Game(1, tileBag, validWords);
+        Game game = new Game(2, tileBag, validWords);
 
-        game.peel();
         game.peel();
         for (Player p: game.getPlayers()) {
             System.out.println(p.getBag());
