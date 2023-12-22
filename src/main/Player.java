@@ -1,12 +1,13 @@
 package src.main;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Player {
     Grid grid;
     Game game;
     TileBag bag;
-    HashSet<Tile> tiles = new HashSet<>(); // represents tiles player has
+    HashMap<Tile, Integer> tiles = new HashMap<>(); // represents tiles player has and how much of each
 
     public Player(Game game, Grid grid, TileBag bag) {
         this.grid = grid;
@@ -30,7 +31,7 @@ public class Player {
     }
 
     // TODO shoudl this exist? Make immutable if so, and rename to hand within class
-    public HashSet<Tile> getHand() {
+    public HashMap<Tile, Integer> getHand() {
         return this.tiles;
     }
 
@@ -59,7 +60,9 @@ public class Player {
         if (bag.isEmpty()) {return null;} // edge case
 
         Tile grabbedTile = bag.grabTile();
-        this.tiles.add(grabbedTile);
+        // if this tile not in hand add it otherwise increment counter
+        // TODO below should be encapsulated in a multiset class?
+        this.tiles.put(grabbedTile, this.tiles.getOrDefault(grabbedTile, 0)+1); // adds one if tile present, otherwise sets to 1
         return grabbedTile;
     }
 
@@ -70,7 +73,7 @@ public class Player {
      * @return true if a tile was dropped, false if none was found that matched parameter
      */
     public boolean dropTile(Tile dropTile) { // TODO maybe make private? Should be ok because game will only ever use dump? Don't know borderline case
-        return tiles.remove(dropTile);
+        return (tiles.remove(dropTile)==null);
     }
 
     /**
@@ -78,7 +81,7 @@ public class Player {
      * @return if the tile is within the hand
      */
     public boolean inHand(Tile t) {
-        return this.tiles.contains(t);
+        return this.tiles.keySet().contains(t);
     }
 
     // TODO make unsafe version to save time for AI?
@@ -99,6 +102,15 @@ public class Player {
         }
         // TODO make placeTile also trigger the game to check for a peel?
         this.grid.placeUnsafe(loc, tile); // now that checks have been done we can place this
+
+        // TODO should this be in multiset class? Probably.
+        // decrement the value for the tile if there are multiple, if only one tile remove it
+        if (this.tiles.get(tile)==1) { // if only one left
+            this.tiles.remove(tile);
+        }
+        else {
+            this.tiles.put(tile, this.tiles.getOrDefault(tile, 0)-1); // decrements when multiple tiles
+        }
         this.tiles.remove(tile); // now that the location remove that tile
     }
 
@@ -115,7 +127,9 @@ public class Player {
         }
         // TODO make placeTile also trigger the game to check for a peel?
         Tile removedTile = this.grid.remove(loc); // now that checks have been done we can place this
-        this.tiles.add(removedTile); // now that the location remove that tile
+
+        // TODO below should be in a multiset class?
+        this.tiles.put(removedTile, this.tiles.getOrDefault(removedTile, 0)+1); // adds one if tile present, otherwise sets to 1
     }
 
     /**

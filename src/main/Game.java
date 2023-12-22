@@ -1,7 +1,6 @@
 package src.main;
 
 import java.util.HashSet;
-import java.util.Arrays;
 
 public class Game {
     TileBag bag;
@@ -26,6 +25,10 @@ public class Game {
 
     public Player[] getPlayers() {
         return this.players;
+    }  
+
+    public TileBag getBag() {
+        return this.bag;
     }
 
     public boolean gameComplete() {

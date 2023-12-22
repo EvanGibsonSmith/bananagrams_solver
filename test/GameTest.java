@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.HashMap;
 
 import src.main.TileBag;
 import src.main.Tile;
@@ -37,7 +37,7 @@ class GameTest {
         Game game = new Game(3, tileBag, null); // words are not important for this test
 
         game.peel();
-        ArrayList<HashSet<Tile>> playerTile = new ArrayList<>(); // each player will have one tile
+        ArrayList<HashMap<Tile, Integer>> playerTile = new ArrayList<>(); // each player will have one tile
         ArrayList<TileBag> playerBags = new ArrayList<>(); 
         for (Player p: game.getPlayers()) {
             playerBags.add(p.getBag());
@@ -45,7 +45,7 @@ class GameTest {
         }
 
         assertEquals(new HashSet<TileBag>(playerBags).size(), 1); // checks that all the bags are the same (as set size is therefore 1)
-        assertEquals(new HashSet<HashSet<Tile>>(playerTile).size(), 3); // every tile should be unique for each player
+        assertEquals(new HashSet<HashMap<Tile, Integer>>(playerTile).size(), 3); // every tile should be unique for each player
 
         // all of the players should be attached to the same bag within the game
     }
@@ -79,13 +79,10 @@ class GameTest {
         Player p1 = players[0]; // get first player, the one with "pet"
         Player p2 = players[1]; // get second player, the one with "bit"
         p1.placeTile(new Location(0, 0), new Tile('p')); // note that new tile is equal to other tile, so this works rather than finding it within hand
-        //assertEquals(p.getHand(), new HashSet<Character>(Arrays.asList('e', 't'))); TODO These are tile objects?
         assertEquals(p1.getHand().size(), 2);
         p1.placeTile(new Location(0, 1), new Tile('e'));
-        //assertEquals(p.getHand(), new HashSet<Character>(Arrays.asList('t'))); TODO These are tile objects?
         assertEquals(p1.getHand().size(), 1);
         p1.placeTile(new Location(0,2), new Tile('t'));
-        //assertEquals(p.getHand(), new HashSet<Character>()); TODO These are tile objects?
         assertEquals(p1.getHand().size(), 0);
         System.out.println(p1.getGrid());
 
@@ -101,7 +98,7 @@ class GameTest {
         System.out.println(p2.getHand());
         
         p2.placeTile(new Location(0, 0), new Tile('i'));
-        assertFalse(p2.getHand().contains(new Tile('i')));
+        assertFalse(p2.getHand().keySet().contains(new Tile('i')));
         assertEquals(p2.getHand().size(), 3);
         p2.placeTile(new Location(-1, 0), new Tile('m'));
         assertEquals(p2.getHand().size(), 2);
@@ -118,11 +115,11 @@ class GameTest {
         // p2 fixes their mistake
         p2.removeTile(new Location(2, 0)); // remove n
         assertEquals(p2.getHand().size(), 1); // should have n now only
-        assertTrue(p2.getHand().contains(new Tile('n')));
+        assertTrue(p2.getHand().keySet().contains(new Tile('n')));
 
         p2.removeTile(new Location(1, 0)); // remove t
         assertEquals(p2.getHand().size(), 2); // now has n and t
-        assertTrue(p2.getHand().contains(new Tile('t')));
+        assertTrue(p2.getHand().keySet().contains(new Tile('t')));
 
         p2.placeTile(new Location(1, 0), new Tile('n'));
         p2.placeTile(new Location(2, 0), new Tile('t'));
@@ -141,5 +138,97 @@ class GameTest {
         // even though all of p1's tiles are placed they cannot peel because islands and words are invalid
         assertFalse(p1.canPeel());
         assertFalse(p2.canPeel()); // has new tile in hand
+    }
+
+    @Test
+    void gameCompleteGridComplete() {
+        HashSet<String> validWords = new HashSet<>();
+        validWords.add("leg");
+        validWords.add("bag");
+
+        char[] letters = "bbalegg".toCharArray();
+        Tile[] tiles = new Tile[letters.length];
+        for (int i=0; i<letters.length; ++i) {
+            tiles[i] = new Tile(letters[i]);
+        }
+        TileBag tileBag = new TileBag(tiles, 314159);
+        Game game = new Game(2, tileBag, validWords); // words are not important for this test
+
+        // start game, give each player three tiles
+        game.peel();
+        game.peel();
+        game.peel();
+
+        for (Player p: game.getPlayers()) {
+            System.out.println(p.getHand());
+        }
+
+        Player p1 = game.getPlayers()[0]; // has tiles a b g to play bag
+        Player p2 = game.getPlayers()[1]; // has tiles e g l to play leg
+        
+        assertFalse(game.gameComplete());
+        p1.placeTile(new Location(1, 1), new Tile('b'));
+        p1.placeTile(new Location(2, 1), new Tile('a'));
+        p1.placeTile(new Location(3, 1), new Tile('g'));
+        System.out.println(p1.getGrid());
+        assertTrue(game.gameComplete()); // one tile in bag, but not enough to give to both players so game is complete
+
+        p2.placeTile(new Location(0, 1), new Tile('l'));
+        p2.placeTile(new Location(0, 2), new Tile('e'));
+        p2.placeTile(new Location(0, 3), new Tile('g'));
+        System.out.println(p2.getGrid());
+        assertTrue(game.gameComplete()); // game is still complete, but both players are valid now
+    }
+
+    @Test
+    void gameCompleteEnoughTiles() {
+        HashSet<String> validWords = new HashSet<>();
+        validWords.add("can");
+        validWords.add("cat");
+
+        char[] letters = "accceant".toCharArray();
+        Tile[] tiles = new Tile[letters.length];
+        for (int i=0; i<letters.length; ++i) {
+            tiles[i] = new Tile(letters[i]);
+        }
+        TileBag tileBag = new TileBag(tiles, 271828);
+        Game game = new Game(2, tileBag, validWords); // words are not important for this test
+
+        // start game, give each player three tiles
+        game.peel();
+        game.peel();
+        game.peel();
+
+        for (Player p: game.getPlayers()) {
+            System.out.println(p.getHand());
+        }
+
+        Player p1 = game.getPlayers()[0];
+        Player p2 = game.getPlayers()[1];
+
+        // p1 can play "can" with this configuration
+        assertTrue(p1.gridValid());
+        p1.placeTile(new Location(0, 0), new Tile('c'));
+        p1.placeTile(new Location(0, 1), new Tile('a'));
+        p1.placeTile(new Location(0, 2), new Tile('n'));
+        assertTrue(p1.gridValid());
+
+        assertFalse(game.gameComplete()); // game is not complete because another peel can be performed
+
+        assertEquals(p1.getHand().size(), 0);
+        assertEquals(p2.getHand().size(), 3);
+        assertEquals(game.getBag().size(), 2);
+        System.out.println(game.getBag());
+        game.peel();
+        System.out.println(game.getBag());
+
+        assertEquals(p1.getHand().size(), 1); // TODO EVERY getHand().size() is measuring DISTINCT letters right now
+        assertEquals(p2.getHand().size(), 3); // 3 DISTINCT letters (FIXME)
+
+        assertEquals(game.getBag().size(), 0);
+
+        assertFalse(game.gameComplete()); // now game is not complete because none of the players can peel
+
+        // both players have valid grids 
     }
 }
