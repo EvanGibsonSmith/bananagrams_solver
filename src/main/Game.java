@@ -1,20 +1,21 @@
 package src.main;
 
 import java.util.HashSet;
+import java.util.Arrays;
 
 public class Game {
     TileBag bag;
-    HashSet<Player> players;  // note that player doesn't have hashcode or equality. Every player is unique
+    Player[] players;  // note that player doesn't have hashcode or equality. Every player is unique
     int numPlayers;
     HashSet<String> validWords;
 
     public Game(int numPlayers, TileBag tiles, HashSet<String> validWords) {
         this.bag = tiles;
         this.validWords = validWords;
-        this.players = new HashSet<Player>();
+        this.players = new Player[numPlayers];
         this.numPlayers = numPlayers;
         for (int i=0; i<numPlayers; ++i) {
-            players.add(new Player(this, new Grid(this.validWords), this.bag));
+            players[i] = new Player(this, new Grid(this.validWords), this.bag);
         }
     }   
 
@@ -23,7 +24,7 @@ public class Game {
         return ""; // TODO STUB
     }
 
-    public HashSet<Player> getPlayers() {
+    public Player[] getPlayers() {
         return this.players;
     }
 
@@ -33,9 +34,17 @@ public class Game {
             return false;
         }
         for (Player p: this.players) { // if any player has completed grid TODO could make this peel something a player has to "submit" like in the game
-            if (p.gridDone()) {return true;} // note that we already know there are not enough tiles for another peel
+            if (p.canPeel()) {return true;} // note that we already know there are not enough tiles for another peel
         }
         return false;
+    }
+
+    /**
+     * Begins the game, giving each player the number of tiles that are specified with
+     * the number of players
+     */
+    public void beginGame() {
+        // TODO COMPLETE THIS 
     }
 
     // TODO document
@@ -63,7 +72,7 @@ public class Game {
      * @return false if the tile was not present in the player's hand, otherwise false
      */
     public boolean dump(Player p, Tile t) {
-        if (!this.players.contains(p)) {throw new OutOfMemoryError("Player Not In Game");} // TODO make the correct type of exception
+        // TODO should we check if player in game (Tehcnically an O(N) operation but for only a few players))
         return p.dump(t);
     }
     

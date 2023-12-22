@@ -70,6 +70,25 @@ public class Grid {
     public boolean locationFilled(Location loc) {
         return filledSquares.containsKey(loc);
     }
+
+    /**
+     * Gets the tile object at the specified location. Will 
+     * return null if the tile is empty
+     * @param loc
+     * @return
+     */
+    public Tile getTile(Location loc) {
+        return filledSquares.get(loc);
+    }
+
+    /**
+     * Gives the number of filled squares on the grid, not based on bounding box
+     * @return integer representing size of grid based on tiles placed
+     */
+    // TODO needed or wanted?
+    public int size() {
+        return filledSquares.size();
+    }
     
     /** Places a tile on the grid, does not check if it is valid (could be "floating", invalid words, etc)
      * Does not check if the square already has a tile on it. If tile is replaced, that tile placed on may "dissapear"

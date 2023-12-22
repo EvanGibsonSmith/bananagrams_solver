@@ -83,11 +83,11 @@ public class Player {
 
     // TODO make unsafe version to save time for AI?
     /**
-     * Places the tile placeTile from the hand into the given location on the grid.
+     * Places the tile from the hand into the given location on the grid.
      * If the tile doesn't exists in the hand or location is already full, an error 
      * is thrown.
-     * @param placeTile
      * @param loc
+     * @param tile
      * @throws IllegalArgumentException If location is already full or tile not in hand
      */
     public void placeTile(Location loc, Tile tile) throws IllegalArgumentException {
@@ -97,8 +97,26 @@ public class Player {
         if (!inHand(tile)) {
             throw new IllegalArgumentException("Tile was not within hand");
         }
+        // TODO make placeTile also trigger the game to check for a peel?
         this.grid.placeUnsafe(loc, tile); // now that checks have been done we can place this
-    }   
+        this.tiles.remove(tile); // now that the location remove that tile
+    }
+
+    // TODO make unsafe version to save time for AI?
+    /**
+     * Removes tile from the specified location and places that tile into the hand.
+     * If the location does not have a tile it will throw an error
+     * @param loc location to remove a tile
+     * @throws IllegalArgumentException If location is empty with no tile
+     */
+    public void removeTile(Location loc) throws IllegalArgumentException {
+        if (!this.grid.locationFilled(loc)) {
+            throw new IllegalArgumentException("Cannot remove tile from an empty location"); //
+        }
+        // TODO make placeTile also trigger the game to check for a peel?
+        Tile removedTile = this.grid.remove(loc); // now that checks have been done we can place this
+        this.tiles.add(removedTile); // now that the location remove that tile
+    }
 
     /**
      * The action within the game of dumping one tile to get three in return.
@@ -131,7 +149,7 @@ public class Player {
      * else to place.
      * @return boolean if the players has used all their tiles properly
      */
-    public boolean gridDone() {
+    public boolean canPeel() {
         return (this.handEmpty() && this.gridValid());
     }
 
