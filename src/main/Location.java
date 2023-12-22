@@ -33,6 +33,7 @@ public class Location {
         return this.row;
     }
 
+    // TODO should tjis be within class or should row and column be final?
     public void setRow(int r) {
         this.row = r;
     }
@@ -41,6 +42,7 @@ public class Location {
         return this.column;
     }
 
+    // TODO should tjis be within class or should row and column be final?
     public void setColumn(int c) {
         this.column = c;
     }
