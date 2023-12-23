@@ -50,22 +50,22 @@ public class GridTest {
     void removeLocations() {
         Grid g = new Grid(null); // words not needed for this test
 
-        assertEquals(g.filledSquares.size(), 0);
+        assertEquals(g.size(), 0);
 
         g.placeUnsafe(new Location(0, 0), new Tile("a".charAt(0)));
         g.placeUnsafe(new Location(1, 0), new Tile("b".charAt(0)));
         g.placeUnsafe(new Location(2, 0), new Tile("c".charAt(0)));
          g.placeUnsafe(new Location(3, 2), new Tile("d".charAt(0)));
 
-        assertEquals(g.filledSquares.size(), 4);
+        assertEquals(g.size(), 4);
 
         Tile removed = g.remove(new Location(2, 0));
         assertEquals(removed, new Tile("c".charAt(0)));
-        assertEquals(g.filledSquares.size(), 3);
+        assertEquals(g.size(), 3);
 
         removed = g.remove(new Location(-1, -1)); // no tile present
         assertNull(removed);
-        assertEquals(g.filledSquares.size(), 3);
+        assertEquals(g.size(), 3);
 
         System.out.println(g);
 
@@ -94,7 +94,7 @@ public class GridTest {
         
         assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan", "par")));
         assertTrue(g.validWords()); // all words are within the small word set created
-        assertTrue(g.validIslands());
+        assertTrue(g.tilesConnected());
 
         System.out.println(g);
 
@@ -107,19 +107,19 @@ public class GridTest {
         assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pane"))); // note old words are gone now
         
         assertTrue(g.validWords()); // still a valid configuration
-        assertTrue(g.validIslands());
+        assertTrue(g.tilesConnected());
         System.out.println(g);
 
         g.placeUnsafe(new Location(1, 3), new Tile('t'));
         assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pane", "part", "et")));
         assertFalse(g.validWords()); // et is not a valid word
-        assertTrue(g.validIslands()); // still portion is still fine though
+        assertTrue(g.tilesConnected()); // still portion is still fine though
         g.placeUnsafe(new Location(-1, 3), new Tile('m')); // now all words are fine (with met)
 
 
         assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pane", "met")));
         assertTrue(g.validWords()); // et is not a valid word
-        assertTrue(g.validIslands()); // still portion is still fine though
+        assertTrue(g.tilesConnected()); // still portion is still fine though
         System.out.println(g);
     } 
 

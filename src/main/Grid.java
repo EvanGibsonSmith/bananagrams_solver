@@ -9,7 +9,7 @@ public class Grid {
     private Location topLeft = null;
     private Location bottomRight = null;
     private HashSet<String> wordsSet; 
-    public HashMap<Location, Tile> filledSquares = new HashMap<>(); // TODO make private later
+    private HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(HashSet<String> wordsSet) {
         this.wordsSet = wordsSet;
@@ -85,17 +85,15 @@ public class Grid {
      * Gives the number of filled squares on the grid, not based on bounding box
      * @return integer representing size of grid based on tiles placed
      */
-    // TODO needed or wanted?
     public int size() {
         return filledSquares.size();
     }
     
     /** Places a tile on the grid, does not check if it is valid (could be "floating", invalid words, etc)
      * Does not check if the square already has a tile on it. If tile is replaced, that tile placed on may "dissapear"
-     * @param loc TODO document
-     * @param tile TODO document
+     * @param loc location to place the tile on the grid
+     * @param tile the tile to place
     */
-    // TODO make private?
     public void placeUnsafe(Location loc, Tile tile) {
         filledSquares.put(loc, tile);
         updateBoundingBox(loc);
@@ -133,15 +131,12 @@ public class Grid {
         return out;
     }
     
-
-    // TODO the two functions below, DRY?
-    
     /**
      * Given a specific tile, this gets the word in which this tile is the starting letter that go to the right.
      * @param loc the location at the start of the word
      * @return null if this tile is not the start of a word, the word if it is
      */
-    private String getWordRight(Location loc) { // TODO TEST ME
+    private String getWordRight(Location loc) {
         if (!(filledSquares.get(loc)!=null && filledSquares.get(loc.left())==null)) { // if NOT conditions making location START of a word
             return null; // if left of this tile not empty or this tile is empty no word can be formed
         }
@@ -183,7 +178,7 @@ public class Grid {
      * In a valid board these should all be acceptable words.
      * @return
      */
-    public HashSet<String> getWordsPlayed() {  // TODO TEST ME  MAKE PRIVATE LATER?
+    public HashSet<String> getWordsPlayed() {
         HashSet<String> words = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
             String downWord = getWordDown(loc);
@@ -202,9 +197,10 @@ public class Grid {
     /**
      * Checks all of the words on the grid and determines if they are all within the set of valid words.
      * Does not check for disconnected island. Just iterates through the letter and each of their words
-     * @return True if all of the words are valid, False is not 
+     * @return true if all of the words are valid, false is not 
      */
-    public Boolean validWords() { // TODO make private again/ for testing. Or make __validWords instead?
+    // FIXME there is a extreme edge case in which only ONE TILE is placed that this will ALWAYS consider valid. Don't even know if I need to care
+    public Boolean validWords() {
         HashSet<String> words = getWordsPlayed();
         for (String word: words) {
             if (!this.wordsSet.contains(word)) { // if one of the words is not valid then board is not valid.
@@ -215,18 +211,21 @@ public class Grid {
     }
  
     /**
-     * TODO fill this documentation including big O
-     * @return
+     * Using BFS through the tiles this determines if all of tiles are connected as they must be 
+     * in a valid configuration for the game. Checks if we can visit the same number of tiles 
+     * as the total number of tiles in the game from a single starting tile. In this case
+     * the single island condition for the grid is satified.
+     * @return true if all tiles are connected, otherwise false 
      */
-    public Boolean validIslands() { // TODO make this private again, this is for testing.
+    public boolean tilesConnected() { 
         if (filledSquares.keySet().iterator().hasNext()==false) {return true;} // base case. If nothing placed, everything is connected        
         
         Location rootLocation = filledSquares.keySet().iterator().next(); // guarenteed to exist because base case covers if not
         HashSet<Location> visited = new HashSet<>();
-        Queue<Location> nextLocations = new LinkedList<Location>(); // TODO I think I have the time complexites correct here
+        Queue<Location> nextLocations = new LinkedList<Location>();
         nextLocations.add(rootLocation);
         while (!nextLocations.isEmpty()) {
-            Location loc = nextLocations.poll(); // TODO potential improvment? Instead of checking if this square is filled in while loop check as you add? More complicated for sure but maybe slightly faster
+            Location loc = nextLocations.poll();
             // only "expand" island if this square is actually a letter/haven't visited already
             if (filledSquares.keySet().contains(loc) && !visited.contains(loc)) { 
                 visited.add(loc);
@@ -239,7 +238,7 @@ public class Grid {
         }
 
         // now that all connected to root node have been found, the sets should have the same elements (and thus size, which is O(1))
-        return (visited.size()==filledSquares.size());
+        return (visited.size()==this.size());
     }
 
     /**
@@ -247,7 +246,7 @@ public class Grid {
      * @return if the Grid is in a valid configuration
      */
     public Boolean valid() { // this function may be able to be improved by short circuiting with easy conditions to check first
-        return (validWords() && validIslands());
+        return (validWords() && tilesConnected());
     }
     
     /**

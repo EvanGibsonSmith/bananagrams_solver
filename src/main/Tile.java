@@ -28,8 +28,4 @@ public class Tile {
     public char getLetter() {
         return letter;
     }
-
-    public boolean isEmpty() { // TODO may need to delete this because it's extraneous as blank tiles will not be in filled squares
-        return this.letter==' ';
-    }
 }

@@ -2,15 +2,9 @@ package src.data_structures;
 
 import java.util.HashMap;
 
-// TODO could potentially make an implementation of the Collection object
 public class MultiSet<K> {
     HashMap<K, Integer> map = new HashMap<>();
     int size = 0;
-
-    // TODO create constructor that can take in another MultiSet to effectively duplicate it
-    public MultiSet() {
-        
-    }
 
     @Override
     public String toString() {

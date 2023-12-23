@@ -30,19 +30,6 @@ public class TileBag {
         this.random = new Random(seed);
     }
 
-
-    /**
-     * Takes in the initial tiles in the bag and the max size,
-     * in case the max size should be bigger than the number of tiles initially 
-     * in the bag
-     * @param tiles
-     * @param maxSize
-     */
-    /*public TileBag(Tile[] tiles, int maxSize) { 
-        this.tiles = tiles;
-        this.maxSize = maxSize;
-    }*/ // TODO this constructor doesn't work because the size of tiles is not maxSize
-
     /**
      * Initializes a bag with a max size given, but the bag
      * begins empty (potentially to add stuff too)
@@ -59,10 +46,9 @@ public class TileBag {
         for (Tile t: this.tiles) {
             out += " " + t;
         }
-        return out;
+        return out.substring(1);
     }
 
-    // TODO should this exist eventually? It's useful for testing. If so make it return immutable version
     public Tile[] getTiles() {
         return this.tiles;
     }   

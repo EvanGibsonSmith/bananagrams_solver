@@ -1,29 +1,23 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.HashMap;
 
 import src.main.TileBag;
 import src.main.Tile;
 import src.main.Game;
 import src.main.Player;
 import src.main.Location;
+import src.data_structures.MultiSet;
 
 class GameTest {
 
     // TODO more precise smaller tests in here?
-    @Test
-    void testThis() {
-
-    }
 
     @Test
     void testPeel() {
@@ -33,11 +27,11 @@ class GameTest {
             tiles[i] = new Tile(letters[i]);
         }
         TileBag tileBag = new TileBag(tiles, 3314159);
-        assertEquals(tileBag.toString(), " a b c d e");
+        assertEquals(tileBag.toString(), "a b c d e");
         Game game = new Game(3, tileBag, null); // words are not important for this test
 
         game.peel();
-        ArrayList<HashMap<Tile, Integer>> playerTile = new ArrayList<>(); // each player will have one tile
+        ArrayList<MultiSet<Tile>> playerTile = new ArrayList<>(); // each player will have one tile
         ArrayList<TileBag> playerBags = new ArrayList<>(); 
         for (Player p: game.getPlayers()) {
             playerBags.add(p.getBag());
@@ -45,14 +39,11 @@ class GameTest {
         }
 
         assertEquals(new HashSet<TileBag>(playerBags).size(), 1); // checks that all the bags are the same (as set size is therefore 1)
-        assertEquals(new HashSet<HashMap<Tile, Integer>>(playerTile).size(), 3); // every tile should be unique for each player
-
-        // all of the players should be attached to the same bag within the game
+        assertEquals(new HashSet<MultiSet<Tile>>(playerTile).size(), 3); // every tile should be unique for each player
     }
 
     @Test
     void smallTwoGame() { // note this test may change based on implementation of the peel/bag
-        // TODO should some of the parts of this test go in the player testing as well?
         HashSet<String> validWords = new HashSet<>();
         validWords.add("pet");
         validWords.add("mint");
@@ -78,6 +69,7 @@ class GameTest {
 
         Player p1 = players[0]; // get first player, the one with "pet"
         Player p2 = players[1]; // get second player, the one with "bit"
+        assertEquals(p1.getHand().size(), 3);
         p1.placeTile(new Location(0, 0), new Tile('p')); // note that new tile is equal to other tile, so this works rather than finding it within hand
         assertEquals(p1.getHand().size(), 2);
         p1.placeTile(new Location(0, 1), new Tile('e'));
@@ -98,7 +90,7 @@ class GameTest {
         System.out.println(p2.getHand());
         
         p2.placeTile(new Location(0, 0), new Tile('i'));
-        assertFalse(p2.getHand().keySet().contains(new Tile('i')));
+        assertFalse(p2.getHand().contains(new Tile('i')));
         assertEquals(p2.getHand().size(), 3);
         p2.placeTile(new Location(-1, 0), new Tile('m'));
         assertEquals(p2.getHand().size(), 2);
@@ -115,11 +107,11 @@ class GameTest {
         // p2 fixes their mistake
         p2.removeTile(new Location(2, 0)); // remove n
         assertEquals(p2.getHand().size(), 1); // should have n now only
-        assertTrue(p2.getHand().keySet().contains(new Tile('n')));
+        assertTrue(p2.getHand().contains(new Tile('n')));
 
         p2.removeTile(new Location(1, 0)); // remove t
         assertEquals(p2.getHand().size(), 2); // now has n and t
-        assertTrue(p2.getHand().keySet().contains(new Tile('t')));
+        assertTrue(p2.getHand().contains(new Tile('t')));
 
         p2.placeTile(new Location(1, 0), new Tile('n'));
         p2.placeTile(new Location(2, 0), new Tile('t'));
@@ -222,8 +214,8 @@ class GameTest {
         game.peel();
         System.out.println(game.getBag());
 
-        assertEquals(p1.getHand().size(), 1); // TODO EVERY getHand().size() is measuring DISTINCT letters right now
-        assertEquals(p2.getHand().size(), 3); // 3 DISTINCT letters (FIXME)
+        assertEquals(p1.getHand().size(), 1);
+        assertEquals(p2.getHand().size(), 4);
 
         assertEquals(game.getBag().size(), 0);
 

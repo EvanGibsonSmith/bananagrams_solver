@@ -19,25 +19,21 @@ public class Player {
         this.bag = bag;
     }
 
-    // TODO make get function return immutable versions
-    // TODO do we want this function facing outward or exiwting at all
     public Grid getGrid() {
         return this.grid;
     }
 
-    // TODO do we want this function facing outward or exiwting at all
     public TileBag getBag() {
         return this.bag;
     }
 
-    // TODO shoudl this exist? Make immutable if so, and rename to hand within class
     public MultiSet<Tile> getHand() {
         return this.hand;
     }
 
     @Override
     public String toString() {
-        return ""; // TODO STUB
+        return "";
     }   
 
     /**
@@ -60,8 +56,6 @@ public class Player {
         if (bag.isEmpty()) {return null;} // edge case
 
         Tile grabbedTile = bag.grabTile();
-        // if this tile not in hand add it otherwise increment counter
-        // TODO below should be encapsulated in a multiset class?
         this.hand.add(grabbedTile); 
         return grabbedTile;
     }
@@ -71,8 +65,7 @@ public class Player {
      * without drawing three tiles. 
      * @param dropTile the tile that is dropped from player
      */
-    // TODO how important would it be to make this return a boolean if removal was successful?
-    public void dropTile(Tile dropTile) { // TODO maybe make private? Should be ok because game will only ever use dump? Don't know borderline case
+    public void dropTile(Tile dropTile) {
         hand.remove(dropTile);
     }
 
@@ -84,7 +77,6 @@ public class Player {
         return this.hand.contains(t);
     }
 
-    // TODO make unsafe version to save time for AI?
     /**
      * Places the tile from the hand into the given location on the grid.
      * If the tile doesn't exists in the hand or location is already full, an error 
@@ -100,12 +92,10 @@ public class Player {
         if (!inHand(tile)) {
             throw new IllegalArgumentException("Tile was not within hand");
         }
-        // TODO make placeTile also trigger the game to check for a peel?
         this.grid.placeUnsafe(loc, tile); // now that checks have been done we can place this
         this.hand.remove(tile); // remove tile from hand now on grid
     }
 
-    // TODO make unsafe version to save time for AI?
     /**
      * Removes tile from the specified location and places that tile into the hand.
      * If the location does not have a tile it will throw an error
@@ -116,10 +106,7 @@ public class Player {
         if (!this.grid.locationFilled(loc)) {
             throw new IllegalArgumentException("Cannot remove tile from an empty location"); //
         }
-        // TODO make placeTile also trigger the game to check for a peel?
         Tile tile = this.grid.remove(loc); // now that checks have been done we can place this
-
-        // TODO below should be in a multiset class?
         this.hand.add(tile); // adds tile from the grid to hand
     }
 
