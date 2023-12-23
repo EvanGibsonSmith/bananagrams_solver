@@ -1,13 +1,13 @@
 package src.main;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import src.data_structures.MultiSet;
 
 public class Player {
     Grid grid;
     Game game;
     TileBag bag;
-    HashMap<Tile, Integer> tiles = new HashMap<>(); // represents tiles player has and how much of each
+    MultiSet<Tile> hand = new MultiSet<>(); // represents hand player has and how much of each tile
 
     public Player(Game game, Grid grid, TileBag bag) {
         this.grid = grid;
@@ -31,8 +31,8 @@ public class Player {
     }
 
     // TODO shoudl this exist? Make immutable if so, and rename to hand within class
-    public HashMap<Tile, Integer> getHand() {
-        return this.tiles;
+    public MultiSet<Tile> getHand() {
+        return this.hand;
     }
 
     @Override
@@ -41,11 +41,11 @@ public class Player {
     }   
 
     /**
-     * If player has no tiles left in their "hand". This means all the tiles are on the Grid
+     * If player has no tiles left in their hand. This means all the tiles are on the Grid
      * @return boolean of tiles left
      */
     public boolean handEmpty() {
-        return this.tiles.isEmpty();
+        return this.hand.isEmpty();
     }
     
     /**
@@ -62,7 +62,7 @@ public class Player {
         Tile grabbedTile = bag.grabTile();
         // if this tile not in hand add it otherwise increment counter
         // TODO below should be encapsulated in a multiset class?
-        this.tiles.put(grabbedTile, this.tiles.getOrDefault(grabbedTile, 0)+1); // adds one if tile present, otherwise sets to 1
+        this.hand.add(grabbedTile); 
         return grabbedTile;
     }
 
@@ -70,10 +70,10 @@ public class Player {
      * Player drops one tile into the bag. This is not done during the game
      * without drawing three tiles. 
      * @param dropTile the tile that is dropped from player
-     * @return true if a tile was dropped, false if none was found that matched parameter
      */
-    public boolean dropTile(Tile dropTile) { // TODO maybe make private? Should be ok because game will only ever use dump? Don't know borderline case
-        return (tiles.remove(dropTile)==null);
+    // TODO how important would it be to make this return a boolean if removal was successful?
+    public void dropTile(Tile dropTile) { // TODO maybe make private? Should be ok because game will only ever use dump? Don't know borderline case
+        hand.remove(dropTile);
     }
 
     /**
@@ -81,7 +81,7 @@ public class Player {
      * @return if the tile is within the hand
      */
     public boolean inHand(Tile t) {
-        return this.tiles.keySet().contains(t);
+        return this.hand.contains(t);
     }
 
     // TODO make unsafe version to save time for AI?
@@ -102,16 +102,7 @@ public class Player {
         }
         // TODO make placeTile also trigger the game to check for a peel?
         this.grid.placeUnsafe(loc, tile); // now that checks have been done we can place this
-
-        // TODO should this be in multiset class? Probably.
-        // decrement the value for the tile if there are multiple, if only one tile remove it
-        if (this.tiles.get(tile)==1) { // if only one left
-            this.tiles.remove(tile);
-        }
-        else {
-            this.tiles.put(tile, this.tiles.getOrDefault(tile, 0)-1); // decrements when multiple tiles
-        }
-        this.tiles.remove(tile); // now that the location remove that tile
+        this.hand.remove(tile); // remove tile from hand now on grid
     }
 
     // TODO make unsafe version to save time for AI?
@@ -126,10 +117,10 @@ public class Player {
             throw new IllegalArgumentException("Cannot remove tile from an empty location"); //
         }
         // TODO make placeTile also trigger the game to check for a peel?
-        Tile removedTile = this.grid.remove(loc); // now that checks have been done we can place this
+        Tile tile = this.grid.remove(loc); // now that checks have been done we can place this
 
         // TODO below should be in a multiset class?
-        this.tiles.put(removedTile, this.tiles.getOrDefault(removedTile, 0)+1); // adds one if tile present, otherwise sets to 1
+        this.hand.add(tile); // adds tile from the grid to hand
     }
 
     /**
@@ -140,10 +131,10 @@ public class Player {
      * @return boolean if the dump was successful (were there three tiles to grab)
      */
     public boolean dump(Tile dropTile) {
-        boolean dropped = dropTile(dropTile); // the cost for dropping tile within game 
-        if (!dropped) {return false;} // if it wasn't successfully dropped then don't move forward
+        if (!this.hand.contains(dropTile)) {return false;}
+        dropTile(dropTile); 
 
-        grabTile();
+        grabTile(); // grab three tiles (could be easily changed later for alternate implementations)
         grabTile();
         grabTile();
         return true;
