@@ -2,10 +2,10 @@ package test;
 
 import org.junit.jupiter.api.Test;
 
+import src.main.game.Location;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import src.main.Location;
 
 public class LocationTest {
     static Location L00 = new Location(0, 0);

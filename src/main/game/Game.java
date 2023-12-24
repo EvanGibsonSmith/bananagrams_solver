@@ -1,4 +1,4 @@
-package src.main;
+package src.main.game;
 
 import java.util.HashSet;
 

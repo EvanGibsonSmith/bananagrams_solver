@@ -1,11 +1,12 @@
 package test;
 
-import src.main.TileBag;
-import src.main.Tile;
-
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
+
+import src.main.game.Tile;
+import src.main.game.TileBag;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;

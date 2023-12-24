@@ -1,21 +1,36 @@
 package src.data_structures;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ListIterator;
 
-public class MultiSet<K> {
-    HashMap<K, Integer> map = new HashMap<>();
+// TODO make this a proper set by making it implement Set (and probably extend AbstractSet as well) instead of just iterable
+public class MultiSet<E> implements Iterable<E> {
+    HashMap<E, Integer> map = new HashMap<>();
     int size = 0;
 
-    @Override
     public String toString() {
         String out = "{";
-        for (K element: map.keySet()) {
+        for (E element: map.keySet()) {
             int duplicates = map.get(element);
             for (int i=0; i<duplicates; ++i) {
                 out += element + ", "; // FIXME should it be element.toString()? Check
             }
         }
         return out.substring(0, out.length()-2) + "}";
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        ArrayList<E> iterList = new ArrayList<>();
+        for (E key: map.keySet()) {
+            int numElements = map.get(key);
+            for (int i=0; i<numElements; ++i) { // add this element that number of times
+                iterList.add(key);
+            }
+        }
+        return iterList.iterator();
     }
 
     /**
@@ -25,7 +40,7 @@ public class MultiSet<K> {
      * underlying HashMap. 
      * @param obj
      */
-    public void add(K obj) {
+    public void add(E obj) {
         map.put(obj, map.getOrDefault(obj, 0)+1); // adds one if tile present, otherwise sets to 1
         ++size;
     }
@@ -38,7 +53,7 @@ public class MultiSet<K> {
      * @param obj
      * @throws IllegalArgumentException
      */
-    public void remove(K obj) {
+    public void remove(E obj) {
         if (!map.containsKey(obj)) {
             throw new IllegalArgumentException("Cannot remove object that is not present from a MultiSet");
         }
@@ -89,5 +104,5 @@ public class MultiSet<K> {
      * 
      * if the set contains the given value
      */
-    public boolean contains(K obj) {return this.map.containsKey(obj);}
+    public boolean contains(E obj) {return this.map.containsKey(obj);}
 }

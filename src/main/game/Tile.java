@@ -1,4 +1,5 @@
-package src.main;
+package src.main.game;
+
 public class Tile {
     final char letter;
 
