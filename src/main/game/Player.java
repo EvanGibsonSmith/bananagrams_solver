@@ -19,6 +19,17 @@ public class Player {
         this.bag = bag;
     }
 
+    public Player(Grid grid, Game game, TileBag bag, MultiSet<Tile> hand) {
+        this.grid = grid;
+        this.game = game;
+        this.bag = bag;
+        this.hand = hand;
+    }
+
+    public Player copy() {
+        return new Player(this.grid, this.game, this.bag, this.hand);
+    }
+
     public Grid getGrid() {
         return this.grid;
     }

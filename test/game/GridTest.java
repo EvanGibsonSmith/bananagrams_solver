@@ -1,5 +1,5 @@
 
-package test;
+package test.game;
 import java.util.HashSet;
 import java.util.Arrays;
 
