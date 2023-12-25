@@ -3,7 +3,6 @@ package src.data_structures;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ListIterator;
 
 // TODO make this a proper set by making it implement Set (and probably extend AbstractSet as well) instead of just iterable
 public class MultiSet<E> implements Iterable<E> {

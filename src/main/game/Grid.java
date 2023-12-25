@@ -6,13 +6,29 @@ import java.util.LinkedList;
 import java.util.HashMap;
 
 public class Grid {
-    private Location topLeft = null;
-    private Location bottomRight = null;
-    private HashSet<String> wordsSet; 
-    private HashMap<Location, Tile> filledSquares = new HashMap<>();
+    protected Location topLeft = null;
+    protected Location bottomRight = null;
+    protected HashSet<String> wordsSet; 
+    protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(HashSet<String> wordsSet) {
         this.wordsSet = wordsSet;
+    }
+
+    // Copy constructor
+    public Grid(HashMap<Location, Tile> filledSquares, Location topLeft, Location bottomRight, HashSet<String> wordsSet) {
+        this.filledSquares = filledSquares;
+        this.topLeft = topLeft;
+        this.bottomRight = bottomRight;
+        this.wordsSet = wordsSet;
+    }
+
+    public HashSet<String> getWordsSet() {
+        return this.wordsSet;
+    }
+
+    public Grid copy() {
+        return new Grid(this.filledSquares, this.topLeft, this.bottomRight, this.wordsSet);
     }
 
     /**
@@ -136,7 +152,7 @@ public class Grid {
      * @param loc the location at the start of the word
      * @return null if this tile is not the start of a word, the word if it is
      */
-    private String getWordRight(Location loc) {
+    public String getWordRight(Location loc) {
         if (!(filledSquares.get(loc)!=null && filledSquares.get(loc.left())==null)) { // if NOT conditions making location START of a word
             return null; // if left of this tile not empty or this tile is empty no word can be formed
         }
@@ -147,8 +163,7 @@ public class Grid {
             cursor = cursor.right();
         }
         
-        // if the length of the word is 1, is doesn't need to be checked with the dictionary because it's already connected somewhere else
-        if (word.length()==1) {return null;} 
+        //if (word.length()==1) {return null;} if length is one, technically not word needed to be checked, but useful to include
         return word;
     }
 
@@ -157,7 +172,7 @@ public class Grid {
      * @param loc the location at the start of the word
      * @return null if this tile is not the start of a word, the word if it is
      */
-    private String getWordDown(Location loc) {
+    public String getWordDown(Location loc) {
         if (!(filledSquares.get(loc)!=null && filledSquares.get(loc.above())==null)) { // if NOT conditions making location START of a word
             return null; // if left of this tile not empty or this tile is empty no word can be formed
         }
@@ -168,8 +183,7 @@ public class Grid {
             cursor = cursor.below();
         }
 
-        // if the length of the word is 1, is doesn't need to be checked with the dictionary because it's already connected somewhere else
-        if (word.length()==1) {return null;} 
+        //if (word.length()==1) {return null;} if length is one, technically not word needed to be checked, but useful to include
         return word;
     }
 
@@ -182,12 +196,12 @@ public class Grid {
         HashSet<String> words = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
             String downWord = getWordDown(loc);
-            if (downWord!=null) {
+            if (downWord!=null && downWord.length()!=1) {
                 words.add(downWord);
             }
 
             String rightWord = getWordRight(loc);
-            if (rightWord!=null) {
+            if (rightWord!=null && rightWord.length()!=1) {
                 words.add(rightWord);
             }
         }
@@ -278,5 +292,21 @@ public class Grid {
             }
         }
         return tilePlaceLocations; 
+    }
+
+    /**
+     * Takes all words from the wordsSet and detemines if they contain the string given.
+     * @return HashSet<String>
+     */
+    // TODO could be faster if implemented with a search tree structure with contains (trie)? Also,
+    // should word set be it's own class then with this method and the trie structure for this method's efficiency?
+    public HashSet<String> containsString(String constr) {
+        HashSet<String> conset = new HashSet<>();
+        for (String word: this.getWordsSet()) {
+            if (word.contains(constr)) {
+                conset.add(word);
+            }
+        }
+        return conset;
     }
 }
