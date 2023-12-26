@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
-    protected HashSet<String> wordsSet; 
+    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and containsString?
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(HashSet<String> wordsSet) {
@@ -187,6 +187,24 @@ public class Grid {
         return word;
     }
 
+    // TODO document
+    public HashMap<Location, String> getWordsDown() {
+        HashMap<Location, String> map = new HashMap<>();
+        for (Location loc: this.filledSquares.keySet()) {
+            map.put(loc, getWordDown(loc));
+        }
+        return map;
+    }
+
+    // TODO document
+    public HashMap<Location, String> getWordsRight() {
+        HashMap<Location, String> map = new HashMap<>();
+        for (Location loc: this.filledSquares.keySet()) {
+            map.put(loc, getWordRight(loc));
+        }
+        return map;
+    }
+
     /**
      * Gets every word played on the board, and returns a list of them.
      * In a valid board these should all be acceptable words.
@@ -292,21 +310,5 @@ public class Grid {
             }
         }
         return tilePlaceLocations; 
-    }
-
-    /**
-     * Takes all words from the wordsSet and detemines if they contain the string given.
-     * @return HashSet<String>
-     */
-    // TODO could be faster if implemented with a search tree structure with contains (trie)? Also,
-    // should word set be it's own class then with this method and the trie structure for this method's efficiency?
-    public HashSet<String> containsString(String constr) {
-        HashSet<String> conset = new HashSet<>();
-        for (String word: this.getWordsSet()) {
-            if (word.contains(constr)) {
-                conset.add(word);
-            }
-        }
-        return conset;
     }
 }
