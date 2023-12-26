@@ -5,7 +5,7 @@ import src.data_structures.MultiSet;
 
 public class Player {
     Grid grid;
-    Game game;
+    protected Game game;
     TileBag bag;
     MultiSet<Tile> hand = new MultiSet<>(); // represents hand player has and how much of each tile
 

@@ -20,7 +20,7 @@ public class GridTest {
     // TODO add more tests sometime
     @Test 
     void placeableLocations() {
-        Grid g = new Grid(null); // no words need for this test
+        Grid g = new Grid((HashSet<String>) null); // no words need for this test
         g.placeUnsafe(new Location(0,0), new Tile("a".charAt(0)));
         
         System.out.println(g.placeableLocations());
@@ -48,7 +48,7 @@ public class GridTest {
 
     @Test 
     void removeLocations() {
-        Grid g = new Grid(null); // words not needed for this test
+        Grid g = new Grid((HashSet<String>) null); // words not needed for this test
 
         assertEquals(g.size(), 0);
 
@@ -125,7 +125,7 @@ public class GridTest {
 
     @Test 
     void removeTile() {
-        Grid g = new Grid(null); // words not important for this test
+        Grid g = new Grid((HashSet<String>) null); // words not important for this test
 
         g.placeUnsafe(new Location(0, 0), new Tile('a'));
         g.placeUnsafe(new Location(0, 1), new Tile('b'));
