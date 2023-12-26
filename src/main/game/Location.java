@@ -11,6 +11,11 @@ public class Location {
         this.column = column;
     }
 
+    public Location(Location loc) {
+        this.row = loc.getRow();
+        this.column = loc.getColumn();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj.getClass() != this.getClass()) {

@@ -4,11 +4,12 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
-    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and containsString?
+    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and contains
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(HashSet<String> wordsSet) {
@@ -16,19 +17,15 @@ public class Grid {
     }
 
     // Copy constructor
-    public Grid(HashMap<Location, Tile> filledSquares, Location topLeft, Location bottomRight, HashSet<String> wordsSet) {
-        this.filledSquares = filledSquares;
-        this.topLeft = topLeft;
-        this.bottomRight = bottomRight;
-        this.wordsSet = wordsSet;
+    public Grid(Grid g) {
+        this.filledSquares = g.filledSquares;
+        this.topLeft = g.topLeft;
+        this.bottomRight = g.bottomRight;
+        this.wordsSet = g.wordsSet;
     }
 
     public HashSet<String> getWordsSet() {
         return this.wordsSet;
-    }
-
-    public Grid copy() {
-        return new Grid(this.filledSquares, this.topLeft, this.bottomRight, this.wordsSet);
     }
 
     /**
@@ -86,6 +83,15 @@ public class Grid {
     public boolean locationFilled(Location loc) {
         return filledSquares.containsKey(loc);
     }
+
+    /**
+     * The filled locations on the grid
+     * @return locations
+     */
+    public Set<Location> filledLocations() {
+        return filledSquares.keySet();
+    }
+
 
     /**
      * Gets the tile object at the specified location. Will 
