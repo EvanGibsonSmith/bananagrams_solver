@@ -317,4 +317,49 @@ public class Grid {
         }
         return tilePlaceLocations; 
     }
+
+    // TODO below should probably be in an extension of the Grid class
+
+    public HashSet<Location> downStartLocations() {
+        HashSet<Location> downStartLocs = new HashSet<>();
+        for (Location loc: filledSquares.keySet()) {
+            if (!this.locationFilled(loc.left())) {
+                downStartLocs.add(loc);
+            }
+        }
+        return downStartLocs;
+    }
+
+    // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
+    public String getDownFragment(Location loc) {
+        String fragment = "";
+        while (!this.locationFilled(loc)) { // while location still has letters keep moving downward
+            fragment += this.getTile(loc).getLetter();
+
+            loc = loc.below();
+        }
+        return fragment;
+    }
+
+    public HashSet<Location> rightStartLocations() {
+        HashSet<Location> rightStartLocs = new HashSet<>();
+        for (Location loc: filledSquares.keySet()) {
+            if (!this.locationFilled(loc.above())) {
+                rightStartLocs.add(loc);
+            }
+        }
+        return rightStartLocs;
+    }
+
+    // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
+    public String getRightFragment(Location loc) {
+        String fragment = "";
+        while (!this.locationFilled(loc)) { // while location still has letters keep moving downward
+            fragment += this.getTile(loc).getLetter();
+
+            loc = loc.right();
+        }
+        return fragment;
+    }
 }
+
