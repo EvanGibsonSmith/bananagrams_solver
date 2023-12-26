@@ -4,38 +4,31 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
-    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and contains
+    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and containsString?
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(HashSet<String> wordsSet) {
         this.wordsSet = wordsSet;
     }
 
-    // Deep copy constructor
-    public Grid(Grid g) {
-        this.filledSquares = new HashMap<Location, Tile>(g.getFilledSquares());
-        this.topLeft = g.getTopLeft();
-        this.bottomRight = g.getBottomRight();
-        this.wordsSet = new HashSet<String>(g.getWordsSet()); // realistically probably won't change but copy just in case
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj.getClass()!=this.getClass()) {return false;}
-        return ((Grid) obj).getFilledSquares().equals(this.getFilledSquares());
+    // Copy constructor
+    public Grid(HashMap<Location, Tile> filledSquares, Location topLeft, Location bottomRight, HashSet<String> wordsSet) {
+        this.filledSquares = filledSquares;
+        this.topLeft = topLeft;
+        this.bottomRight = bottomRight;
+        this.wordsSet = wordsSet;
     }
 
     public HashSet<String> getWordsSet() {
         return this.wordsSet;
     }
 
-    public HashMap<Location, Tile> getFilledSquares() {
-        return this.filledSquares;
+    public Grid copy() {
+        return new Grid(this.filledSquares, this.topLeft, this.bottomRight, this.wordsSet);
     }
 
     /**
@@ -93,15 +86,6 @@ public class Grid {
     public boolean locationFilled(Location loc) {
         return filledSquares.containsKey(loc);
     }
-
-    /**
-     * The filled locations on the grid
-     * @return locations
-     */
-    public Set<Location> filledLocations() {
-        return filledSquares.keySet();
-    }
-
 
     /**
      * Gets the tile object at the specified location. Will 
@@ -327,49 +311,4 @@ public class Grid {
         }
         return tilePlaceLocations; 
     }
-
-    // TODO below should probably be in an extension of the Grid class
-
-    public HashSet<Location> downStartLocations() {
-        HashSet<Location> downStartLocs = new HashSet<>();
-        for (Location loc: filledSquares.keySet()) {
-            if (!this.locationFilled(loc.above())) {
-                downStartLocs.add(loc);
-            }
-        }
-        return downStartLocs;
-    }
-
-    // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
-    public String getDownFragment(Location loc) {
-        String fragment = "";
-        while (this.locationFilled(loc)) { // while location still has letters keep moving downward
-            fragment += this.getTile(loc).getLetter();
-
-            loc = loc.below();
-        }
-        return fragment;
-    }
-
-    public HashSet<Location> rightStartLocations() {
-        HashSet<Location> rightStartLocs = new HashSet<>();
-        for (Location loc: filledSquares.keySet()) {
-            if (this.locationFilled(loc.left())) {
-                rightStartLocs.add(loc);
-            }
-        }
-        return rightStartLocs;
-    }
-
-    // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
-    public String getRightFragment(Location loc) {
-        String fragment = "";
-        while (!this.locationFilled(loc)) { // while location still has letters keep moving downward
-            fragment += this.getTile(loc).getLetter();
-
-            loc = loc.right();
-        }
-        return fragment;
-    }
 }
-
