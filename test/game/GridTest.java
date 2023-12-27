@@ -151,6 +151,4 @@ public class GridTest {
         assertNotEquals(g1, g2);
     }
     // TODO add a bounding box test. I found an small error, I think they are all fixed but there are quite a few components so it would be nice to test.
-
-
 }

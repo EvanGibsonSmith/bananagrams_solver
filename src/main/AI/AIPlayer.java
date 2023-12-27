@@ -3,6 +3,8 @@ package src.main.AI;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import src.main.game.Player;
 import src.main.game.Tile;
@@ -43,7 +45,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
     // TODO maybe this could be broken up, might require a small helper package class. Also document
     // TODO instead of duplicating the nextPlayer within this classe should the class act on an 
     // existing player and we copy the player outside of this class?
-    private AIPlayer placeWord(String word, Location wordStartLoc, int direction) {
+    private AIPlayer placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
 
         AIPlayer nextPlayer = this.copy();
@@ -80,15 +82,28 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         return nextPlayer;
     }
 
-    // TODO This might be kind of inefficient  
-    public Set<AIPlayer> branch_forward() {
+    public Set<AIPlayer> branch_forward_single_direction(byte direction) {
+        BiFunction<Grid, Location, String> getGridFragmentFunction;
+        Function<Grid, HashSet<Location>> startLocationsFunction;
+        BiFunction<Location, Integer, Location> wordStartLocationFunction;
+        if (direction==0) {
+            getGridFragmentFunction = (g, loc) -> g.getRightFragment(loc);
+            startLocationsFunction = (g) -> g.rightStartLocations();
+            wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow(), loc.getColumn()-idx);
+        }
+        else if (direction==1) {
+            getGridFragmentFunction = (g, loc) -> g.getDownFragment(loc);
+            startLocationsFunction = (g) -> g.downStartLocations();
+            wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow()-idx, loc.getColumn());
+        }
+        else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
+
         Set<AIPlayer> branchedPlayers = new HashSet<>();
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
 
-        // TODO just goes DOWN right now
         Grid grid = this.getGrid();
-        for (Location loc: grid.downStartLocations()) {
-            String gridFragment = grid.getDownFragment(loc);
+        for (Location loc: startLocationsFunction.apply(grid)) {
+            String gridFragment = getGridFragmentFunction.apply(grid, loc);
 
             for (String candidateWord: grid.getWordsSet()) {
                 if (candidateWord.equals(gridFragment)) {continue;} // EDGE CASE: don't consider word already there, nothing will change
@@ -96,8 +111,8 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                 // below will usually be empty or only one index with execption of something like eye where e can be on either side
                 for (int idx: idxs) { 
                     // given loc on grid we know the idx letter of the word goes there, so can get start of word
-                    Location startWordLocation = new Location(loc.getRow()-idx, loc.getColumn());
-                    AIPlayer nextPlayer = placeWord(candidateWord, startWordLocation, 1);
+                    Location startWordLocation = wordStartLocationFunction.apply(loc, idx); // this function gets location of start of word based on direction
+                    AIPlayer nextPlayer = placeWord(candidateWord, startWordLocation, direction);
                     // do not include if grid has been seen, no grid is present, OR the new work incidentally made the grid invalid
                     if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid()) && nextPlayer.getGrid().valid()) {
                         foundGrids.add(nextPlayer.getGrid());
@@ -105,9 +120,15 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                     }
                 }
             }
-
         }
-        return branchedPlayers; // STUB
+
+        return branchedPlayers;
+    }
+
+    public Set<AIPlayer> branch_forward() {
+        Set<AIPlayer> out = branch_forward_single_direction((byte) 1);
+        out.addAll(branch_forward_single_direction((byte) 0)); // just combine both directions
+        return out;
     }
 
     public Set<AIPlayer> branch_backward() {

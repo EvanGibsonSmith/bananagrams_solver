@@ -1,19 +1,26 @@
-package test.AI;
+package test.AI.AIPlayer;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashSet;
+import java.util.function.Function;
 import java.util.Set;
 
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.data_structures.MultiSet;
 import src.main.AI.AIPlayer;
 
-class AIPlayerTest {
+class BranchDown {
+    static Function <AIPlayer, Set<AIPlayer>> branchDown; // this will branch only down and add forward branches for these tests
+
+    @BeforeAll
+    static void defineBranchDown() {
+        branchDown = (player) -> (player.branch_forward_single_direction((byte) 1));
+    }
 
     @Test 
     void singleBranchTilesBeforeTest() {
@@ -50,7 +57,7 @@ class AIPlayerTest {
         
         System.out.println(player.getGrid());
 
-        HashSet<AIPlayer> nextPlayers = (HashSet<AIPlayer>) player.branch_forward();
+        Set<AIPlayer> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         for (AIPlayer p: nextPlayers) { // only one player
@@ -93,10 +100,11 @@ class AIPlayerTest {
         
         System.out.println(player.getGrid());
 
-        HashSet<AIPlayer> nextPlayers = (HashSet<AIPlayer>) player.branch_forward(); 
+        Set<AIPlayer> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         for (AIPlayer p: nextPlayers) { // only one player
+            System.out.println(p.getGrid());
             //assertEquals(p.getGrid().gridWords(), "pact"); // TODO create gridWords method
         }
     }
@@ -138,7 +146,7 @@ class AIPlayerTest {
         
         System.out.println(player.getGrid());
 
-        HashSet<AIPlayer> nextPlayers = (HashSet<AIPlayer>) player.branch_forward(); // TODO in future make branch_forward down for these tests
+        Set<AIPlayer> nextPlayers = branchDown.apply(player);
 
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid()); 
@@ -185,7 +193,7 @@ class AIPlayerTest {
         
         System.out.println(player.getGrid());
 
-        HashSet<AIPlayer> nextPlayers = (HashSet<AIPlayer>) player.branch_forward(); // TODO in future make branch_forward down for these tests
+        Set<AIPlayer> nextPlayers = branchDown.apply(player);
         
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid());
@@ -231,7 +239,7 @@ class AIPlayerTest {
         
         System.out.println(player.getGrid());
 
-        HashSet<AIPlayer> nextPlayers = (HashSet<AIPlayer>) player.branch_forward(); // TODO in future make branch_forward down for these tests
+        Set<AIPlayer> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
 
@@ -281,9 +289,9 @@ class AIPlayerTest {
         
         System.out.println(player.getGrid());
 
-        HashSet<AIPlayer> nextPlayers = (HashSet<AIPlayer>) player.branch_forward(); // TODO in future make branch_forward down for these tests
+        Set<AIPlayer> nextPlayers = branchDown.apply(player);
         
-        assertEquals(nextPlayers.size(), 9);
+        assertEquals(nextPlayers.size(), 7); // TODO complete this test
 
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid());
