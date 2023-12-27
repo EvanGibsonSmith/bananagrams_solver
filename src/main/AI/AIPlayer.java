@@ -2,6 +2,7 @@ package src.main.AI;
 
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import src.main.game.Player;
 import src.main.game.Tile;
@@ -17,25 +18,37 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         super(game, grid, bag);
     }
 
+    public AIPlayer(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
+        super(game, grid, bag, hand);
+    }
+
+    public AIPlayer copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
+        // TODO make copying nicer and make copyable interface.
+        return new AIPlayer(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
+    }
+
     // TODO kind of odd place for this function. Maybe test this?
     private ArrayList<Integer> indexesOf(String word, String sub) {
         ArrayList<Integer> out = new ArrayList<>();
         int start = 0;
         while (start!=-1) {
-            int newIndex = word.indexOf(sub, 0);
+            int newIndex = word.indexOf(sub, start);
+            if (newIndex==-1) {break;}; // if new index is "real index" add
             out.add(newIndex);
-            start = newIndex;
+            start = newIndex+sub.length();
         }
         return out;
     }
 
     // TODO maybe this could be broken up, might require a small helper package class. Also document
-    private Grid placeWord(String word, Location wordStartLoc, int direction) {
+    // TODO instead of duplicating the nextPlayer within this classe should the class act on an 
+    // existing player and we copy the player outside of this class?
+    private AIPlayer placeWord(String word, Location wordStartLoc, int direction) {
         Location cursor = new Location(wordStartLoc);
 
-        Player nextPlayer = new AIPlayer(this.game, getGrid(), getBag());
+        AIPlayer nextPlayer = this.copy();
         MultiSet<Tile> nextHand = nextPlayer.getHand();
-        Grid nextGrid = new Grid(this.getGrid());
+        Grid nextGrid = nextPlayer.getGrid();
 
         String currentGridFragment = ""; // represents the letters in the word from grid we are looking over
         for (int i=0; i<word.length(); ++i) {
@@ -44,7 +57,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             }
             else { // if this location is blank the currentGridFragment is done so we check it
                 // check fragment, can't play word if not. If fragment blank branch is always false
-                if (!word.substring(i-currentGridFragment.length(), i+1).equals(currentGridFragment)) {
+                if (!word.substring(i-currentGridFragment.length(), i).equals(currentGridFragment)) {
                     return null; // no grid can be made
                 }
                 currentGridFragment = ""; // if the grid fragment words, reset it since we now have blank tiles
@@ -64,12 +77,13 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             else if (direction==1) {cursor = cursor.below();}
         }
         
-        return nextGrid;
+        return nextPlayer;
     }
 
     // TODO This might be kind of inefficient  
     public Set<AIPlayer> branch_forward() {
-        ArrayList<Grid> branchedGrids = new ArrayList<>();
+        Set<AIPlayer> branchedPlayers = new HashSet<>();
+        HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
 
         // TODO just goes DOWN right now
         Grid grid = this.getGrid();
@@ -77,20 +91,23 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             String gridFragment = grid.getDownFragment(loc);
 
             for (String candidateWord: grid.getWordsSet()) {
+                if (candidateWord.equals(gridFragment)) {continue;} // EDGE CASE: don't consider word already there, nothing will change
                 ArrayList<Integer> idxs = indexesOf(candidateWord, gridFragment);
                 // below will usually be empty or only one index with execption of something like eye where e can be on either side
-                for (Integer idx: idxs) { 
+                for (int idx: idxs) { 
                     // given loc on grid we know the idx letter of the word goes there, so can get start of word
                     Location startWordLocation = new Location(loc.getRow()-idx, loc.getColumn());
-                    Grid nextGrid = placeWord(candidateWord, startWordLocation, 1);
-                    if (nextGrid!=null) {
-                        branchedGrids.add(nextGrid);
+                    AIPlayer nextPlayer = placeWord(candidateWord, startWordLocation, 1);
+                    // do not include if grid has been seen, no grid is present, OR the new work incidentally made the grid invalid
+                    if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid()) && nextPlayer.getGrid().valid()) {
+                        foundGrids.add(nextPlayer.getGrid());
+                        branchedPlayers.add(nextPlayer);
                     }
                 }
             }
 
         }
-        return null; // STUB
+        return branchedPlayers; // STUB
     }
 
     public Set<AIPlayer> branch_backward() {

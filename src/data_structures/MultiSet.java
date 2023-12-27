@@ -17,6 +17,15 @@ public class MultiSet<E> implements Iterable<E> {
         this.size = size;
     }
 
+    public MultiSet(MultiSet<E> other) {
+        this.map = new HashMap<>(other.map);
+        this.size = other.size; // primitive so nothing needed
+    }
+
+    public MultiSet<E> copy() {
+        return new MultiSet<E>(this);
+    }
+
     public String toString() {
         String out = "{";
         for (E element: map.keySet()) {
