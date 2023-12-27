@@ -19,7 +19,7 @@ public class Player {
         this.bag = bag;
     }
 
-    public Player(Grid grid, Game game, TileBag bag, MultiSet<Tile> hand) {
+    public Player(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
         this.grid = grid;
         this.game = game;
         this.bag = bag;
@@ -27,7 +27,7 @@ public class Player {
     }
 
     public Player copy() {
-        return new Player(this.grid, this.game, this.bag, this.hand);
+        return new Player(this.game, this.grid, this.bag, this.hand);
     }
 
     public Grid getGrid() {

@@ -138,6 +138,18 @@ public class GridTest {
         assertEquals(g.getTile(new Location(0, 2)), null);
         assertEquals(g.getTile(new Location(0, 0)), new Tile('a'));
     }
+    
+    @Test
+    void copyTest() {
+        Grid g1 = new Grid((HashSet<String>) null);
+        g1.placeUnsafe(new Location(-1, -1), new Tile('a'));
+        Grid g2 = new Grid(g1); // should be copy
+        assertEquals(g1, g2);
+        g1.placeUnsafe(new Location(0, 0), new Tile('b'));
+        System.out.println(g1);
+        System.out.println(g2);
+        assertNotEquals(g1, g2);
+    }
     // TODO add a bounding box test. I found an small error, I think they are all fixed but there are quite a few components so it would be nice to test.
 
 

@@ -16,16 +16,26 @@ public class Grid {
         this.wordsSet = wordsSet;
     }
 
-    // Copy constructor
+    // Deep copy constructor
     public Grid(Grid g) {
-        this.filledSquares = g.filledSquares;
-        this.topLeft = g.topLeft;
-        this.bottomRight = g.bottomRight;
-        this.wordsSet = g.wordsSet;
+        this.filledSquares = new HashMap<Location, Tile>(g.getFilledSquares());
+        this.topLeft = g.getTopLeft();
+        this.bottomRight = g.getBottomRight();
+        this.wordsSet = new HashSet<String>(g.getWordsSet()); // realistically probably won't change but copy just in case
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass()!=this.getClass()) {return false;}
+        return ((Grid) obj).getFilledSquares().equals(this.getFilledSquares());
     }
 
     public HashSet<String> getWordsSet() {
         return this.wordsSet;
+    }
+
+    public HashMap<Location, Tile> getFilledSquares() {
+        return this.filledSquares;
     }
 
     /**
@@ -323,7 +333,7 @@ public class Grid {
     public HashSet<Location> downStartLocations() {
         HashSet<Location> downStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
-            if (!this.locationFilled(loc.left())) {
+            if (!this.locationFilled(loc.above())) {
                 downStartLocs.add(loc);
             }
         }
@@ -333,7 +343,7 @@ public class Grid {
     // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
     public String getDownFragment(Location loc) {
         String fragment = "";
-        while (!this.locationFilled(loc)) { // while location still has letters keep moving downward
+        while (this.locationFilled(loc)) { // while location still has letters keep moving downward
             fragment += this.getTile(loc).getLetter();
 
             loc = loc.below();
@@ -344,7 +354,7 @@ public class Grid {
     public HashSet<Location> rightStartLocations() {
         HashSet<Location> rightStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
-            if (!this.locationFilled(loc.above())) {
+            if (this.locationFilled(loc.left())) {
                 rightStartLocs.add(loc);
             }
         }
