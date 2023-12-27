@@ -12,6 +12,7 @@ import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
+import src.data_structures.MultiSet;
 import src.main.AI.AIPlayer;
 
 class BranchRight {
@@ -20,6 +21,14 @@ class BranchRight {
     @BeforeAll
     static void defineBranchRight() {
         branchRight = (player) -> (player.branch_forward_single_direction((byte) 0));
+    }
+
+    MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {
+        MultiSet<MultiSet<String>> out = new MultiSet<MultiSet<String>>();
+        for (AIPlayer player: players) {
+            out.add(player.getGrid().getWordsPlayed());
+        }
+        return out;
     }
 
     @Test 
@@ -55,15 +64,13 @@ class BranchRight {
         player.placeTile(new Location(0, 1), new Tile('c'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        System.out.println(player.getGrid());
-
         Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
-        //assertEquals(nextPlayers.size(), 1);
-        for (AIPlayer p: nextPlayers) { // only one player
-            System.out.println(p.getGrid());
-            //assertEquals(p.getGrid().gridWords(), "pact"); // TODO create gridWords method
-        }
+        assertEquals(nextPlayers.size(), 1);
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"fact"}));
+        getAllWordsPlayed(nextPlayers);
+        assertEquals(getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test 
@@ -99,15 +106,12 @@ class BranchRight {
         player.placeTile(new Location(0, 1), new Tile('c'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        System.out.println(player.getGrid());
-
         Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
-        for (AIPlayer p: nextPlayers) { // only one player
-            System.out.println(p.getGrid());
-            //assertEquals(p.getGrid().gridWords(), "pact"); // TODO create gridWords method
-        }
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"actor"}));
+        assertEquals(getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test
@@ -145,17 +149,14 @@ class BranchRight {
         player.placeTile(new Location(0, 1), new Tile('c'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        System.out.println(player.getGrid());
-
         Set<AIPlayer> nextPlayers = branchRight.apply(player);
 
-        for (AIPlayer p: nextPlayers) {
-            System.out.println(p.getGrid()); 
-        }
-
         assertEquals(nextPlayers.size(), 3);
-
-        // TODO add formal test of how set of word sets matches what is expected
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"pact"}));
+        expected.add(new MultiSet<String>(new String[] {"actor"}));
+        expected.add(new MultiSet<String>(new String[] {"fact"}));
+        assertEquals(getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test
@@ -192,15 +193,12 @@ class BranchRight {
         player.placeTile(new Location(1, 0), new Tile('a'));
         player.placeTile(new Location(2, 0), new Tile('t'));
         
-        System.out.println(player.getGrid());
-
         Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
-        for (AIPlayer p: nextPlayers) {
-            System.out.println(p.getGrid());
-            //assertEquals(p.getGrid().getWords(), new MultiSet<String>(new String[] {"cat", "rap"})); // TODO add getWords to getGrid and array constructor to MultiSet
-        }
         assertEquals(nextPlayers.size(), 1);
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"cat", "rap"}));
+        assertEquals(getAllWordsPlayed(nextPlayers), expected);    
         
     }
 
@@ -238,16 +236,12 @@ class BranchRight {
         player.placeTile(new Location(2, 0), new Tile('a'));
         player.placeTile(new Location(3, 0), new Tile('t'));
         
-        System.out.println(player.getGrid());
-
         Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
-
-        for (AIPlayer p: nextPlayers) { // only one player
-            System.out.println(p.getGrid());
-            //assertEquals(p.getGrid().getWords(), new MultiSet<String>(new String[] {"cat", "cat"})); // TODO add getWords to getGrid and array constructor to MultiSet
-        }
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"cat", "cat"}));
+        assertEquals(getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test
@@ -288,15 +282,17 @@ class BranchRight {
         player.placeTile(new Location(2, 0), new Tile('a'));
         player.placeTile(new Location(3, 0), new Tile('t'));
         
-        System.out.println(player.getGrid());
-
         Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
-        assertEquals(nextPlayers.size(), 7); // TODO complete this test
-
-        for (AIPlayer p: nextPlayers) {
-            System.out.println(p.getGrid());
-        }
-        // TODO add formal test on how the set of sets of words should be equal for both instead of printing
+        assertEquals(nextPlayers.size(), 7);
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"cat", "cat"}));
+        expected.add(new MultiSet<String>(new String[] {"cat", "at"}));
+        expected.add(new MultiSet<String>(new String[] {"cat", "at"}));
+        expected.add(new MultiSet<String>(new String[] {"cat", "tat"}));
+        expected.add(new MultiSet<String>(new String[] {"cat", "tat"}));
+        expected.add(new MultiSet<String>(new String[] {"cat", "par"}));
+        expected.add(new MultiSet<String>(new String[] {"cat", "rap"}));
+        assertEquals(getAllWordsPlayed(nextPlayers), expected);    
     }
 }

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Set;
 
+import src.data_structures.MultiSet;
+
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
@@ -226,8 +228,8 @@ public class Grid {
      * In a valid board these should all be acceptable words.
      * @return
      */
-    public HashSet<String> getWordsPlayed() {
-        HashSet<String> words = new HashSet<>();
+    public MultiSet<String> getWordsPlayed() {
+        MultiSet<String> words = new MultiSet<>();
         for (Location loc: filledSquares.keySet()) {
             String downWord = getWordDown(loc);
             if (downWord!=null && downWord.length()!=1) {
@@ -249,7 +251,7 @@ public class Grid {
      */
     // FIXME there is a extreme edge case in which only ONE TILE is placed that this will ALWAYS consider valid. Don't even know if I need to care
     public Boolean validWords() {
-        HashSet<String> words = getWordsPlayed();
+        MultiSet<String> words = getWordsPlayed();
         for (String word: words) {
             if (!this.wordsSet.contains(word)) { // if one of the words is not valid then board is not valid.
                 return false;
