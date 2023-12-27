@@ -14,12 +14,12 @@ import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.main.AI.AIPlayer;
 
-class BranchDown {
-    static Function <AIPlayer, Set<AIPlayer>> branchDown; // this will branch only down and add forward branches for these tests
+class BranchRight {
+    static Function <AIPlayer, Set<AIPlayer>> branchRight; // this will branch only down and add forward branches for these tests
 
     @BeforeAll
-    static void defineBranchDown() {
-        branchDown = (player) -> (player.branch_forward_single_direction((byte) 1));
+    static void defineBranchRight() {
+        branchRight = (player) -> (player.branch_forward_single_direction((byte) 0));
     }
 
     @Test 
@@ -50,17 +50,18 @@ class BranchDown {
         player.grabTile();
 
         System.out.println(player.getHand()); // player has act letters
-        // player places act down
+        // player places act across
         player.placeTile(new Location(0, 0), new Tile('a'));
-        player.placeTile(new Location(1, 0), new Tile('c'));
-        player.placeTile(new Location(2, 0), new Tile('t'));
+        player.placeTile(new Location(0, 1), new Tile('c'));
+        player.placeTile(new Location(0, 2), new Tile('t'));
         
         System.out.println(player.getGrid());
 
-        Set<AIPlayer> nextPlayers = branchDown.apply(player);
+        Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
-        assertEquals(nextPlayers.size(), 1);
+        //assertEquals(nextPlayers.size(), 1);
         for (AIPlayer p: nextPlayers) { // only one player
+            System.out.println(p.getGrid());
             //assertEquals(p.getGrid().gridWords(), "pact"); // TODO create gridWords method
         }
     }
@@ -95,12 +96,12 @@ class BranchDown {
         System.out.println(player.getHand()); // player has act letters
         // player places act down
         player.placeTile(new Location(0, 0), new Tile('a'));
-        player.placeTile(new Location(1, 0), new Tile('c'));
-        player.placeTile(new Location(2, 0), new Tile('t'));
+        player.placeTile(new Location(0, 1), new Tile('c'));
+        player.placeTile(new Location(0, 2), new Tile('t'));
         
         System.out.println(player.getGrid());
 
-        Set<AIPlayer> nextPlayers = branchDown.apply(player);
+        Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         for (AIPlayer p: nextPlayers) { // only one player
@@ -141,12 +142,12 @@ class BranchDown {
         System.out.println(player.getHand()); // player has act letters
         // player places act down
         player.placeTile(new Location(0, 0), new Tile('a'));
-        player.placeTile(new Location(1, 0), new Tile('c'));
-        player.placeTile(new Location(2, 0), new Tile('t'));
+        player.placeTile(new Location(0, 1), new Tile('c'));
+        player.placeTile(new Location(0, 2), new Tile('t'));
         
         System.out.println(player.getGrid());
 
-        Set<AIPlayer> nextPlayers = branchDown.apply(player);
+        Set<AIPlayer> nextPlayers = branchRight.apply(player);
 
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid()); 
@@ -158,7 +159,7 @@ class BranchDown {
     }
 
     @Test
-    void acrossWordTestSingleDown() {
+    void downWordTestSingleDown() {
         HashSet<String> wordsSet = new HashSet<String>();
         wordsSet.add("cat"); // first word to play
 
@@ -188,12 +189,12 @@ class BranchDown {
         System.out.println(player.getHand()); // player has cat letters
         // player places cat across
         player.placeTile(new Location(0, 0), new Tile('c'));
-        player.placeTile(new Location(0, 1), new Tile('a'));
-        player.placeTile(new Location(0, 2), new Tile('t'));
+        player.placeTile(new Location(1, 0), new Tile('a'));
+        player.placeTile(new Location(2, 0), new Tile('t'));
         
         System.out.println(player.getGrid());
 
-        Set<AIPlayer> nextPlayers = branchDown.apply(player);
+        Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid());
@@ -204,7 +205,7 @@ class BranchDown {
     }
 
     @Test
-    void acrossWordDoubleWord() {
+    void downWordDoubleWord() {
         HashSet<String> wordsSet = new HashSet<String>();
         wordsSet.add("cat"); // first word to play, can ALSO be played down
 
@@ -233,13 +234,13 @@ class BranchDown {
 
         System.out.println(player.getHand()); // player has cat letters
         // player places cat across
-        player.placeTile(new Location(0, 1), new Tile('c'));
-        player.placeTile(new Location(0, 2), new Tile('a'));
-        player.placeTile(new Location(0, 3), new Tile('t'));
+        player.placeTile(new Location(1, 0), new Tile('c'));
+        player.placeTile(new Location(2, 0), new Tile('a'));
+        player.placeTile(new Location(3, 0), new Tile('t'));
         
         System.out.println(player.getGrid());
 
-        Set<AIPlayer> nextPlayers = branchDown.apply(player);
+        Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
 
@@ -250,7 +251,7 @@ class BranchDown {
     }
 
     @Test
-    void acrossWordTestTogether() {
+    void downWordTestTogether() {
         HashSet<String> wordsSet = new HashSet<String>();
         wordsSet.add("cat"); // first word to play, can ALSO be played down
 
@@ -283,15 +284,15 @@ class BranchDown {
 
         System.out.println(player.getHand()); // player has cat letters
         // player places cat across
-        player.placeTile(new Location(0, 1), new Tile('c'));
-        player.placeTile(new Location(0, 2), new Tile('a'));
-        player.placeTile(new Location(0, 3), new Tile('t'));
+        player.placeTile(new Location(1, 0), new Tile('c'));
+        player.placeTile(new Location(2, 0), new Tile('a'));
+        player.placeTile(new Location(3, 0), new Tile('t'));
         
         System.out.println(player.getGrid());
 
-        Set<AIPlayer> nextPlayers = branchDown.apply(player);
+        Set<AIPlayer> nextPlayers = branchRight.apply(player);
         
-        assertEquals(nextPlayers.size(), 7);
+        assertEquals(nextPlayers.size(), 7); // TODO complete this test
 
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid());

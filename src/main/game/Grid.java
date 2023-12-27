@@ -354,7 +354,7 @@ public class Grid {
     public HashSet<Location> rightStartLocations() {
         HashSet<Location> rightStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
-            if (this.locationFilled(loc.left())) {
+            if (!this.locationFilled(loc.left())) {
                 rightStartLocs.add(loc);
             }
         }
@@ -364,7 +364,7 @@ public class Grid {
     // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
     public String getRightFragment(Location loc) {
         String fragment = "";
-        while (!this.locationFilled(loc)) { // while location still has letters keep moving downward
+        while (this.locationFilled(loc)) { // while location still has letters keep moving downward
             fragment += this.getTile(loc).getLetter();
 
             loc = loc.right();
