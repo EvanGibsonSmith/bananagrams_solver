@@ -27,6 +27,11 @@ public class Grid {
     }
 
     @Override
+    public int hashCode() {
+        return this.filledSquares.hashCode();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj.getClass()!=this.getClass()) {return false;}
         return ((Grid) obj).getFilledSquares().equals(this.getFilledSquares());

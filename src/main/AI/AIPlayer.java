@@ -85,16 +85,17 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
 
     public Set<AIPlayer> branchForwardSingleDirection(byte direction) {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
-        Function<Grid, HashSet<Location>> startLocationsFunction;
+        HashSet<Location> startLocations;
         BiFunction<Location, Integer, Location> wordStartLocationFunction;
+        Grid grid = this.getGrid();
         if (direction==0) {
             getGridFragmentFunction = (g, loc) -> g.getRightFragment(loc);
-            startLocationsFunction = (g) -> g.rightStartLocations();
+            startLocations = grid.rightStartLocations();
             wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow(), loc.getColumn()-idx);
         }
         else if (direction==1) {
             getGridFragmentFunction = (g, loc) -> g.getDownFragment(loc);
-            startLocationsFunction = (g) -> g.downStartLocations();
+            startLocations = grid.downStartLocations();
             wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow()-idx, loc.getColumn());
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
@@ -102,8 +103,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         Set<AIPlayer> branchedPlayers = new HashSet<>();
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
 
-        Grid grid = this.getGrid();
-        for (Location loc: startLocationsFunction.apply(grid)) {
+        for (Location loc: startLocations) {
             String gridFragment = getGridFragmentFunction.apply(grid, loc);
 
             for (String candidateWord: grid.getWordsSet()) {
@@ -151,7 +151,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         Location cursor = loc;
         while (grid.locationFilled(cursor)) {
             if (!connectedToOtherWord.apply(cursor)) {
-                Tile t = grid.remove(loc);
+                Tile t = grid.remove(cursor);
                 nextPlayer.getHand().add(t);
             }
             cursor = move.apply(cursor);
@@ -161,21 +161,24 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
     }
 
     public Set<AIPlayer> branchBackwardsSingleDirection(byte direction) {
-        Function<Grid, Set<Location>> startLocations;
+        HashSet<Location> startLocations;
+        Grid grid = this.getGrid();
+        HashSet<Grid> foundGrids = new HashSet<>();
+        foundGrids.add(grid);
         if (direction==0) {
-            startLocations = (grid) -> grid.rightStartLocations();
+            startLocations = grid.rightStartLocations();
         }
         else if (direction==1) {
-            startLocations = (grid) -> grid.downStartLocations();
+            startLocations = grid.downStartLocations();
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
         
         Set<AIPlayer> branchedPlayers = new HashSet<>();
-        Grid grid = this.getGrid();
-        for (Location loc: startLocations.apply(grid)) { // get starts of words to remove
+        for (Location loc: startLocations) { // get starts of words to remove
             AIPlayer nextPlayer = removeWord(loc, direction);
-            if (nextPlayer!=null) {
+            if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid())) {
                 branchedPlayers.add(nextPlayer);
+                foundGrids.add(nextPlayer.getGrid());
             }
         }
 
