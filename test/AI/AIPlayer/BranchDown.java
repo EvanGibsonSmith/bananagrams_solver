@@ -20,7 +20,7 @@ class BranchDown {
 
     @BeforeAll
     static void defineBranchDown() {
-        branchDown = (player) -> (player.branch_forward_single_direction((byte) 1));
+        branchDown = (player) -> (player.branchForwardSingleDirection((byte) 1));
     }
 
     MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {

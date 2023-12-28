@@ -58,7 +58,7 @@ class BranchForward {
         player.placeTile(new Location(0, 0), new Tile('a'));
         player.placeTile(new Location(1, 0), new Tile('s'));
 
-        Set<AIPlayer> nextPlayers = player.branch_forward();
+        Set<AIPlayer> nextPlayers = player.branchForward();
 
         // can play sat right now
         assertEquals(nextPlayers.size(), 3);
@@ -71,7 +71,7 @@ class BranchForward {
 
 
         player.placeTile(new Location(0, -1), new Tile('t'));
-        nextPlayers = player.branch_forward();
+        nextPlayers = player.branchForward();
 
         assertEquals(nextPlayers.size(), 0);   
     }

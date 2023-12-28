@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Function;
+
 import java.util.function.BiFunction;
 
 import src.main.game.Player;
@@ -82,7 +83,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         return nextPlayer;
     }
 
-    public Set<AIPlayer> branch_forward_single_direction(byte direction) {
+    public Set<AIPlayer> branchForwardSingleDirection(byte direction) {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
         Function<Grid, HashSet<Location>> startLocationsFunction;
         BiFunction<Location, Integer, Location> wordStartLocationFunction;
@@ -125,14 +126,66 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         return branchedPlayers;
     }
 
-    public Set<AIPlayer> branch_forward() {
-        Set<AIPlayer> out = branch_forward_single_direction((byte) 1);
-        out.addAll(branch_forward_single_direction((byte) 0)); // just combine both directions
+    public Set<AIPlayer> branchForward() {
+        Set<AIPlayer> out = branchForwardSingleDirection((byte) 1);
+        out.addAll(branchForwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
 
-    public Set<AIPlayer> branch_backward() {
-        return null; // STUB ("backward" meaning removing words and tiles)
+    private AIPlayer removeWord(Location loc, byte direction) {
+        AIPlayer nextPlayer = this.copy();
+        Grid grid = nextPlayer.getGrid();
+
+        Function<Location, Location> move;
+        Function<Location, Boolean> connectedToOtherWord;
+        if (direction==0) {
+            move = (cursor) -> cursor.right();
+            connectedToOtherWord = (cursor) -> (grid.locationFilled(cursor.above()) || grid.locationFilled(cursor.below()));
+        }
+        else if (direction==1) {
+            move = (cursor) -> cursor.below();
+            connectedToOtherWord = (cursor) -> (grid.locationFilled(cursor.left()) || grid.locationFilled(cursor.right()));
+        }
+        else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
+
+        Location cursor = loc;
+        while (grid.locationFilled(cursor)) {
+            if (!connectedToOtherWord.apply(cursor)) {
+                Tile t = grid.remove(loc);
+                nextPlayer.getHand().add(t);
+            }
+            cursor = move.apply(cursor);
+        }
+        if (!nextPlayer.gridValid()) {return null;}
+        return nextPlayer;
+    }
+
+    public Set<AIPlayer> branchBackwardsSingleDirection(byte direction) {
+        Function<Grid, Set<Location>> startLocations;
+        if (direction==0) {
+            startLocations = (grid) -> grid.rightStartLocations();
+        }
+        else if (direction==1) {
+            startLocations = (grid) -> grid.downStartLocations();
+        }
+        else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
+        
+        Set<AIPlayer> branchedPlayers = new HashSet<>();
+        Grid grid = this.getGrid();
+        for (Location loc: startLocations.apply(grid)) { // get starts of words to remove
+            AIPlayer nextPlayer = removeWord(loc, direction);
+            if (nextPlayer!=null) {
+                branchedPlayers.add(nextPlayer);
+            }
+        }
+
+        return branchedPlayers;
+    }
+
+    public Set<AIPlayer> branchBackwards() {
+        Set<AIPlayer> out = branchBackwardsSingleDirection((byte) 1);
+        out.addAll(branchBackwardsSingleDirection((byte) 0)); // just combine both directions
+        return out;
     }
 
     @Override

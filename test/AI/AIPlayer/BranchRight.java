@@ -20,7 +20,7 @@ class BranchRight {
 
     @BeforeAll
     static void defineBranchRight() {
-        branchRight = (player) -> (player.branch_forward_single_direction((byte) 0));
+        branchRight = (player) -> (player.branchForwardSingleDirection((byte) 0));
     }
 
     MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {
