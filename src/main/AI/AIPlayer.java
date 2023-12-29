@@ -134,7 +134,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
     private AIPlayer removeWord(Location loc, byte direction) {
         AIPlayer nextPlayer = this.copy();
         Grid grid = nextPlayer.getGrid();
-
         Function<Location, Location> move;
         Function<Location, Boolean> connectedToOtherWord;
         if (direction==0) {
@@ -189,9 +188,58 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
+  
+    // similar to place word, but with no extra checks of preexisting letters and no stipulation of connection.
+    // always placed at the origin
+    private AIPlayer placeFirstWord(String word, byte direction) {
+        AIPlayer nextPlayer = this.copy();
+        Location cursor = new Location(0, 0);
+        Grid grid = nextPlayer.getGrid();
+        MultiSet<Tile> hand = nextPlayer.getHand();
+        Function<Location, Location> move;
+        if (direction==0) {
+            move = (loc) -> loc.right();
+        }
+        else if (direction==1) {
+            move = (loc) -> loc.below();
+        }
+        else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
+
+        for (Character c: word.toCharArray()) {
+            Tile t = new Tile(c);
+            if (!hand.contains(t)) {
+                return null; // if hand doesn't contain letter return nothing since valid grid can't be made
+            } 
+            grid.placeUnsafe(cursor, t);
+            hand.remove(t);
+            cursor = move.apply(cursor); // do not have to check if the grid is valid because this is the only word
+        }
+
+        return nextPlayer;
+    }
+
+    public Set<AIPlayer> branchEmpty() {
+        Set<AIPlayer> branchedPlayers = new HashSet<>();
+        for (String candidateWord: this.getGrid().getWordsSet()) {
+            // below works, but may be slightly inefficient because placeWord has additional checks not needed 
+            AIPlayer nextRightPlayer = placeFirstWord(candidateWord, (byte) 0);
+            if (nextRightPlayer!=null) {
+                branchedPlayers.add(nextRightPlayer);
+            }
+
+            AIPlayer nextDownPlayer = placeFirstWord(candidateWord, (byte) 1);
+            if (nextDownPlayer!=null) {
+                branchedPlayers.add(nextDownPlayer);
+            }
+        }
+        return branchedPlayers;
+    }
 
     @Override
     public Set<AIPlayer> branch() {
+        if (this.getGrid().isEmpty()) {
+            return branchEmpty(); // edge case for when the grid is empty
+        }
         Set<AIPlayer> out = branchForward();
         out.addAll(branchBackward()); // just combine both directions
         return out;
