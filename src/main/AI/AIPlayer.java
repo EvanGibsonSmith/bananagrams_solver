@@ -160,7 +160,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         return nextPlayer;
     }
 
-    public Set<AIPlayer> branchBackwardsSingleDirection(byte direction) {
+    public Set<AIPlayer> branchBackwardSingleDirection(byte direction) {
         HashSet<Location> startLocations;
         Grid grid = this.getGrid();
         HashSet<Grid> foundGrids = new HashSet<>();
@@ -185,14 +185,16 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         return branchedPlayers;
     }
 
-    public Set<AIPlayer> branchBackwards() {
-        Set<AIPlayer> out = branchBackwardsSingleDirection((byte) 1);
-        out.addAll(branchBackwardsSingleDirection((byte) 0)); // just combine both directions
+    public Set<AIPlayer> branchBackward() {
+        Set<AIPlayer> out = branchBackwardSingleDirection((byte) 1);
+        out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
 
     @Override
     public Set<AIPlayer> branch() {
-        return null; // TODO STUB, will combine forward and backward branchinh
+        Set<AIPlayer> out = branchForward();
+        out.addAll(branchBackward()); // just combine both directions
+        return out;
     }
 }

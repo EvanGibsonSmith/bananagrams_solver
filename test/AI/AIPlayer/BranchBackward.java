@@ -15,7 +15,7 @@ import src.main.game.TileBag;
 import src.main.AI.AIPlayer;
 import src.data_structures.MultiSet;
 
-public class BranchBackwards {
+public class BranchBackward {
 
     MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {
         MultiSet<MultiSet<String>> out = new MultiSet<MultiSet<String>>();
@@ -67,7 +67,7 @@ public class BranchBackwards {
         assertTrue(player.gridValid());
 
         System.out.println(player.getGrid());
-        Set<AIPlayer> nextPlayers = player.branchBackwards();
+        Set<AIPlayer> nextPlayers = player.branchBackward();
         
         for (AIPlayer p: nextPlayers) {
             System.out.println(p.getGrid());
