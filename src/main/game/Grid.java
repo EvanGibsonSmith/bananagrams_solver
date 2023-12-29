@@ -44,10 +44,6 @@ public class Grid {
     public HashMap<Location, Tile> getFilledSquares() {
         return this.filledSquares;
     }
-  
-    public Grid copy() {
-        return new Grid(this.filledSquares, this.topLeft, this.bottomRight, this.wordsSet);
-    }
 
     /**
      * Gets the top left location bounding the letters
