@@ -44,7 +44,7 @@ public class Grid {
     public HashMap<Location, Tile> getFilledSquares() {
         return this.filledSquares;
     }
-
+  
     /**
      * Gets the top left location bounding the letters
      * @return Location topLeft
@@ -334,7 +334,6 @@ public class Grid {
     }
 
     // TODO some of below should probably be in an extension of the Grid class
-
     public HashSet<Location> downStartLocations() {
         HashSet<Location> downStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {

@@ -134,7 +134,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
     private AIPlayer removeWord(Location loc, byte direction) {
         AIPlayer nextPlayer = this.copy();
         Grid grid = nextPlayer.getGrid();
-
         Function<Location, Location> move;
         Function<Location, Boolean> connectedToOtherWord;
         if (direction==0) {
@@ -189,7 +188,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
-
+  
     // similar to place word, but with no extra checks of preexisting letters and no stipulation of connection.
     // always placed at the origin
     private AIPlayer placeFirstWord(String word, byte direction) {
