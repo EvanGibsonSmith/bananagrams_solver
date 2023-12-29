@@ -16,14 +16,6 @@ import src.main.AI.AIPlayer;
 
 class BranchForward {
 
-    MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {
-        MultiSet<MultiSet<String>> out = new MultiSet<MultiSet<String>>();
-        for (AIPlayer player: players) {
-            out.add(player.getGrid().getWordsPlayed());
-        }
-        return out;
-    }
-
     @Test 
     void accidentalInvalidation() {
         HashSet<String> wordsSet = new HashSet<String>();
@@ -66,8 +58,8 @@ class BranchForward {
         expected.add(new MultiSet<String>(new String[] {"as", "sat"}));
         expected.add(new MultiSet<String>(new String[] {"as", "at"}));
         expected.add(new MultiSet<String>(new String[] {"as", "as"}));
-        getAllWordsPlayed(nextPlayers);
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);
+        BranchTestMethods.getAllWordsPlayed(nextPlayers);
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);
 
 
         player.placeTile(new Location(0, -1), new Tile('t'));

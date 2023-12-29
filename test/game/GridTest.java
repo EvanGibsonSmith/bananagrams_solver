@@ -5,9 +5,11 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import src.data_structures.MultiSet;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
+import src.data_structures.MultiSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -85,14 +87,14 @@ public class GridTest {
         g.placeUnsafe(new Location(0, 1), new Tile('a'));
         g.placeUnsafe(new Location(0, 2), new Tile('n'));
         
-        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan")));
+        assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"pan"}));
 
-        assertNotEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan", "a"))); // single letter is not a word that needs to be checked
+        assertNotEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"pan", "a"})); // single letter is not a word that needs to be checked
 
         g.placeUnsafe(new Location(1, 0), new Tile('a'));
         g.placeUnsafe(new Location(2, 0), new Tile('r'));
         
-        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pan", "par")));
+        assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"pan", "par"}));
         assertTrue(g.validWords()); // all words are within the small word set created
         assertTrue(g.tilesConnected());
 
@@ -100,24 +102,24 @@ public class GridTest {
 
         g.placeUnsafe(new Location(3, 0), new Tile('t'));
 
-        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pan")));
+        assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"part", "pan"}));
 
         g.placeUnsafe(new Location(0, 3), new Tile('e'));
 
-        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pane"))); // note old words are gone now
+        assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"part", "pane"})); // note old words are gone now
         
         assertTrue(g.validWords()); // still a valid configuration
         assertTrue(g.tilesConnected());
         System.out.println(g);
 
         g.placeUnsafe(new Location(1, 3), new Tile('t'));
-        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("pane", "part", "et")));
+        assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"part", "pane", "et"}));
         assertFalse(g.validWords()); // et is not a valid word
         assertTrue(g.tilesConnected()); // still portion is still fine though
         g.placeUnsafe(new Location(-1, 3), new Tile('m')); // now all words are fine (with met)
 
 
-        assertEquals(g.getWordsPlayed(), new HashSet<String>(Arrays.asList("part", "pane", "met")));
+        assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"part", "pane", "met"}));
         assertTrue(g.validWords()); // et is not a valid word
         assertTrue(g.tilesConnected()); // still portion is still fine though
         System.out.println(g);
@@ -141,7 +143,7 @@ public class GridTest {
     
     @Test
     void copyTest() {
-        Grid g1 = new Grid((HashSet<String>) null);
+        Grid g1 = new Grid(new HashSet<>());
         g1.placeUnsafe(new Location(-1, -1), new Tile('a'));
         Grid g2 = new Grid(g1); // should be copy
         assertEquals(g1, g2);

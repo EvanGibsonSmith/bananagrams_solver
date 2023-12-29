@@ -69,8 +69,8 @@ class BranchRight {
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
         expected.add(new MultiSet<String>(new String[] {"fact"}));
-        getAllWordsPlayed(nextPlayers);
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);
+        BranchTestMethods.getAllWordsPlayed(nextPlayers);
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test 
@@ -111,7 +111,7 @@ class BranchRight {
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
         expected.add(new MultiSet<String>(new String[] {"actor"}));
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test
@@ -156,7 +156,7 @@ class BranchRight {
         expected.add(new MultiSet<String>(new String[] {"pact"}));
         expected.add(new MultiSet<String>(new String[] {"actor"}));
         expected.add(new MultiSet<String>(new String[] {"fact"}));
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test
@@ -198,7 +198,7 @@ class BranchRight {
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
         expected.add(new MultiSet<String>(new String[] {"cat", "rap"}));
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);    
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);    
         
     }
 
@@ -241,7 +241,7 @@ class BranchRight {
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
         expected.add(new MultiSet<String>(new String[] {"cat", "cat"}));
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);
     }
 
     @Test
@@ -293,6 +293,6 @@ class BranchRight {
         expected.add(new MultiSet<String>(new String[] {"cat", "tat"}));
         expected.add(new MultiSet<String>(new String[] {"cat", "par"}));
         expected.add(new MultiSet<String>(new String[] {"cat", "rap"}));
-        assertEquals(getAllWordsPlayed(nextPlayers), expected);    
+        assertEquals(BranchTestMethods.getAllWordsPlayed(nextPlayers), expected);    
     }
 }
