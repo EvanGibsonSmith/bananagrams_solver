@@ -109,6 +109,13 @@ public class Grid {
         return filledSquares.keySet();
     }
 
+    /**
+     * If the grid has nothing placed one it
+     * @return boolean if grid is empty
+     */
+    public boolean isEmpty() {
+        return this.filledSquares.isEmpty();
+    }
 
     /**
      * Gets the tile object at the specified location. Will 
