@@ -4,33 +4,47 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Set;
+
+import src.data_structures.MultiSet;
 
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
-    protected HashSet<String> wordsSet; 
+    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and contains
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(HashSet<String> wordsSet) {
         this.wordsSet = wordsSet;
     }
 
-    // Copy constructor
-    public Grid(HashMap<Location, Tile> filledSquares, Location topLeft, Location bottomRight, HashSet<String> wordsSet) {
-        this.filledSquares = filledSquares;
-        this.topLeft = topLeft;
-        this.bottomRight = bottomRight;
-        this.wordsSet = wordsSet;
+    // Deep copy constructor
+    public Grid(Grid g) {
+        this.filledSquares = new HashMap<Location, Tile>(g.getFilledSquares());
+        this.topLeft = g.getTopLeft();
+        this.bottomRight = g.getBottomRight();
+        this.wordsSet = new HashSet<String>(g.getWordsSet()); // realistically probably won't change but copy just in case
+    }
+
+    @Override
+    public int hashCode() {
+        return this.filledSquares.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass()!=this.getClass()) {return false;}
+        return ((Grid) obj).getFilledSquares().equals(this.getFilledSquares());
     }
 
     public HashSet<String> getWordsSet() {
         return this.wordsSet;
     }
 
-    public Grid copy() {
-        return new Grid(this.filledSquares, this.topLeft, this.bottomRight, this.wordsSet);
+    public HashMap<Location, Tile> getFilledSquares() {
+        return this.filledSquares;
     }
-
+  
     /**
      * Gets the top left location bounding the letters
      * @return Location topLeft
@@ -86,6 +100,15 @@ public class Grid {
     public boolean locationFilled(Location loc) {
         return filledSquares.containsKey(loc);
     }
+
+    /**
+     * The filled locations on the grid
+     * @return locations
+     */
+    public Set<Location> filledLocations() {
+        return filledSquares.keySet();
+    }
+
 
     /**
      * Gets the tile object at the specified location. Will 
@@ -187,13 +210,31 @@ public class Grid {
         return word;
     }
 
+    // TODO document
+    public HashMap<Location, String> getWordsDown() {
+        HashMap<Location, String> map = new HashMap<>();
+        for (Location loc: this.filledSquares.keySet()) {
+            map.put(loc, getWordDown(loc));
+        }
+        return map;
+    }
+
+    // TODO document
+    public HashMap<Location, String> getWordsRight() {
+        HashMap<Location, String> map = new HashMap<>();
+        for (Location loc: this.filledSquares.keySet()) {
+            map.put(loc, getWordRight(loc));
+        }
+        return map;
+    }
+
     /**
      * Gets every word played on the board, and returns a list of them.
      * In a valid board these should all be acceptable words.
      * @return
      */
-    public HashSet<String> getWordsPlayed() {
-        HashSet<String> words = new HashSet<>();
+    public MultiSet<String> getWordsPlayed() {
+        MultiSet<String> words = new MultiSet<>();
         for (Location loc: filledSquares.keySet()) {
             String downWord = getWordDown(loc);
             if (downWord!=null && downWord.length()!=1) {
@@ -215,7 +256,7 @@ public class Grid {
      */
     // FIXME there is a extreme edge case in which only ONE TILE is placed that this will ALWAYS consider valid. Don't even know if I need to care
     public Boolean validWords() {
-        HashSet<String> words = getWordsPlayed();
+        MultiSet<String> words = getWordsPlayed();
         for (String word: words) {
             if (!this.wordsSet.contains(word)) { // if one of the words is not valid then board is not valid.
                 return false;
@@ -262,15 +303,6 @@ public class Grid {
     public Boolean valid() { // this function may be able to be improved by short circuiting with easy conditions to check first
         return (validWords() && tilesConnected());
     }
-    
-    /**
-     * Places a tile on the board, checking if the move is a valid choice. 
-     * This check includes all words that are created with the placement.
-     * @return True if place was successful, false if not
-     */
-    public Boolean place() {
-        return true;
-    }
 
     /**
      * Gives the locations where are of the tiles could potentially be placed, not taking into account if a word can be made.
@@ -294,19 +326,48 @@ public class Grid {
         return tilePlaceLocations; 
     }
 
-    /**
-     * Takes all words from the wordsSet and detemines if they contain the string given.
-     * @return HashSet<String>
-     */
-    // TODO could be faster if implemented with a search tree structure with contains (trie)? Also,
-    // should word set be it's own class then with this method and the trie structure for this method's efficiency?
-    public HashSet<String> containsString(String constr) {
-        HashSet<String> conset = new HashSet<>();
-        for (String word: this.getWordsSet()) {
-            if (word.contains(constr)) {
-                conset.add(word);
+    // TODO some of below should probably be in an extension of the Grid class
+
+    public HashSet<Location> downStartLocations() {
+        HashSet<Location> downStartLocs = new HashSet<>();
+        for (Location loc: filledSquares.keySet()) {
+            if (!this.locationFilled(loc.above())) {
+                downStartLocs.add(loc);
             }
         }
-        return conset;
+        return downStartLocs;
+    }
+
+    // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
+    public String getDownFragment(Location loc) {
+        String fragment = "";
+        while (this.locationFilled(loc)) { // while location still has letters keep moving downward
+            fragment += this.getTile(loc).getLetter();
+
+            loc = loc.below();
+        }
+        return fragment;
+    }
+
+    public HashSet<Location> rightStartLocations() {
+        HashSet<Location> rightStartLocs = new HashSet<>();
+        for (Location loc: filledSquares.keySet()) {
+            if (!this.locationFilled(loc.left())) {
+                rightStartLocs.add(loc);
+            }
+        }
+        return rightStartLocs;
+    }
+
+    // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
+    public String getRightFragment(Location loc) {
+        String fragment = "";
+        while (this.locationFilled(loc)) { // while location still has letters keep moving downward
+            fragment += this.getTile(loc).getLetter();
+
+            loc = loc.right();
+        }
+        return fragment;
     }
 }
+
