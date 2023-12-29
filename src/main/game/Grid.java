@@ -109,6 +109,13 @@ public class Grid {
         return filledSquares.keySet();
     }
 
+    /**
+     * If the grid has nothing placed one it
+     * @return boolean if grid is empty
+     */
+    public boolean isEmpty() {
+        return this.filledSquares.isEmpty();
+    }
 
     /**
      * Gets the tile object at the specified location. Will 
@@ -327,7 +334,6 @@ public class Grid {
     }
 
     // TODO some of below should probably be in an extension of the Grid class
-
     public HashSet<Location> downStartLocations() {
         HashSet<Location> downStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {

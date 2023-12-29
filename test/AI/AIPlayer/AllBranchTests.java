@@ -5,7 +5,7 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({Branch.class, BranchBackward.class, BranchDown.class, 
-               BranchForward.class, BranchRight.class})
-public class AllBranchTests
-{
+                BranchForward.class, BranchRight.class, BranchEmpty.class})
+public class AllBranchTests {
+  
 }
