@@ -9,7 +9,6 @@ import src.data_structures.MultiSet;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
-import src.data_structures.MultiSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -113,11 +112,11 @@ public class GridTest {
         System.out.println(g);
 
         g.placeUnsafe(new Location(1, 3), new Tile('t'));
+
         assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"part", "pane", "et"}));
         assertFalse(g.validWords()); // et is not a valid word
         assertTrue(g.tilesConnected()); // still portion is still fine though
         g.placeUnsafe(new Location(-1, 3), new Tile('m')); // now all words are fine (with met)
-
 
         assertEquals(g.getWordsPlayed(), new MultiSet<String>(new String[] {"part", "pane", "met"}));
         assertTrue(g.validWords()); // et is not a valid word

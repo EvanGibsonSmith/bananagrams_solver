@@ -44,6 +44,10 @@ public class Grid {
     public HashMap<Location, Tile> getFilledSquares() {
         return this.filledSquares;
     }
+  
+    public Grid copy() {
+        return new Grid(this.filledSquares, this.topLeft, this.bottomRight, this.wordsSet);
+    }
 
     /**
      * Gets the top left location bounding the letters
@@ -303,15 +307,6 @@ public class Grid {
     public Boolean valid() { // this function may be able to be improved by short circuiting with easy conditions to check first
         return (validWords() && tilesConnected());
     }
-    
-    /**
-     * Places a tile on the board, checking if the move is a valid choice. 
-     * This check includes all words that are created with the placement.
-     * @return True if place was successful, false if not
-     */
-    public Boolean place() {
-        return true;
-    }
 
     /**
      * Gives the locations where are of the tiles could potentially be placed, not taking into account if a word can be made.
@@ -335,7 +330,7 @@ public class Grid {
         return tilePlaceLocations; 
     }
 
-    // TODO below should probably be in an extension of the Grid class
+    // TODO some of below should probably be in an extension of the Grid class
 
     public HashSet<Location> downStartLocations() {
         HashSet<Location> downStartLocs = new HashSet<>();

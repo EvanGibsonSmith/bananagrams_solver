@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Function;
-
 import java.util.function.BiFunction;
 
 import src.main.game.Player;
