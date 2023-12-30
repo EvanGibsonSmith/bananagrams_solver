@@ -15,7 +15,7 @@ public class AStarHashSets<T extends Branchable<T>> {
     HashMap<Integer, Integer> from = new HashMap<>(); // where each grid is "from" in result, used to trace path
     HashMap<Integer, T> objects = new HashMap<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
     HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
-    HashSet<Integer> visited = new HashSet<>();
+    HashSet<T> visited = new HashSet<>();
     IndexMinPQ<Double> pq = new IndexMinPQ<>(100000); // TODO fix the size issue by altering or extending IndexMinPQ class
     Integer endIndex;
 
@@ -23,31 +23,29 @@ public class AStarHashSets<T extends Branchable<T>> {
     public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
         objects.put(0, start); // set index 0 to start
         costTo.put(0, 0.0); // set index 0 to 0.0
-        pq.insert(objects.size()-1, heuristic.apply(start)); // estimated total distance is just heuristic
+        //pq.insert(objects.size()-1, heuristic.apply(start)); // estimated total distance is just heuristic TODO this needed?
         from.put(0, -1); // only the root is from -1
 
-        int currIndex = 0; // start at first object
-        while (!isGoal.apply(objects.get(currIndex))) {
-            T currObj = objects.get(currIndex);
-            if (!visited.contains(currIndex)) {
-                visited.add(currIndex);
-                for (T branchObj: currObj.branch()) { 
-                    // TODO all this stuff shouldn't be in branch it should be up BEFORE branch.
-                    int branchIndex = objects.size();
-                    objects.put(branchIndex, branchObj); // new object at next index
-                    costTo.put(branchIndex, costTo.get(currIndex) + cost.apply(currObj, branchObj));
-                    from.put(branchIndex, currIndex);
-                    pq.insert(branchIndex, costTo.get(currIndex) + heuristic.apply(currObj));
+        int currIdx = 0; // start at first object
+        while (!isGoal.apply(objects.get(currIdx))) {
+            T currObj = objects.get(currIdx);
+            if (isGoal.apply(currObj)) {return;} // if goal reached we are done
+            if (!visited.contains(currObj)) {
+                visited.add(currObj);
+                for (T branchObj: currObj.branch()) {
+                    Integer branchIdx = objects.size()+1;
+                    objects.put(branchIdx, branchObj);
+                    costTo.put(branchIdx, costTo.get(currIdx) + cost.apply(currObj, branchObj));
+                    from.put(branchIdx, currIdx);
+                    pq.insert(branchIdx, costTo.get(branchIdx) + heuristic.apply(branchObj));
                 }
             }
             else {
-                // TODO implement, but this isn't critical right now
-                //relax();
-                //pq.decreaseKey();
+                // TODO
             }
-            currIndex = pq.delMin();
+            currIdx = pq.delMin();
         }
-        endIndex = currIndex;
+        endIndex = currIdx;
     }
 
     public HashMap<Integer, Integer> getFrom() {
@@ -56,6 +54,16 @@ public class AStarHashSets<T extends Branchable<T>> {
 
     public int visitedSize() {
         return visited.size();
+    }
+
+    public void connected(int idx) {
+        for (int i: this.from.keySet()) {
+            if (from.get(i)==idx) {
+                System.out.println();
+                System.out.println(i);
+                System.out.println(objects.get(i));
+            }
+        }
     }
     
     public ArrayList<T> getPath() {

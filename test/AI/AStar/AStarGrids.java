@@ -172,10 +172,8 @@ class AStarGrids {
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(wordsSet.contains("the"));
-        System.out.println(wordsSet.size());
 
-        char[] letters = "beetlap".toCharArray();
+        char[] letters = "petramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
         Tile[] tiles = new Tile[letters.length];
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
@@ -185,14 +183,16 @@ class AStarGrids {
         player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
 
+        long startTime = System.currentTimeMillis();
         astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time: " + (endTime-startTime));
         for (AIPlayer p: astar.getPath()) {
             System.out.println(p.getGrid());
         }
 
-        System.out.println(astar.getFrom());
-        
 
+    
 
     }
 }

@@ -241,7 +241,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             return branchEmpty(); // edge case for when the grid is empty
         }
         Set<AIPlayer> out = branchForward();
-        out.addAll(branchBackward()); // just combine both directions
+        //out.addAll(branchBackward()); // just combine both directions TODO removing brnaching back ward for now
         return out;
     }
 }

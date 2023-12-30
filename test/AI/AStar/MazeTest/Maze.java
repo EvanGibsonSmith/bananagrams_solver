@@ -19,7 +19,7 @@ public class Maze implements Branchable<Maze> {
     public Maze(int rows, int columns, int density) {
         this.rows = rows;
         this.columns = columns;
-        this.grid = new boolean[columns][rows];
+        this.grid = new boolean[rows][columns];
         grid[0][0] = false;
         this.density = density;
 
@@ -28,7 +28,7 @@ public class Maze implements Branchable<Maze> {
             for (int column=0; column<columns; ++column) {
                 int next = rand.nextInt(100);
                 if (next<density) {
-                    this.grid[column][row] = true;
+                    this.grid[row][column] = true;
                 }
             }
         }
@@ -48,7 +48,7 @@ public class Maze implements Branchable<Maze> {
     }
 
     public boolean playerLocationValid() {
-        return !grid[playerColumn][playerRow];
+        return !grid[playerRow][playerColumn];
     }
 
     @Override 
@@ -56,6 +56,11 @@ public class Maze implements Branchable<Maze> {
         if (obj.getClass()!=this.getClass()) {return false;}
         Maze mobj = ((Maze) obj);
         return (this.grid == mobj.grid && this.playerRow==mobj.playerRow && this.playerColumn==mobj.playerColumn);
+    }
+
+    @Override 
+    public int hashCode() {
+        return this.grid.hashCode();
     }
 
     @Override
@@ -102,7 +107,7 @@ public class Maze implements Branchable<Maze> {
                 if (row==playerRow && column==playerColumn) {
                     out += " P ";
                 }
-                else if (this.grid[column][row]==false) {
+                else if (this.grid[row][column]==false) {
                     out += " O ";
                 }
                 else {
