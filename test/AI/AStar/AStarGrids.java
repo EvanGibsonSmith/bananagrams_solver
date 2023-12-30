@@ -4,8 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -16,7 +19,7 @@ import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 
-class GridTest {
+class AStarGrids {
     AIPlayer player;
     final Function<AIPlayer, Double> heuristic = (p) -> (double) p.getHand().size();
     final BiFunction<AIPlayer, AIPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();
@@ -153,6 +156,44 @@ class GridTest {
         for (AIPlayer p: path) {
             System.out.println(p.getGrid());
         }
+    }
+
+    @Test
+    void bigExample() {
+        // set up all scrabble words
+        HashSet<String> wordsSet = new HashSet<>();
+        try (Scanner scnr = new Scanner (new File("src/resources/1000commonWords.txt"))) {
+            scnr.useDelimiter("\n");
+            while (scnr.hasNext()) {
+                String next = scnr.next();
+                wordsSet.add(next.substring(0, next.length()-1));
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println(wordsSet.contains("the"));
+        System.out.println(wordsSet.size());
+
+        char[] letters = "beetlap".toCharArray();
+        Tile[] tiles = new Tile[letters.length];
+        for (int i=0; i<letters.length; ++i) {
+            tiles[i] = new Tile(letters[i]);
+        }
+        TileBag tileBag = new TileBag(tiles, 1);
+        
+        player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        for (int i=0; i<letters.length; ++i) {player.grabTile();}
+
+        astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        for (AIPlayer p: astar.getPath()) {
+            System.out.println(p.getGrid());
+        }
+
+        System.out.println(astar.getFrom());
+        
+
+
     }
 }
 

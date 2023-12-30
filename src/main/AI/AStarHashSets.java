@@ -5,6 +5,7 @@ import src.data_structures.IndexMinPQ;
 import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.BiFunction;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,9 +16,10 @@ public class AStarHashSets<T extends Branchable<T>> {
     HashMap<Integer, T> objects = new HashMap<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
     HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
     HashSet<Integer> visited = new HashSet<>();
-    IndexMinPQ<Double> pq = new IndexMinPQ<>(1000); // TODO fix the size issue by altering or extending IndexMinPQ class
+    IndexMinPQ<Double> pq = new IndexMinPQ<>(100000); // TODO fix the size issue by altering or extending IndexMinPQ class
     Integer endIndex;
 
+    // FIXME this never terminates even when all options should be exausted. Priority queue never empties?! This is because we don't check for any equality before adding to visited. Because the hashmap is only indicies, we can't check the OBJECT as needed
     public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
         objects.put(0, start); // set index 0 to start
         costTo.put(0, 0.0); // set index 0 to 0.0
@@ -29,7 +31,8 @@ public class AStarHashSets<T extends Branchable<T>> {
             T currObj = objects.get(currIndex);
             if (!visited.contains(currIndex)) {
                 visited.add(currIndex);
-                for (T branchObj: currObj.branch()) {
+                for (T branchObj: currObj.branch()) { 
+                    // TODO all this stuff shouldn't be in branch it should be up BEFORE branch.
                     int branchIndex = objects.size();
                     objects.put(branchIndex, branchObj); // new object at next index
                     costTo.put(branchIndex, costTo.get(currIndex) + cost.apply(currObj, branchObj));
@@ -51,6 +54,9 @@ public class AStarHashSets<T extends Branchable<T>> {
         return this.from;
     }
 
+    public int visitedSize() {
+        return visited.size();
+    }
     
     public ArrayList<T> getPath() {
         ArrayList<T> path = new ArrayList<>();
