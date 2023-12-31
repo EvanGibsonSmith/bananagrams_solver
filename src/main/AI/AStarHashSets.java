@@ -29,7 +29,7 @@ public class AStarHashSets<T extends Branchable<T>> {
         int currIdx = 0; // start at first object
         while (!pq.isEmpty()) {
             T currObj = objects.get(currIdx);
-            if (isGoal.apply(currObj)) {return;} // if goal reached we are done
+            if (isGoal.apply(currObj)) {endIndex=currIdx; return;} // if goal reached we are done
             if (!visited.contains(currObj)) {
                 visited.add(currObj);
                 for (T branchObj: currObj.branch()) {
