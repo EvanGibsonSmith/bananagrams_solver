@@ -35,16 +35,20 @@ public class AStarMaze {
         //m.grid[4][4]=true;
         BiFunction<Maze, Maze, Double> cost = (m1, m2) -> (double) (m2.moves - m1.moves);
         Function<Maze, Double> heuristic = (m1) -> (double) (Math.abs(m1.playerRow-m1.rows+1) + Math.abs(m1.playerColumn));
-        Function<Maze, Boolean> isGoal = (ma) -> ((ma.playerRow==ma.rows-1) && (ma.playerColumn==0));
+        Function<Maze, Boolean> isGoal = (ma) -> ((ma.playerRow==ma.rows-1) && (ma.playerColumn==ma.columns-1));
         AStarHashSets<Maze> astar = new AStarHashSets<Maze>(m, cost, heuristic, isGoal);
-        
+        System.out.println(m);
+
         ArrayList<Maze> path = astar.getPath();
-        for (Maze next: path) {
-            //System.out.println(next);
+        if (path==null) {System.out.println("No Path");}
+        else {
+            for (Maze next: path) {
+                System.out.println(next);
+            }
         }
-        System.out.println(astar.visitedSize());
-        System.out.println(astar.getFrom());
-        astar.connected(8); // TODO for debugging
+        //System.out.println(astar.visitedSize());
+        //System.out.println(astar.getFrom());
+        //astar.connected(8); // TODO for debugging
         //for (Maze pathMaze: astar.getPath()) {
         //    System.out.println(pathMaze); // TODO objects seems to be collecting duplicates
         //}
