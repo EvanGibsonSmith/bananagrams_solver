@@ -13,6 +13,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import src.main.AI.AIPlayer;
+import src.main.AI.AStarArrayList;
 import src.main.AI.AStarHashSets;
 import src.main.game.Grid;
 import src.main.game.Location;
@@ -24,7 +25,8 @@ class AStarGrids {
     final Function<AIPlayer, Double> heuristic = (p) -> (double) p.getHand().size();
     final BiFunction<AIPlayer, AIPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();
     final Function<AIPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
-    AStarHashSets<AIPlayer> astar;
+    AStarHashSets<AIPlayer> astarhash;
+    AStarArrayList<AIPlayer> astararray;
 
     @BeforeEach
     void resetPlayer() {
@@ -75,9 +77,9 @@ class AStarGrids {
         
         // with valid grid perform A*. We can rid our tiles with just one word
         // TODO make the heuristic methods within their proper class
-        astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
-        System.out.println(astar.getFrom());
-        ArrayList<AIPlayer> path = astar.getPath();
+        astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        System.out.println(astarhash.getFrom());
+        ArrayList<AIPlayer> path = astarhash.getPath();
         for (AIPlayer p: path) {
             System.out.println(p.getGrid());
         }
@@ -99,9 +101,9 @@ class AStarGrids {
         
         // with valid grid perform A*. We can rid our tiles with just one word
         // TODO make the heuristic methods within their proper class
-        astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
-        System.out.println(astar.getFrom());
-        ArrayList<AIPlayer> path = astar.getPath();
+        astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        System.out.println(astarhash.getFrom());
+        ArrayList<AIPlayer> path = astarhash.getPath();
         for (AIPlayer p: path) {
             System.out.println(p.getGrid());
         }
@@ -124,9 +126,9 @@ class AStarGrids {
         
         // with valid grid perform A*. We can rid our tiles with just one word
         // TODO make the heuristic methods within their proper class
-        astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
-        System.out.println(astar.getFrom());
-        ArrayList<AIPlayer> path = astar.getPath();
+        astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        System.out.println(astarhash.getFrom());
+        ArrayList<AIPlayer> path = astarhash.getPath();
         for (AIPlayer p: path) {
             System.out.println(p.getGrid());
         }
@@ -150,9 +152,9 @@ class AStarGrids {
         
         // with valid grid perform A*. We can rid our tiles with just one word
         // TODO make the heuristic methods within their proper class
-        astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
-        System.out.println(astar.getFrom());
-        ArrayList<AIPlayer> path = astar.getPath();
+        astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        System.out.println(astarhash.getFrom());
+        ArrayList<AIPlayer> path = astarhash.getPath();
         for (AIPlayer p: path) {
             System.out.println(p.getGrid());
         }
@@ -162,32 +164,44 @@ class AStarGrids {
     void bigExample() {
         // set up all scrabble words
         HashSet<String> wordsSet = new HashSet<>();
-        try (Scanner scnr = new Scanner (new File("src/resources/1000commonWords.txt"))) {
+        try (Scanner scnr = new Scanner (new File("src/resources/10000Words.txt"))) {
             scnr.useDelimiter("\n");
             while (scnr.hasNext()) {
                 String next = scnr.next();
-                wordsSet.add(next.substring(0, next.length()-1));
+                if (next.length()-1>2) {
+                    wordsSet.add(next.substring(0, next.length()-1));
+                }
             }
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        char[] letters = "petramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
+        //char[] letters = "qqyzjpetramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
+        char[] letters = "baarteeopg".toCharArray();
+        //char[] letters = "abassteerlsmmoo".toCharArray();
+        //char[] letters = "date".toCharArray();
         Tile[] tiles = new Tile[letters.length];
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
         TileBag tileBag = new TileBag(tiles, 1);
-        
         player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
-
+        
         long startTime = System.currentTimeMillis();
-        astar = new AStarHashSets<>(player, cost, heuristic, isGoal);
+        astarhash = new AStarHashSets<>(player.copy(), cost, heuristic, isGoal);
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime-startTime));
-        for (AIPlayer p: astar.getPath()) {
+        for (AIPlayer p: astarhash.getPath()) {
+            System.out.println(p.getGrid());
+        }
+
+        long startTimeArray = System.currentTimeMillis();
+        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+        long endTimeArray = System.currentTimeMillis();
+        System.out.println("Time: " + (endTimeArray-startTimeArray));
+        for (AIPlayer p: astararray.getPath()) {
             System.out.println(p.getGrid());
         }
 
