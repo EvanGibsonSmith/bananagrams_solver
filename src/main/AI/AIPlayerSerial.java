@@ -11,7 +11,7 @@ import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.data_structures.MultiSet;
-public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
+public class AIPlayerSerial extends Player implements Branchable<AIPlayerSerial> {
     
     public AIPlayerSerial(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
@@ -19,9 +19,9 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
     public AIPlayerSerial(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
         super(game, grid, bag, hand);
     }
-    public AIPlayer copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
+    public AIPlayerSerial copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
         // TODO make copying nicer and make copyable interface.
-        return new AIPlayer(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
+        return new AIPlayerSerial(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
     }
     // TODO kind of odd place for this function. Maybe test this?
     private ArrayList<Integer> indexesOf(String word, String sub) {
@@ -38,9 +38,9 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
     // TODO maybe this could be broken up, might require a small helper package class. Also document
     // TODO instead of duplicating the nextPlayer within this classe should the class act on an 
     // existing player and we copy the player outside of this class?
-    private AIPlayer placeWord(String word, Location wordStartLoc, byte direction) {
+    private AIPlayerSerial placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
-        AIPlayer nextPlayer = this.copy();
+        AIPlayerSerial nextPlayer = this.copy();
         MultiSet<Tile> nextHand = nextPlayer.getHand();
         Grid nextGrid = nextPlayer.getGrid();
         String currentGridFragment = ""; // represents the letters in the word from grid we are looking over
@@ -70,7 +70,7 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         
         return nextPlayer;
     }
-    public Set<AIPlayer> branchForwardSingleDirection(byte direction) {
+    public Set<AIPlayerSerial> branchForwardSingleDirection(byte direction) {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
         HashSet<Location> startLocations;
         BiFunction<Location, Integer, Location> wordStartLocationFunction;
@@ -86,7 +86,7 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
             wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow()-idx, loc.getColumn());
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
-        Set<AIPlayer> branchedPlayers = new HashSet<>();
+        Set<AIPlayerSerial> branchedPlayers = new HashSet<>();
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
         for (Location loc: startLocations) {
             String gridFragment = getGridFragmentFunction.apply(grid, loc);
@@ -97,7 +97,7 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
                 for (int idx: idxs) { 
                     // given loc on grid we know the idx letter of the word goes there, so can get start of word
                     Location startWordLocation = wordStartLocationFunction.apply(loc, idx); // this function gets location of start of word based on direction
-                    AIPlayer nextPlayer = placeWord(candidateWord, startWordLocation, direction);
+                    AIPlayerSerial nextPlayer = placeWord(candidateWord, startWordLocation, direction);
                     // do not include if grid has been seen, no grid is present, OR the new work incidentally made the grid invalid
                     if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid()) && nextPlayer.getGrid().valid()) {
                         foundGrids.add(nextPlayer.getGrid());
@@ -108,13 +108,13 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         }
         return branchedPlayers;
     }
-    public Set<AIPlayer> branchForward() {
-        Set<AIPlayer> out = branchForwardSingleDirection((byte) 1);
+    public Set<AIPlayerSerial> branchForward() {
+        Set<AIPlayerSerial> out = branchForwardSingleDirection((byte) 1);
         out.addAll(branchForwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
-    private AIPlayer removeWord(Location loc, byte direction) {
-        AIPlayer nextPlayer = this.copy();
+    private AIPlayerSerial removeWord(Location loc, byte direction) {
+        AIPlayerSerial nextPlayer = this.copy();
         Grid grid = nextPlayer.getGrid();
         Function<Location, Location> move;
         Function<Location, Boolean> connectedToOtherWord;
@@ -138,7 +138,7 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         if (!nextPlayer.gridValid()) {return null;}
         return nextPlayer;
     }
-    public Set<AIPlayer> branchBackwardSingleDirection(byte direction) {
+    public Set<AIPlayerSerial> branchBackwardSingleDirection(byte direction) {
         HashSet<Location> startLocations;
         Grid grid = this.getGrid();
         HashSet<Grid> foundGrids = new HashSet<>();
@@ -151,9 +151,9 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
         
-        Set<AIPlayer> branchedPlayers = new HashSet<>();
+        Set<AIPlayerSerial> branchedPlayers = new HashSet<>();
         for (Location loc: startLocations) { // get starts of words to remove
-            AIPlayer nextPlayer = removeWord(loc, direction);
+            AIPlayerSerial nextPlayer = removeWord(loc, direction);
             if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid())) {
                 branchedPlayers.add(nextPlayer);
                 foundGrids.add(nextPlayer.getGrid());
@@ -161,16 +161,16 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         }
         return branchedPlayers;
     }
-    public Set<AIPlayer> branchBackward() {
-        Set<AIPlayer> out = branchBackwardSingleDirection((byte) 1);
+    public Set<AIPlayerSerial> branchBackward() {
+        Set<AIPlayerSerial> out = branchBackwardSingleDirection((byte) 1);
         out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
   
     // similar to place word, but with no extra checks of preexisting letters and no stipulation of connection.
     // always placed at the origin
-    private AIPlayer placeFirstWord(String word, byte direction) {
-        AIPlayer nextPlayer = this.copy();
+    private AIPlayerSerial placeFirstWord(String word, byte direction) {
+        AIPlayerSerial nextPlayer = this.copy();
         Location cursor = new Location(0, 0);
         Grid grid = nextPlayer.getGrid();
         MultiSet<Tile> hand = nextPlayer.getHand();
@@ -193,15 +193,15 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         }
         return nextPlayer;
     }
-    public Set<AIPlayer> branchEmpty() {
-        Set<AIPlayer> branchedPlayers = new HashSet<>();
+    public Set<AIPlayerSerial> branchEmpty() {
+        Set<AIPlayerSerial> branchedPlayers = new HashSet<>();
         for (String candidateWord: this.getGrid().getWordsSet()) {
             // below works, but may be slightly inefficient because placeWord has additional checks not needed 
-            AIPlayer nextRightPlayer = placeFirstWord(candidateWord, (byte) 0);
+            AIPlayerSerial nextRightPlayer = placeFirstWord(candidateWord, (byte) 0);
             if (nextRightPlayer!=null) {
                 branchedPlayers.add(nextRightPlayer);
             }
-            AIPlayer nextDownPlayer = placeFirstWord(candidateWord, (byte) 1);
+            AIPlayerSerial nextDownPlayer = placeFirstWord(candidateWord, (byte) 1);
             if (nextDownPlayer!=null) {
                 branchedPlayers.add(nextDownPlayer);
             }
@@ -209,11 +209,11 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
         return branchedPlayers;
     }
     @Override
-    public Set<AIPlayer> branch() {
+    public Set<AIPlayerSerial> branch() {
         if (this.getGrid().isEmpty()) {
             return branchEmpty(); // edge case for when the grid is empty
         }
-        Set<AIPlayer> out = branchForward();
+        Set<AIPlayerSerial> out = branchForward();
         out.addAll(branchBackward()); // just combine both directions
         return out;
     }

@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.Scanner;
 
 import src.main.AI.AIPlayer;
+import src.main.AI.AIPlayerSerial;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
@@ -20,9 +21,9 @@ import src.main.game.TileBag;
 public class BranchStressTest {
     
     @Test
-    void StressTest() {
+    void StressTestSerial() {
         HashSet<String> wordsSet = new HashSet<>();
-        try (Scanner scnr = new Scanner (new File("src/resources/scrabbleWords.csv"))) {
+        try (Scanner scnr = new Scanner (new File("src/resources/10000words.txt"))) {
             scnr.useDelimiter("\n");
             while (scnr.hasNext()) {
                 String next = scnr.next();
@@ -53,7 +54,7 @@ public class BranchStressTest {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerSerial player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -72,11 +73,10 @@ public class BranchStressTest {
 
         System.out.println(player.getGrid());
         long startTime = System.currentTimeMillis();
-        Set<AIPlayer> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
+        Set<AIPlayerSerial> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - startTime));
-        
-        for (AIPlayer p: nextPlayers) {
+        for (AIPlayerSerial p: nextPlayers) {
             System.out.println(p.getGrid());
         }
     }
