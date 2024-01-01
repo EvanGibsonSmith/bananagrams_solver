@@ -1,17 +1,9 @@
 package src.main.AI;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.BiFunction;
-
 import src.main.game.Player;
 import src.main.game.Tile;
 import src.main.game.TileBag;
@@ -19,23 +11,18 @@ import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.data_structures.MultiSet;
-
-public class AIPlayer extends Player implements Branchable<AIPlayer> {
-    private ExecutorService executorService = Executors.newFixedThreadPool(2); // TODO look into number of threads more
-
-    public AIPlayer(Game game, Grid grid, TileBag bag) {
+public class AIPlayerSerial extends Player implements Branchable<AIPlayer> {
+    
+    public AIPlayerSerial(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
     }
-
-    public AIPlayer(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
+    public AIPlayerSerial(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
         super(game, grid, bag, hand);
     }
-
     public AIPlayer copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
         // TODO make copying nicer and make copyable interface.
         return new AIPlayer(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
     }
-
     // TODO kind of odd place for this function. Maybe test this?
     private ArrayList<Integer> indexesOf(String word, String sub) {
         ArrayList<Integer> out = new ArrayList<>();
@@ -48,17 +35,14 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         }
         return out;
     }
-
     // TODO maybe this could be broken up, might require a small helper package class. Also document
     // TODO instead of duplicating the nextPlayer within this classe should the class act on an 
     // existing player and we copy the player outside of this class?
     private AIPlayer placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
-
         AIPlayer nextPlayer = this.copy();
         MultiSet<Tile> nextHand = nextPlayer.getHand();
         Grid nextGrid = nextPlayer.getGrid();
-
         String currentGridFragment = ""; // represents the letters in the word from grid we are looking over
         for (int i=0; i<word.length(); ++i) {
             if (nextGrid.locationFilled(cursor)) { // if this location is filled add to the word fragment to check is substring
@@ -70,7 +54,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                     return null; // no grid can be made
                 }
                 currentGridFragment = ""; // if the grid fragment words, reset it since we now have blank tiles
-
                 // check this letter in the word is within the players hand since it isn't already on board
                 if (!nextHand.contains(new Tile(word.charAt(i)))) {
                     return null; // if hand doesn't have needed letter can't play the word
@@ -80,7 +63,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                 nextHand.remove(nextPlaced); 
                 nextGrid.placeUnsafe(cursor, nextPlaced);
             }
-
             // move cursor along proposed word placement
             if (direction==0) {cursor = cursor.right();}
             else if (direction==1) {cursor = cursor.below();}
@@ -88,7 +70,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         
         return nextPlayer;
     }
-
     public Set<AIPlayer> branchForwardSingleDirection(byte direction) {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
         HashSet<Location> startLocations;
@@ -105,13 +86,12 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow()-idx, loc.getColumn());
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
-
         Set<AIPlayer> branchedPlayers = new HashSet<>();
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
-        startLocations.stream().parallel().forEach(loc -> {
+        for (Location loc: startLocations) {
             String gridFragment = getGridFragmentFunction.apply(grid, loc);
-            grid.getWordsSet().stream().parallel().forEach(candidateWord -> {
-                if (candidateWord.equals(gridFragment)) {return;} // EDGE CASE: don't consider word already there, nothing will change
+            for (String candidateWord: grid.getWordsSet()) {
+                if (candidateWord.equals(gridFragment)) {continue;} // EDGE CASE: don't consider word already there, nothing will change
                 ArrayList<Integer> idxs = indexesOf(candidateWord, gridFragment);
                 // below will usually be empty or only one index with execption of something like eye where e can be on either side
                 for (int idx: idxs) { 
@@ -124,37 +104,15 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                         branchedPlayers.add(nextPlayer);
                     }
                 }
-            });
-        });
-
-        return branchedPlayers;
-    }
-
-    public Set<AIPlayer> branchForward() {
-        List<Callable<Set<AIPlayer>>> tasks = new ArrayList<>();
-        tasks.add(() -> branchForwardSingleDirection((byte) 1));
-        tasks.add(() -> branchForwardSingleDirection((byte) 0)); // just combine both directions
-
-        // just adds the two sets from the threads
-        Set<AIPlayer> out = new HashSet<>();
-        try {
-            List<Future<Set<AIPlayer>>> futures = executorService.invokeAll(tasks);
-            for (Future<Set<AIPlayer>> p: futures) {
-                try {
-                    out.addAll(p.get());
-                }
-                catch (InterruptedException| ExecutionException e) {
-                    e.printStackTrace();
-                }
             }
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        return branchedPlayers;
+    }
+    public Set<AIPlayer> branchForward() {
+        Set<AIPlayer> out = branchForwardSingleDirection((byte) 1);
+        out.addAll(branchForwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
-
     private AIPlayer removeWord(Location loc, byte direction) {
         AIPlayer nextPlayer = this.copy();
         Grid grid = nextPlayer.getGrid();
@@ -169,7 +127,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             connectedToOtherWord = (cursor) -> (grid.locationFilled(cursor.left()) || grid.locationFilled(cursor.right()));
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
-
         Location cursor = loc;
         while (grid.locationFilled(cursor)) {
             if (!connectedToOtherWord.apply(cursor)) {
@@ -181,7 +138,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         if (!nextPlayer.gridValid()) {return null;}
         return nextPlayer;
     }
-
     public Set<AIPlayer> branchBackwardSingleDirection(byte direction) {
         HashSet<Location> startLocations;
         Grid grid = this.getGrid();
@@ -203,10 +159,8 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                 foundGrids.add(nextPlayer.getGrid());
             }
         }
-
         return branchedPlayers;
     }
-
     public Set<AIPlayer> branchBackward() {
         Set<AIPlayer> out = branchBackwardSingleDirection((byte) 1);
         out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
@@ -228,7 +182,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             move = (loc) -> loc.below();
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
-
         for (Character c: word.toCharArray()) {
             Tile t = new Tile(c);
             if (!hand.contains(t)) {
@@ -238,10 +191,8 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             hand.remove(t);
             cursor = move.apply(cursor); // do not have to check if the grid is valid because this is the only word
         }
-
         return nextPlayer;
     }
-
     public Set<AIPlayer> branchEmpty() {
         Set<AIPlayer> branchedPlayers = new HashSet<>();
         for (String candidateWord: this.getGrid().getWordsSet()) {
@@ -250,7 +201,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
             if (nextRightPlayer!=null) {
                 branchedPlayers.add(nextRightPlayer);
             }
-
             AIPlayer nextDownPlayer = placeFirstWord(candidateWord, (byte) 1);
             if (nextDownPlayer!=null) {
                 branchedPlayers.add(nextDownPlayer);
@@ -258,7 +208,6 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         }
         return branchedPlayers;
     }
-
     @Override
     public Set<AIPlayer> branch() {
         if (this.getGrid().isEmpty()) {
