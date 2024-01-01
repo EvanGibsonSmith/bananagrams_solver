@@ -78,7 +78,6 @@ public class AStarHashSets<T extends Branchable<T>> {
     
     public ArrayList<T> getPath() {
         if (endIndex==null) {return null;}
-
         ArrayList<T> path = new ArrayList<>();
         for (int idx=endIndex; idx!=-1; idx=from.get(idx)) {
             path.add(objects.get(idx));
