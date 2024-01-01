@@ -60,7 +60,7 @@ public class Maze implements Branchable<Maze> {
 
     @Override 
     public int hashCode() {
-        return this.grid.hashCode();
+        return this.grid.hashCode() + this.playerRow + this.playerColumn;
     }
 
     @Override
