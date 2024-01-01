@@ -11,11 +11,15 @@ import src.data_structures.MultiSet;
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
-    protected HashSet<String> wordsSet; // TODO may want to make this it's own class with trie structure included and contains
+    protected WordsSet wordsSet; // TODO may want to make this it's own class with trie structure included and contains
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
-    public Grid(HashSet<String> wordsSet) {
+    public Grid(WordsSet wordsSet) {
         this.wordsSet = wordsSet;
+    }
+
+    public Grid(HashSet<String> wordsSet) {
+        this.wordsSet = new WordsSet(wordsSet);
     }
 
     // Deep copy constructor
@@ -23,7 +27,7 @@ public class Grid {
         this.filledSquares = new HashMap<Location, Tile>(g.getFilledSquares());
         this.topLeft = g.getTopLeft();
         this.bottomRight = g.getBottomRight();
-        this.wordsSet = new HashSet<String>(g.getWordsSet()); // realistically probably won't change but copy just in case
+        this.wordsSet = g.getWordsSet().copy(); // realistically probably won't change but copy just in case
     }
 
     @Override
@@ -37,7 +41,7 @@ public class Grid {
         return ((Grid) obj).getFilledSquares().equals(this.getFilledSquares());
     }
 
-    public HashSet<String> getWordsSet() {
+    public WordsSet getWordsSet() {
         return this.wordsSet;
     }
 

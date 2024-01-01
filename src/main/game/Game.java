@@ -6,17 +6,29 @@ public class Game {
     TileBag bag;
     Player[] players;  // note that player doesn't have hashcode or equality. Every player is unique
     int numPlayers;
-    HashSet<String> validWords;
+    WordsSet validWords;
 
-    public Game(int numPlayers, TileBag tiles, HashSet<String> validWords) {
+    private Game(int numPlayers, TileBag tiles) {
         this.bag = tiles;
-        this.validWords = validWords;
         this.players = new Player[numPlayers];
         this.numPlayers = numPlayers;
+    }   
+
+    public Game(int numPlayers, TileBag tiles, WordsSet validWords) {
+        this(numPlayers, tiles);
+        this.validWords = validWords;
         for (int i=0; i<numPlayers; ++i) {
             players[i] = new Player(this, new Grid(this.validWords), this.bag);
         }
-    }   
+    }
+
+    public Game(int numPlayers, TileBag tiles, HashSet<String> validWords) {
+        this(numPlayers, tiles);
+        this.validWords = new WordsSet(validWords);
+        for (int i=0; i<numPlayers; ++i) {
+            players[i] = new Player(this, new Grid(this.validWords), this.bag);
+        }
+    }
 
     @Override
     public String toString() {

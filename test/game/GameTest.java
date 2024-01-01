@@ -14,6 +14,7 @@ import src.main.game.Location;
 import src.main.game.Player;
 import src.main.game.Tile;
 import src.main.game.TileBag;
+import src.main.game.WordsSet;
 
 class GameTest {
 
@@ -28,7 +29,7 @@ class GameTest {
         }
         TileBag tileBag = new TileBag(tiles, 3314159);
         assertEquals(tileBag.toString(), "a b c d e");
-        Game game = new Game(3, tileBag, null); // words are not important for this test
+        Game game = new Game(3, tileBag, new WordsSet()); // words are not important for this test
 
         game.peel();
         ArrayList<MultiSet<Tile>> playerTile = new ArrayList<>(); // each player will have one tile

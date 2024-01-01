@@ -10,18 +10,20 @@ public class Player {
     MultiSet<Tile> hand = new MultiSet<>(); // represents hand player has and how much of each tile
 
     public Player(Game game, Grid grid, TileBag bag) {
+        this.game = game;
         this.grid = grid;
         this.bag = bag;
     }
 
-    public Player(Game game, HashSet<String> wordsSet, TileBag bag) {
+    public Player(Game game, WordsSet wordsSet, TileBag bag) {
+        this.game = game;
         this.grid = new Grid(wordsSet);
         this.bag = bag;
     }
 
     public Player(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
-        this.grid = grid;
         this.game = game;
+        this.grid = grid;
         this.bag = bag;
         this.hand = hand;
     }
