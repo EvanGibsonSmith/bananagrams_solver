@@ -1,5 +1,11 @@
 package src.main.AI;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +21,8 @@ import src.main.game.Location;
 import src.data_structures.MultiSet;
 
 public class AIPlayer extends Player implements Branchable<AIPlayer> {
-    
+    private ExecutorService executorService = Executors.newFixedThreadPool(2); // TODO look into number of threads more
+
     public AIPlayer(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
     }
@@ -101,12 +108,10 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
 
         Set<AIPlayer> branchedPlayers = new HashSet<>();
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
-
-        for (Location loc: startLocations) {
+        startLocations.stream().parallel().forEach(loc -> {
             String gridFragment = getGridFragmentFunction.apply(grid, loc);
-
-            for (String candidateWord: grid.getWordsSet()) {
-                if (candidateWord.equals(gridFragment)) {continue;} // EDGE CASE: don't consider word already there, nothing will change
+            grid.getWordsSet().stream().parallel().forEach(candidateWord -> {
+                if (candidateWord.equals(gridFragment)) {return;} // EDGE CASE: don't consider word already there, nothing will change
                 ArrayList<Integer> idxs = indexesOf(candidateWord, gridFragment);
                 // below will usually be empty or only one index with execption of something like eye where e can be on either side
                 for (int idx: idxs) { 
@@ -119,15 +124,34 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
                         branchedPlayers.add(nextPlayer);
                     }
                 }
-            }
-        }
+            });
+        });
 
         return branchedPlayers;
     }
 
     public Set<AIPlayer> branchForward() {
-        Set<AIPlayer> out = branchForwardSingleDirection((byte) 1);
-        out.addAll(branchForwardSingleDirection((byte) 0)); // just combine both directions
+        List<Callable<Set<AIPlayer>>> tasks = new ArrayList<>();
+        tasks.add(() -> branchForwardSingleDirection((byte) 1));
+        tasks.add(() -> branchForwardSingleDirection((byte) 0)); // just combine both directions
+
+        // just adds the two sets from the threads
+        Set<AIPlayer> out = new HashSet<>();
+        try {
+            List<Future<Set<AIPlayer>>> futures = executorService.invokeAll(tasks);
+            for (Future<Set<AIPlayer>> p: futures) {
+                try {
+                    out.addAll(p.get());
+                }
+                catch (InterruptedException| ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return out;
     }
 
