@@ -14,6 +14,10 @@ public class Grid {
     protected WordsSet wordsSet; // TODO may want to make this it's own class with trie structure included and contains
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
+    // TODO this stuff should be taken over to AIGrid along with other stuff?
+    protected HashSet<Location> rightStartLocations = new HashSet<Location>();
+    protected HashSet<Location> downStartLocations = new HashSet<Location>();
+
     public Grid(WordsSet wordsSet) {
         this.wordsSet = wordsSet;
     }
@@ -151,6 +155,7 @@ public class Grid {
     public void placeUnsafe(Location loc, Tile tile) {
         filledSquares.put(loc, tile);
         updateBoundingBox(loc);
+        updateStartLocations(loc);
     }
 
     /**
@@ -201,7 +206,6 @@ public class Grid {
             cursor = cursor.right();
         }
         
-        //if (word.length()==1) {return null;} if length is one, technically not word needed to be checked, but useful to include
         return word;
     }
 
@@ -221,7 +225,6 @@ public class Grid {
             cursor = cursor.below();
         }
 
-        //if (word.length()==1) {return null;} if length is one, technically not word needed to be checked, but useful to include
         return word;
     }
 
@@ -246,7 +249,7 @@ public class Grid {
     /**
      * Gets every word played on the board, and returns a list of them.
      * In a valid board these should all be acceptable words.
-     * @return
+     * @return MultiSet of the words
      */
     public MultiSet<String> getWordsPlayed() {
         MultiSet<String> words = new MultiSet<>();
@@ -342,7 +345,7 @@ public class Grid {
     }
 
     // TODO some of below should probably be in an extension of the Grid class
-    public HashSet<Location> downStartLocations() {
+    /*public HashSet<Location> downStartLocations() {
         HashSet<Location> downStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
             if (!this.locationFilled(loc.above())) {
@@ -350,7 +353,18 @@ public class Grid {
             }
         }
         return downStartLocs;
+    }*/
+    public HashSet<Location> getDownStartLocations() {
+        return this.downStartLocations;
     }
+
+    private void updateDownStartLocations(Location loc) {
+        // this new placed tile could be a down location if nothing is above it
+        if (!this.locationFilled(loc.above())) {this.downStartLocations.add(loc);}
+        // this tile could have potentially invalidated the tile below it
+        this.downStartLocations.remove(loc.below()); // if this in list it is no longer, otherwise nothing
+    }
+
 
     // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location
     public String getDownFragment(Location loc) {
@@ -363,7 +377,7 @@ public class Grid {
         return fragment;
     }
 
-    public HashSet<Location> rightStartLocations() {
+    /*public HashSet<Location> rightStartLocations() {
         HashSet<Location> rightStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {
             if (!this.locationFilled(loc.left())) {
@@ -371,6 +385,22 @@ public class Grid {
             }
         }
         return rightStartLocs;
+    }*/
+
+    public HashSet<Location> getRightStartLocations() {
+        return this.rightStartLocations;
+    }
+
+    private void updateRightStartLocations(Location loc) {
+        // this new placed tile could be right start location if nothing to the left of it
+        if (!this.locationFilled(loc.left())) {this.rightStartLocations.add(loc);}
+        // this tile could invalid tile to it's right
+        this.rightStartLocations.remove(loc.right()); // if this in list it is no longer, otherwise nothing
+    }
+
+    private void updateStartLocations(Location loc) {
+        updateDownStartLocations(loc);
+        updateRightStartLocations(loc);
     }
 
     // NOTE this assumes that the location is at beginning or word or otherwise gets fragment only down from this location

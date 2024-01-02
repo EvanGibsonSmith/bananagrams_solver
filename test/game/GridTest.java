@@ -152,4 +152,41 @@ public class GridTest {
         assertNotEquals(g1, g2);
     }
     // TODO add a bounding box test. I found an small error, I think they are all fixed but there are quite a few components so it would be nice to test.
+
+    @Test 
+    void rightStartLocations() {
+        Grid g = new Grid(new HashSet<>());
+        g.placeUnsafe(new Location(0, 0), new Tile('a')); // can begin a word right
+        g.placeUnsafe(new Location(0, 1), new Tile('c'));
+        g.placeUnsafe(new Location(0, 2), new Tile('t'));
+        g.placeUnsafe(new Location(1, 2), new Tile('a')); // can begin a word right
+        g.placeUnsafe(new Location(2, 2), new Tile('p')); // can begin a word right
+        System.out.println(g);
+
+        HashSet<Location> locs = new HashSet<>();
+        locs.add(new Location(0,0));
+        locs.add(new Location(1, 2));
+        locs.add(new Location(2, 2));
+        assertEquals(g.getRightStartLocations(), locs);
+
+    }
+
+    
+    @Test 
+    void downStartLocations() {
+        Grid g = new Grid(new HashSet<>());
+        g.placeUnsafe(new Location(1, 1), new Tile('c')); // can begin a word down
+        g.placeUnsafe(new Location(1, 3), new Tile('t')); // can begin a word down 
+        g.placeUnsafe(new Location(0, 2), new Tile('t')); // can begin a word down
+        g.placeUnsafe(new Location(1, 2), new Tile('a')); 
+        g.placeUnsafe(new Location(2, 2), new Tile('p')); 
+        System.out.println(g);
+
+        HashSet<Location> locs = new HashSet<>();
+        locs.add(new Location(1,1));
+        locs.add(new Location(1, 3));
+        locs.add(new Location(0, 2));
+        assertEquals(g.getDownStartLocations(), locs);
+
+    }
 }

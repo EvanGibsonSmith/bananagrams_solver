@@ -77,12 +77,12 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayerSerial>
         Grid grid = this.getGrid();
         if (direction==0) {
             getGridFragmentFunction = (g, loc) -> g.getRightFragment(loc);
-            startLocations = grid.rightStartLocations();
+            startLocations = grid.getRightStartLocations();
             wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow(), loc.getColumn()-idx);
         }
         else if (direction==1) {
             getGridFragmentFunction = (g, loc) -> g.getDownFragment(loc);
-            startLocations = grid.downStartLocations();
+            startLocations = grid.getDownStartLocations();
             wordStartLocationFunction = (loc, idx) -> new Location(loc.getRow()-idx, loc.getColumn());
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
@@ -144,10 +144,10 @@ public class AIPlayerSerial extends Player implements Branchable<AIPlayerSerial>
         HashSet<Grid> foundGrids = new HashSet<>();
         foundGrids.add(grid);
         if (direction==0) {
-            startLocations = grid.rightStartLocations();
+            startLocations = grid.getRightStartLocations();
         }
         else if (direction==1) {
-            startLocations = grid.downStartLocations();
+            startLocations = grid.getDownStartLocations();
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
         

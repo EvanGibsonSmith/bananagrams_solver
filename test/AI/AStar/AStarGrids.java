@@ -178,8 +178,8 @@ class AStarGrids {
         }
 
         //char[] letters = "qqyzjpetramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
-        char[] letters = "baarteeopg".toCharArray();
-        //char[] letters = "abassteerlsmmoo".toCharArray();
+        //char[] letters = "baarteeopg".toCharArray();
+        char[] letters = "abassteerlsmmoo".toCharArray();
         //char[] letters = "date".toCharArray();
         Tile[] tiles = new Tile[letters.length];
         for (int i=0; i<letters.length; ++i) {
