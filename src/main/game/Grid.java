@@ -41,6 +41,10 @@ public class Grid {
         return ((Grid) obj).getFilledSquares().equals(this.getFilledSquares());
     }
 
+    public Grid copy() {
+        return new Grid(this);
+    }
+
     public WordsSet getWordsSet() {
         return this.wordsSet;
     }

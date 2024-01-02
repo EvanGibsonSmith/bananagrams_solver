@@ -56,7 +56,7 @@ public class GridTest {
         g.placeUnsafe(new Location(0, 0), new Tile("a".charAt(0)));
         g.placeUnsafe(new Location(1, 0), new Tile("b".charAt(0)));
         g.placeUnsafe(new Location(2, 0), new Tile("c".charAt(0)));
-         g.placeUnsafe(new Location(3, 2), new Tile("d".charAt(0)));
+        g.placeUnsafe(new Location(3, 2), new Tile("d".charAt(0)));
 
         assertEquals(g.size(), 4);
 

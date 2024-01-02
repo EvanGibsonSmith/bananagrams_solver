@@ -33,7 +33,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
 
     public AIPlayer copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
         // TODO make copying nicer and make copyable interface.
-        return new AIPlayer(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
+        return new AIPlayer(game, this.getGrid().copy(), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
     }
 
     // TODO kind of odd place for this function. Maybe test this?
