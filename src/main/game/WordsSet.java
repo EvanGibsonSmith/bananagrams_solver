@@ -11,6 +11,10 @@ public class WordsSet implements Iterable<String> {
         this.wordsSet = new HashSet<>();
     }
 
+    public WordsSet(WordsSet set) {
+        this.wordsSet = set.wordsSet;
+    }
+
     public WordsSet(HashSet<String> set) {
         this.wordsSet = set;
     }

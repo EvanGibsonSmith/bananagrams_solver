@@ -21,6 +21,14 @@ public class AIWordsSet extends WordsSet {
         this.combinations = buildNewSet(true, (String word, String key) -> word.contains(key));
     }
 
+    public AIWordsSet(WordsSet set, int combinationLength) {
+        super(set);
+        this.wordsSet = super.wordsSet;
+        this.combinationLength = combinationLength;
+        makeSubstrings(this.combinations);
+        this.combinations = buildNewSet(true, (String word, String key) -> word.contains(key));
+    }
+
     private HashMap<String, HashSet<String>> buildNewSet(boolean isSubstrings, BiFunction<String, String, Boolean> isIn) {
         // make a new empty set for all combinations
         HashMap<String, HashSet<String>> set = new HashMap<>();

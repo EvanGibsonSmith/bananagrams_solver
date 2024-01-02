@@ -13,6 +13,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import src.main.AI.AIPlayer;
+import src.main.AI.AIGrid;
 import src.main.AI.AStarArrayList;
 import src.main.AI.AStarHashSets;
 import src.main.game.Grid;
@@ -51,7 +52,7 @@ class AStarGrids {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayer(null, new AIGrid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -186,16 +187,16 @@ class AStarGrids {
             tiles[i] = new Tile(letters[i]);
         }
         TileBag tileBag = new TileBag(tiles, 1);
-        player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayer(null, new AIGrid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         
-        long startTime = System.currentTimeMillis();
+        /*long startTime = System.currentTimeMillis();
         astarhash = new AStarHashSets<>(player.copy(), cost, heuristic, isGoal);
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime-startTime));
         for (AIPlayer p: astarhash.getPath()) {
             System.out.println(p.getGrid());
-        }
+        }*/
 
         long startTimeArray = System.currentTimeMillis();
         astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface

@@ -23,12 +23,17 @@ import src.data_structures.MultiSet;
 public class AIPlayer extends Player implements Branchable<AIPlayer> {
     private ExecutorService executorService = Executors.newFixedThreadPool(2); // TODO look into number of threads more
 
-    public AIPlayer(Game game, Grid grid, TileBag bag) {
+    public AIPlayer(Game game, AIGrid grid, TileBag bag) {
         super(game, grid, bag);
     }
 
-    public AIPlayer(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
+    public AIPlayer(Game game, AIGrid grid, TileBag bag, MultiSet<Tile> hand) {
         super(game, grid, bag, hand);
+    }
+
+    @Override
+    public AIGrid getGrid() {
+        return (AIGrid) super.getGrid();
     }
 
     public AIPlayer copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
@@ -93,7 +98,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
         HashSet<Location> startLocations;
         BiFunction<Location, Integer, Location> wordStartLocationFunction;
-        Grid grid = this.getGrid();
+        AIGrid grid = this.getGrid();
         if (direction==0) {
             getGridFragmentFunction = (g, loc) -> g.getRightFragment(loc);
             startLocations = grid.getRightStartLocations();
@@ -110,7 +115,9 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
         startLocations.stream().parallel().forEach(loc -> {
             String gridFragment = getGridFragmentFunction.apply(grid, loc);
-            grid.getWordsSet().stream().parallel().forEach(candidateWord -> {
+            // get set of words that could be played based on this fragment
+            HashSet<String> fragmentSet = grid.getWordsSet().getCombinations().get(gridFragment.substring(0, 1)); // TODO make more general
+            fragmentSet.stream().parallel().forEach(candidateWord -> {
                 if (candidateWord.equals(gridFragment)) {return;} // EDGE CASE: don't consider word already there, nothing will change
                 ArrayList<Integer> idxs = indexesOf(candidateWord, gridFragment);
                 // below will usually be empty or only one index with execption of something like eye where e can be on either side
@@ -131,6 +138,7 @@ public class AIPlayer extends Player implements Branchable<AIPlayer> {
     }
 
     public Set<AIPlayer> branchForward() {
+        branchForwardSingleDirection((byte) 1);
         List<Callable<Set<AIPlayer>>> tasks = new ArrayList<>();
         tasks.add(() -> branchForwardSingleDirection((byte) 1));
         tasks.add(() -> branchForwardSingleDirection((byte) 0)); // just combine both directions
