@@ -164,7 +164,7 @@ class AStarGrids {
     void bigExample() {
         // set up all scrabble words
         HashSet<String> wordsSet = new HashSet<>();
-        try (Scanner scnr = new Scanner (new File("src/resources/10000Words.txt"))) {
+        try (Scanner scnr = new Scanner (new File("src/resources/10000words.txt"))) {
             scnr.useDelimiter("\n");
             while (scnr.hasNext()) {
                 String next = scnr.next();
@@ -178,7 +178,8 @@ class AStarGrids {
         }
 
         //char[] letters = "qqyzjpetramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
-        char[] letters = "baarteeopg".toCharArray();
+        //char[] letters = "baarteeopg".toCharArray();
+        char[] letters = "hello".toCharArray();
         //char[] letters = "abassteerlsmmoo".toCharArray();
         //char[] letters = "date".toCharArray();
         Tile[] tiles = new Tile[letters.length];
@@ -189,14 +190,15 @@ class AStarGrids {
         player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         
-        long startTime = System.currentTimeMillis();
+        /*long startTime = System.currentTimeMillis();
         astarhash = new AStarHashSets<>(player.copy(), cost, heuristic, isGoal);
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime-startTime));
         for (AIPlayer p: astarhash.getPath()) {
             System.out.println(p.getGrid());
-        }
+        }*/
 
+        System.out.println("Beginning");
         long startTimeArray = System.currentTimeMillis();
         astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
         long endTimeArray = System.currentTimeMillis();
