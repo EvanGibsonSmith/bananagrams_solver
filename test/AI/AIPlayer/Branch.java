@@ -12,7 +12,6 @@ import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.main.AI.AIPlayer;
-import src.main.AI.AIPlayerParallel;
 import src.main.AI.AIPlayerSerial;
 import src.data_structures.MultiSet;
 
@@ -37,7 +36,7 @@ public class Branch {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayer player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();

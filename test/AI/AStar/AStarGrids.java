@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 import src.main.AI.AIPlayer;
 import src.main.AI.AIPlayerParallel;
+import src.main.AI.AIPlayerSerial;
 import src.main.AI.AStarArrayList;
 import src.main.AI.AStarHashSets;
 import src.main.game.Grid;
@@ -52,7 +53,7 @@ class AStarGrids {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -188,7 +189,7 @@ class AStarGrids {
             tiles[i] = new Tile(letters[i]);
         }
         TileBag tileBag = new TileBag(tiles, 1);
-        player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         
         /*long startTime = System.currentTimeMillis();
