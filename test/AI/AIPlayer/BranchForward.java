@@ -11,7 +11,7 @@ import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.data_structures.MultiSet;
-import src.main.AI.AIPlayer;
+import src.main.AI.AIPlayerParallel;
 
 
 class BranchForward {
@@ -38,7 +38,7 @@ class BranchForward {
         }
         TileBag tileBag = new TileBag(tiles, 42);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -50,7 +50,7 @@ class BranchForward {
         player.placeTile(new Location(0, 0), new Tile('a'));
         player.placeTile(new Location(1, 0), new Tile('s'));
 
-        Set<AIPlayer> nextPlayers = player.branchForward();
+        Set<AIPlayerParallel> nextPlayers = player.branchForward();
 
         // can play sat right now
         assertEquals(nextPlayers.size(), 3);

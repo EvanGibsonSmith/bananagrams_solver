@@ -12,7 +12,7 @@ import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.AI.AIPlayer;
+import src.main.AI.AIPlayerParallel;
 import src.data_structures.MultiSet;
 
 public class BranchBackward {
@@ -37,7 +37,7 @@ public class BranchBackward {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -58,9 +58,9 @@ public class BranchBackward {
         assertTrue(player.gridValid());
 
         System.out.println(player.getGrid());
-        Set<AIPlayer> nextPlayers = player.branchBackward();
+        Set<AIPlayerParallel> nextPlayers = player.branchBackward();
         
-        for (AIPlayer p: nextPlayers) {
+        for (AIPlayerParallel p: nextPlayers) {
             System.out.println(p.getGrid());
         }
         assertEquals(nextPlayers.size(), 2);

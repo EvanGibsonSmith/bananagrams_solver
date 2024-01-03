@@ -8,7 +8,7 @@ import src.main.game.Tile;
 
 public class BranchTestMethods {
     
-    static MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {
+    static MultiSet<MultiSet<String>> getAllWordsPlayed(Set<? extends AIPlayer> players) {
         MultiSet<MultiSet<String>> out = new MultiSet<>();
         for (AIPlayer player: players) {
             out.add(player.getGrid().getWordsPlayed());
@@ -16,7 +16,7 @@ public class BranchTestMethods {
         return out;
     }
 
-    static MultiSet<MultiSet<Character>> getAllHandsCharacters(Set<AIPlayer> players) {
+    static MultiSet<MultiSet<Character>> getAllHandsCharacters(Set<? extends AIPlayer> players) {
         MultiSet<MultiSet<Character>> out = new MultiSet<>();
         for (AIPlayer player: players) {
             MultiSet<Character> charSet = new MultiSet<>();

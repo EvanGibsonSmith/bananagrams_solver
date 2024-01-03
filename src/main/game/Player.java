@@ -1,6 +1,5 @@
 package src.main.game;
 
-import java.util.HashSet;
 import src.data_structures.MultiSet;
 
 public class Player {

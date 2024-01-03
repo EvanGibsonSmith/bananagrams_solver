@@ -10,9 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Scanner;
 
-import src.main.AI.AIPlayer;
 import src.main.AI.AIPlayerParallel;
-import src.main.AI.AIPlayerSerial;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
@@ -85,7 +83,7 @@ public class BranchStressTest {
     @Test
     void StressTestEmpty() {
         HashSet<String> wordsSet = new HashSet<>();
-        try (Scanner scnr = new Scanner (new File("src/resources/10000words.txt"))) {
+        try (Scanner scnr = new Scanner (new File("src/resources/scrabbleWords.txt"))) {
             scnr.useDelimiter("\n");
             while (scnr.hasNext()) {
                 String next = scnr.next();

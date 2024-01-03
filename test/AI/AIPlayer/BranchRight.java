@@ -13,19 +13,19 @@ import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.data_structures.MultiSet;
-import src.main.AI.AIPlayer;
+import src.main.AI.AIPlayerParallel;
 
 class BranchRight {
-    static Function <AIPlayer, Set<AIPlayer>> branchRight; // this will branch only down and add forward branches for these tests
+    static Function <AIPlayerParallel, Set<AIPlayerParallel>> branchRight; // this will branch only down and add forward branches for these tests
 
     @BeforeAll
     static void defineBranchRight() {
         branchRight = (player) -> (player.branchForwardSingleDirection((byte) 0));
     }
 
-    MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayer> players) {
+    MultiSet<MultiSet<String>> getAllWordsPlayed(Set<AIPlayerParallel> players) {
         MultiSet<MultiSet<String>> out = new MultiSet<MultiSet<String>>();
-        for (AIPlayer player: players) {
+        for (AIPlayerParallel player: players) {
             out.add(player.getGrid().getWordsPlayed());
         }
         return out;
@@ -49,7 +49,7 @@ class BranchRight {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -64,7 +64,7 @@ class BranchRight {
         player.placeTile(new Location(0, 1), new Tile('c'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        Set<AIPlayer> nextPlayers = branchRight.apply(player);
+        Set<AIPlayerParallel> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -91,7 +91,7 @@ class BranchRight {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -106,7 +106,7 @@ class BranchRight {
         player.placeTile(new Location(0, 1), new Tile('c'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        Set<AIPlayer> nextPlayers = branchRight.apply(player);
+        Set<AIPlayerParallel> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -134,7 +134,7 @@ class BranchRight {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -149,7 +149,7 @@ class BranchRight {
         player.placeTile(new Location(0, 1), new Tile('c'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        Set<AIPlayer> nextPlayers = branchRight.apply(player);
+        Set<AIPlayerParallel> nextPlayers = branchRight.apply(player);
 
         assertEquals(nextPlayers.size(), 3);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -178,7 +178,7 @@ class BranchRight {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -193,7 +193,7 @@ class BranchRight {
         player.placeTile(new Location(1, 0), new Tile('a'));
         player.placeTile(new Location(2, 0), new Tile('t'));
         
-        Set<AIPlayer> nextPlayers = branchRight.apply(player);
+        Set<AIPlayerParallel> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -221,7 +221,7 @@ class BranchRight {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -236,7 +236,7 @@ class BranchRight {
         player.placeTile(new Location(2, 0), new Tile('a'));
         player.placeTile(new Location(3, 0), new Tile('t'));
         
-        Set<AIPlayer> nextPlayers = branchRight.apply(player);
+        Set<AIPlayerParallel> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -267,7 +267,7 @@ class BranchRight {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayer player = new AIPlayer(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AIPlayerParallel player = new AIPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -282,7 +282,7 @@ class BranchRight {
         player.placeTile(new Location(2, 0), new Tile('a'));
         player.placeTile(new Location(3, 0), new Tile('t'));
         
-        Set<AIPlayer> nextPlayers = branchRight.apply(player);
+        Set<AIPlayerParallel> nextPlayers = branchRight.apply(player);
         
         assertEquals(nextPlayers.size(), 7);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();

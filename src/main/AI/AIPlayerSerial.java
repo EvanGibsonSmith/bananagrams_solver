@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.BiFunction;
-import src.main.game.Player;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.data_structures.MultiSet;
-public class AIPlayerSerial extends Player implements Branchable<AIPlayerSerial> {
+
+public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
     
     public AIPlayerSerial(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
