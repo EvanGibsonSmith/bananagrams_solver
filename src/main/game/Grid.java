@@ -27,7 +27,7 @@ public class Grid {
         this.filledSquares = new HashMap<Location, Tile>(g.getFilledSquares());
         this.topLeft = g.getTopLeft();
         this.bottomRight = g.getBottomRight();
-        this.wordsSet = g.getWordsSet().copy(); // realistically probably won't change but copy just in case
+        this.wordsSet = g.getWordsSet(); // DO NOT COPY OVER WORD SET
     }
 
     @Override
