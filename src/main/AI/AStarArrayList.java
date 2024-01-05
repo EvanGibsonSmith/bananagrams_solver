@@ -90,5 +90,9 @@ public class AStarArrayList<T extends Branchable<T>> {
         return path;
     }
 
+    public T getGoal() {
+        return objects.get(endIndex);
+    }
+
 
 }

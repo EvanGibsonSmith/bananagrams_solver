@@ -3,11 +3,15 @@ package test.AI.AStar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -179,11 +183,7 @@ class AStarGrids {
             e.printStackTrace();
         }
 
-        //char[] letters = "qqyzjpetramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
-        char[] letters = "baarteeopg".toCharArray();
-        //char[] letters = "jaqrretiposzz".toCharArray();
-        //char[] letters = "abassteerlsmmoo".toCharArray();
-        //char[] letters = "date".toCharArray();
+        char[] letters = "weetoraadosinng".toCharArray();
         Tile[] tiles = new Tile[letters.length];
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
@@ -191,14 +191,7 @@ class AStarGrids {
         TileBag tileBag = new TileBag(tiles, 1);
         player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
-        
-        /*long startTime = System.currentTimeMillis();
-        astarhash = new AStarHashSets<>(player.copy(), cost, heuristic, isGoal);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Time: " + (endTime-startTime));
-        for (AIPlayer p: astarhash.getPath()) {
-            System.out.println(p.getGrid());
-        }*/
+        System.out.println("Player Hand: " + player.getHand());
 
         System.out.println("Beginning");
         long startTimeArray = System.currentTimeMillis();
@@ -208,8 +201,134 @@ class AStarGrids {
         for (AIPlayer p: astararray.getPath()) {
             System.out.println(p.getGrid());
         }
-    
+    }
 
+
+    @Test
+    void bigPeelExample() {
+        // set up all scrabble words
+        HashSet<String> wordsSet = new HashSet<>();
+        try (Scanner scnr = new Scanner (new File("src/resources/scrabbleWords.txt"))) {
+            scnr.useDelimiter("\n");
+            while (scnr.hasNext()) {
+                String next = scnr.next();
+                if (next.length()-1>2) {
+                    wordsSet.add(next.substring(0, next.length()-1));
+                }
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //char[] letters = "qqyzjpetramodalmoodlatpedderlfasseetgasmboopbeetrascoolbatgarmanstasbagtryabstrahgloopabcdteraluunnat".toCharArray();
+        char[] letters = "abeelopndmopost".toCharArray();
+        //char[] letters = "jaqrretiposzz".toCharArray();
+        //char[] letters = "abassteerlsmmoo".toCharArray();
+        //char[] letters = "date".toCharArray();
+        int leftInBag = 3; // tiles are left in the bag after player draws up
+        Tile[] tiles = new Tile[letters.length];
+        for (int i=0; i<letters.length; ++i) {
+            tiles[i] = new Tile(letters[i]);
+        }
+
+        TileBag tileBag = new TileBag(tiles, 1);
+        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        for (int i=0; i<letters.length-leftInBag; ++i) {player.grabTile();}
+        System.out.println(player.getHand());
+
+        System.out.println("Beginning");
+        long startTimeArray = System.currentTimeMillis();
+        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+        long endTimeArray = System.currentTimeMillis();
+        System.out.println("Time: " + (endTimeArray-startTimeArray));
+        for (AIPlayer p: astararray.getPath()) {
+            System.out.println(p.getGrid());
+        }
+
+        // with this big grid peel a tile
+        player.playGrid(astararray.getGoal().getGrid());
+        assertEquals(player.getBag().size(), leftInBag);
+        assertEquals(player.getGrid(), astararray.getGoal().getGrid());
+        assertEquals(player.getHand(), astararray.getGoal().getHand());
+        assertTrue(player.getGrid().valid());
+        assertTrue(player.canPeel());
+        // player now has the A* grid placed
+        player.grabTile(); // "peel" for this player
+        assertEquals(player.getBag().size(), leftInBag-1);
+        assertTrue(player.getGrid().valid());
+        assertFalse(player.canPeel());
+
+        // now run A* from this position
+        startTimeArray = System.currentTimeMillis();
+        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal);
+        endTimeArray = System.currentTimeMillis();
+        System.out.println("Peel Time: " + (endTimeArray-startTimeArray));
+        for (AIPlayer p: astararray.getPath()) {
+            System.out.println("Hand: " + p.getHand());
+            System.out.println(p.getGrid());
+        }
+    }
+
+    @Test
+    void playerInputExample() {
+        // set up all scrabble words
+        HashSet<String> wordsSet = new HashSet<>();
+        try (Scanner scnr = new Scanner (new File("src/resources/scrabbleWords.txt"))) {
+            scnr.useDelimiter("\n");
+            while (scnr.hasNext()) {
+                String next = scnr.next();
+                if (next.length()-1>2) {
+                    wordsSet.add(next.substring(0, next.length()-1));
+                }
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        char[] letters = "linedtanetoniuw".toCharArray();
+        Tile[] tiles = new Tile[letters.length];
+        for (int i=0; i<letters.length; ++i) {
+            tiles[i] = new Tile(letters[i]);
+        }
+        TileBag tileBag = new TileBag(tiles, 1);
+        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        for (int i=0; i<letters.length; ++i) {player.grabTile();}
+        System.out.println("Player Hand: " + player.getHand());
+
+        System.out.println("Beginning");
+        long startTimeArray = System.currentTimeMillis();
+        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+        long endTimeArray = System.currentTimeMillis();
+        System.out.println("Time: " + (endTimeArray-startTimeArray));
+        for (AIPlayer p: astararray.getPath()) {
+            System.out.println(p.getGrid());
+        }
+
+        // update player grid
+        // after initial create scanner
+        player.playGrid(astararray.getGoal().getGrid());
+        Queue<Character> nextChars = new LinkedList<>();
+        nextChars.add('a');
+        nextChars.add('r');
+        nextChars.add('e');
+        nextChars.add('i');
+        nextChars.add('n');
+        while (!nextChars.isEmpty()) {
+            char c = nextChars.poll();
+            tileBag.addTile(new Tile(c)); // add single tile
+            player.grabTile(); // grab that tile 
+            startTimeArray = System.currentTimeMillis();
+            astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+            endTimeArray = System.currentTimeMillis();
+            System.out.println("Time: " + (endTimeArray-startTimeArray));
+            for (AIPlayer p: astararray.getPath()) {
+                System.out.println("Hand: " + p.getHand());
+                System.out.println(p.getGrid());
+            }
+            player.playGrid(astararray.getGoal().getGrid());
+        }
     }
 }
 

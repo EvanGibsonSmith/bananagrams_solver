@@ -1,5 +1,8 @@
 package src.main.game;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import src.data_structures.MultiSet;
 
 public class Player {
@@ -120,6 +123,15 @@ public class Player {
         }
         Tile tile = this.grid.remove(loc); // now that checks have been done we can place this
         this.hand.add(tile); // adds tile from the grid to hand
+    }
+
+    // TODO document
+    public void clearGrid() {
+        Set<Location> filled = new HashSet<>(this.getGrid().filledLocations());
+        for (Location loc: filled) {
+            Tile tile = this.grid.remove(loc); // now that checks have been done we can place this
+            this.hand.add(tile); // adds tile from the grid to hand
+        }
     }
 
     /**
