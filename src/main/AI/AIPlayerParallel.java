@@ -30,8 +30,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         super(game, grid, bag, hand);
     }
 
-    public AIPlayerParallel copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
-        // TODO make copying nicer and make copyable interface.
+    public AIPlayerParallel copy() {
         return new AIPlayerParallel(game, new Grid(getGrid()), getBag(), this.getHand().copy());
     }
 

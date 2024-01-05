@@ -2,6 +2,7 @@ package src.main.AI;
 
 import java.util.Set;
 
+import src.main.game.Copyable;
 import src.main.game.Player;
 import src.main.game.Tile;
 import src.main.game.TileBag;
@@ -10,7 +11,7 @@ import src.main.game.Grid;
 import src.main.game.Location;
 import src.data_structures.MultiSet;
 
-public abstract class AIPlayer<T extends AIPlayer<T>> extends Player implements Branchable<T> {
+public abstract class AIPlayer<T extends AIPlayer<T>> extends Player implements Branchable<T>, Copyable<T> {
 
     public AIPlayer(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);

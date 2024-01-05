@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-public class WordsSet implements Iterable<String> {
+public class WordsSet implements Iterable<String>, Copyable<WordsSet> {
     protected HashSet<String> wordsSet;
 
     public WordsSet() {

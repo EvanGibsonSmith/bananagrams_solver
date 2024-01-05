@@ -22,7 +22,6 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
     }
 
     public AIPlayerSerial copy() {
-        // TODO make copying nicer and make copyable interface.
         return new AIPlayerSerial(game, new Grid(getGrid()), getBag(), this.getHand().copy());
     }
 

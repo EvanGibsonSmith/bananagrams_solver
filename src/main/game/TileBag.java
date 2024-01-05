@@ -12,7 +12,7 @@ public class TileBag {
      * Takes in the initial tiles in the bag and the max size,
      * Assumes the max size is the initial number of tiles in the 
      * bag. This makes sense for the application within the game
-     * @param tiless
+     * @param tiles
      */
     public TileBag(Tile[] tiles) {
         this.tiles = tiles;

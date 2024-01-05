@@ -57,5 +57,4 @@ public class Location {
     public Location right() {
         return new Location(this.row, this.column+1);
     }
-
 }
