@@ -11,7 +11,7 @@ import src.data_structures.MultiSet;
 public class Grid {
     protected Location topLeft = null;
     protected Location bottomRight = null;
-    protected WordsSet wordsSet; // TODO may want to make this it's own class with trie structure included and contains
+    protected WordsSet wordsSet;
     protected HashMap<Location, Tile> filledSquares = new HashMap<>();
 
     public Grid(WordsSet wordsSet) {
@@ -225,7 +225,14 @@ public class Grid {
         return word;
     }
 
-    // TODO document
+    /**
+     * Gets all of the "words" that are facing down on the grid, including
+     * one letter "words". These one letter words are useful for other functions,
+     * and may not be valid words on a valid board (like z). Other words will be (given grid is valid).
+     * Each location in the hash map is the beginning of the down words, (a word that is down but not the
+     * beginning is not included)
+     * @return HashMap of each locations and it's down word
+     */
     public HashMap<Location, String> getWordsDown() {
         HashMap<Location, String> map = new HashMap<>();
         for (Location loc: this.filledSquares.keySet()) {
@@ -234,7 +241,14 @@ public class Grid {
         return map;
     }
 
-    // TODO document
+    /**
+     * Gets all of the "words" that are facing right on the grid, including
+     * one letter "words". These one letter words are useful for other functions,
+     * and may not be valid words on a valid board (like z). Other words will be (given grid is valid).
+     * Each location in the hash map is the beginning of the down words, (a word that is down but not the
+     * beginning is not included)
+     * @return HashMap of each locations and it's right word
+     */
     public HashMap<Location, String> getWordsRight() {
         HashMap<Location, String> map = new HashMap<>();
         for (Location loc: this.filledSquares.keySet()) {
@@ -269,7 +283,6 @@ public class Grid {
      * Does not check for disconnected island. Just iterates through the letter and each of their words
      * @return true if all of the words are valid, false is not 
      */
-    // FIXME there is a extreme edge case in which only ONE TILE is placed that this will ALWAYS consider valid. Don't even know if I need to care
     public Boolean validWords() {
         MultiSet<String> words = getWordsPlayed();
         for (String word: words) {
@@ -324,7 +337,7 @@ public class Grid {
      * THIS DOES NOT TAKE INTO ACCOUNT IF WORD CAN BE MADE, just if it is connected
      * @return array of locations
      */
-    public HashSet<Location> placeableLocations() {  // TODO TEST ME
+    public HashSet<Location> placeableLocations() {
         HashSet<Location> tilePlaceLocations = new HashSet<>();
         for (Location sq: filledSquares.keySet()) {
             Location[] adj = {new Location(sq.getRow()+1, sq.getColumn()),
@@ -341,7 +354,6 @@ public class Grid {
         return tilePlaceLocations; 
     }
 
-    // TODO some of below should probably be in an extension of the Grid class
     public HashSet<Location> downStartLocations() {
         HashSet<Location> downStartLocs = new HashSet<>();
         for (Location loc: filledSquares.keySet()) {

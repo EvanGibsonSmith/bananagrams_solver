@@ -16,14 +16,16 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
     public AIPlayerSerial(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
     }
+
     public AIPlayerSerial(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
         super(game, grid, bag, hand);
     }
-    public AIPlayerSerial copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
+
+    public AIPlayerSerial copy() {
         // TODO make copying nicer and make copyable interface.
-        return new AIPlayerSerial(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
+        return new AIPlayerSerial(game, new Grid(getGrid()), getBag(), this.getHand().copy());
     }
-    // TODO kind of odd place for this function. Maybe test this?
+
     private ArrayList<Integer> indexesOf(String word, String sub) {
         ArrayList<Integer> out = new ArrayList<>();
         int start = 0;
@@ -35,9 +37,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         }
         return out;
     }
-    // TODO maybe this could be broken up, might require a small helper package class. Also document
-    // TODO instead of duplicating the nextPlayer within this classe should the class act on an 
-    // existing player and we copy the player outside of this class?
+
     private AIPlayerSerial placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
         AIPlayerSerial nextPlayer = this.copy();
@@ -70,6 +70,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         
         return nextPlayer;
     }
+
     public Set<AIPlayerSerial> branchForwardSingleDirection(byte direction) {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
         HashSet<Location> startLocations;
@@ -108,11 +109,13 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         }
         return branchedPlayers;
     }
+
     public Set<AIPlayerSerial> branchForward() {
         Set<AIPlayerSerial> out = branchForwardSingleDirection((byte) 1);
         out.addAll(branchForwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
+
     private AIPlayerSerial removeWord(Location loc, byte direction) {
         AIPlayerSerial nextPlayer = this.copy();
         Grid grid = nextPlayer.getGrid();
@@ -138,6 +141,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         if (!nextPlayer.gridValid()) {return null;}
         return nextPlayer;
     }
+
     public Set<AIPlayerSerial> branchBackwardSingleDirection(byte direction) {
         HashSet<Location> startLocations;
         Grid grid = this.getGrid();
@@ -161,6 +165,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         }
         return branchedPlayers;
     }
+
     public Set<AIPlayerSerial> branchBackward() {
         Set<AIPlayerSerial> out = branchBackwardSingleDirection((byte) 1);
         out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
@@ -193,6 +198,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         }
         return nextPlayer;
     }
+
     public Set<AIPlayerSerial> branchEmpty() {
         Set<AIPlayerSerial> branchedPlayers = new HashSet<>();
         for (String candidateWord: this.getGrid().getWordsSet()) {

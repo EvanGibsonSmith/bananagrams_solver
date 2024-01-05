@@ -13,7 +13,7 @@ import java.util.HashSet;
 public class AStarHashSets<T extends Branchable<T>> {
     HashMap<Integer, Integer> from = new HashMap<>(); // where each grid is "from" in result, used to trace path
     HashMap<Integer, T> objects = new HashMap<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
-    HashMap<T, Integer> indexes = new HashMap<>(); // TODO extra space, wasn't needed without relax
+    HashMap<T, Integer> indexes = new HashMap<>();
     HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
     HashSet<T> visited = new HashSet<>();
     IndexMinPQ<Double> pq = new IndexMinPQ<>(100000); // TODO fix the size issue by altering or extending IndexMinPQ class
@@ -23,7 +23,7 @@ public class AStarHashSets<T extends Branchable<T>> {
         objects.put(0, start); // set index 0 to start
         indexes.put(start, 0); // set index 0 to start
         costTo.put(0, 0.0); // set index 0 to 0.0
-        pq.insert(objects.size()-1, heuristic.apply(start)); // estimated total distance is just heuristic TODO this needed?
+        pq.insert(objects.size()-1, heuristic.apply(start)); // estimated total distance is just heuristic
         from.put(0, -1); // only the root is from -1
 
         int currIdx = 0; // start at first object

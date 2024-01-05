@@ -20,7 +20,7 @@ import src.main.game.Location;
 import src.data_structures.MultiSet;
 
 public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
-    private ExecutorService executorService = Executors.newFixedThreadPool(2); // TODO look into number of threads more
+    private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public AIPlayerParallel(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
@@ -32,10 +32,9 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
 
     public AIPlayerParallel copy() { // TODO make it possible to copy multiple types of players? Should deep copy game too?
         // TODO make copying nicer and make copyable interface.
-        return new AIPlayerParallel(game, new Grid(getGrid()), getBag(), this.getHand().copy()); // TODO does AI Player even need a bag? dump is a last resort in this configuration
+        return new AIPlayerParallel(game, new Grid(getGrid()), getBag(), this.getHand().copy());
     }
 
-    // TODO kind of odd place for this function. Maybe test this?
     private ArrayList<Integer> indexesOf(String word, String sub) {
         ArrayList<Integer> out = new ArrayList<>();
         int start = 0;
@@ -48,9 +47,6 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return out;
     }
 
-    // TODO maybe this could be broken up, might require a small helper package class. Also document
-    // TODO instead of duplicating the nextPlayer within this classe should the class act on an 
-    // existing player and we copy the player outside of this class?
     private AIPlayerParallel placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
 

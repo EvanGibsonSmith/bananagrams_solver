@@ -45,7 +45,6 @@ public class MultiSet<E> implements Iterable<E> {
         return out.substring(0, out.length()-2) + "}";
     }
 
-    // TODO test this I believe it works though. Also best location for it?
     public static MultiSet<Character> toMultiSet(String str) {
         MultiSet<Character> set = new MultiSet<>();
         for (char c: str.toCharArray()) {
@@ -97,7 +96,31 @@ public class MultiSet<E> implements Iterable<E> {
         ++size;
     }
 
-    // TODO a method to add a set could be nice, like addAll
+    /**
+     * 
+     * Adds all objects from inputted set to Multiset if not present, otherwise increments
+     * underlying HashMap. 
+     * @param objSet
+     */
+    public void addAll(MultiSet<E> objSet) {
+        for (E obj: objSet) {
+            map.put(obj, map.getOrDefault(obj, 0)+1); // adds one if tile present, otherwise sets to 1
+            ++size;
+        }
+    }
+
+    /**
+     * 
+     * Adds all objects from inputted Set, if not present, otherwise increments
+     * underlying HashMap. 
+     * @param objSet
+     */
+    public void addAll(Set<E> objSet) {
+        for (E obj: objSet) {
+            map.put(obj, map.getOrDefault(obj, 0)+1); // adds one if tile present, otherwise sets to 1
+            ++size;
+        }
+    }
 
     /**
      * Remove method has O(1) time complexity
@@ -243,7 +266,6 @@ public class MultiSet<E> implements Iterable<E> {
     }
 
     /**
-     * removeAll has O(TODO) time complexity where N is the ???
      * Note the keys are not the size of the set, but the number of unique elements
      * 
      * Removes all elements in the other set from this set.

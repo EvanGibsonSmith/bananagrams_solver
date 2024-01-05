@@ -24,7 +24,6 @@ public class AStarMaze {
         }
     }
 
-    // TODO there appears to be a problem with either BOTH of my heuristics or A star itself.
     @Test
     void small() {
         Maze m = new Maze(5, 5, 30);
@@ -46,11 +45,5 @@ public class AStarMaze {
                 System.out.println(next);
             }
         }
-        //System.out.println(astar.visitedSize());
-        //System.out.println(astar.getFrom());
-        //astar.connected(8); // TODO for debugging
-        //for (Maze pathMaze: astar.getPath()) {
-        //    System.out.println(pathMaze); // TODO objects seems to be collecting duplicates
-        //}
     }
 }

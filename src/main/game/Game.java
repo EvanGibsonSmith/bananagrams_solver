@@ -32,7 +32,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return ""; // TODO STUB
+        return "Bag: \n" + bag.toString() + "Player: \n" + players.toString();
     }
 
     public Player[] getPlayers() {

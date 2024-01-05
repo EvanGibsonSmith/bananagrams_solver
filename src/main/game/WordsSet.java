@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 public class WordsSet implements Iterable<String> {
-    protected HashSet<String> wordsSet; // TODO protected? Cleaner way to give this to AIWordsSet?
+    protected HashSet<String> wordsSet;
 
     public WordsSet() {
         this.wordsSet = new HashSet<>();
@@ -25,7 +25,6 @@ public class WordsSet implements Iterable<String> {
         return this.wordsSet.iterator();
     }
 
-    // TODO create streamable?
     public Stream<String> stream() {
         return this.wordsSet.stream();
     }

@@ -14,18 +14,17 @@ import java.util.HashSet;
 public class AStarArrayList<T extends Branchable<T>> {
     ArrayList<Integer> from = new ArrayList<>(); // where each grid is "from" in result, used to trace path
     ArrayList<T> objects = new ArrayList<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
-    HashMap<T, Integer> indexes = new HashMap<>(); // TODO extra space, wasn't needed without relax
+    HashMap<T, Integer> indexes = new HashMap<>();
     ArrayList<Double> costTo = new ArrayList<>(); // distance for each grid to start location (index 0)
     HashSet<T> visited = new HashSet<>();
     IndexMinPQ<Double> pq = new IndexMinPQ<>(100000); // TODO fix the size issue by altering or extending IndexMinPQ class
     Integer endIndex;
 
-    // FIXME this never terminates even when all options should be exausted. Priority queue never empties?! This is because we don't check for any equality before adding to visited. Because the hashmap is only indicies, we can't check the OBJECT as needed
     public AStarArrayList(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
         objects.add(start); // set index 0 to start
         indexes.put(start, 0);
         costTo.add(0.0); // set index 0 to 0.0
-        pq.insert(0, heuristic.apply(start)); // estimated total distance is just heuristic TODO this needed?
+        pq.insert(0, heuristic.apply(start)); // estimated total distance is just heuristic 
         from.add(-1); // only the root is from -1
 
         int currIdx = 0; // start at first object

@@ -15,7 +15,6 @@ public class LocationTest {
 
     @Test
     void equality() {
-        // TODO make this actual junit and make some nice tests. Do equalvalence, hashcode, etc.
         Location l1 = new Location(1, 2);
         Location l2 = new Location(1, 2);
 

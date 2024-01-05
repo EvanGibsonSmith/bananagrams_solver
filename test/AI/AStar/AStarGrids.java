@@ -82,7 +82,6 @@ class AStarGrids {
         assertTrue(player.gridValid());
         
         // with valid grid perform A*. We can rid our tiles with just one word
-        // TODO make the heuristic methods within their proper class
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         System.out.println(astarhash.getFrom());
         ArrayList<? extends AIPlayer> path = astarhash.getPath();
@@ -106,7 +105,6 @@ class AStarGrids {
         assertTrue(player.gridValid());
         
         // with valid grid perform A*. We can rid our tiles with just one word
-        // TODO make the heuristic methods within their proper class
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         System.out.println(astarhash.getFrom());
         ArrayList<? extends AIPlayer> path = astarhash.getPath();
@@ -131,7 +129,6 @@ class AStarGrids {
         assertTrue(player.gridValid());
         
         // with valid grid perform A*. We can rid our tiles with just one word
-        // TODO make the heuristic methods within their proper class
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         System.out.println(astarhash.getFrom());
         ArrayList<? extends AIPlayer> path = astarhash.getPath();
@@ -157,7 +154,6 @@ class AStarGrids {
         assertTrue(player.gridValid());
         
         // with valid grid perform A*. We can rid our tiles with just one word
-        // TODO make the heuristic methods within their proper class
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         System.out.println(astarhash.getFrom());
         ArrayList<? extends AIPlayer> path = astarhash.getPath();
@@ -195,7 +191,7 @@ class AStarGrids {
 
         System.out.println("Beginning");
         long startTimeArray = System.currentTimeMillis();
-        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+        astararray = new AStarArrayList<>(player, cost, heuristic, isGoal);
         long endTimeArray = System.currentTimeMillis();
         System.out.println("Time: " + (endTimeArray-startTimeArray));
         for (AIPlayer p: astararray.getPath()) {
@@ -239,7 +235,7 @@ class AStarGrids {
 
         System.out.println("Beginning");
         long startTimeArray = System.currentTimeMillis();
-        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+        astararray = new AStarArrayList<>(player, cost, heuristic, isGoal);
         long endTimeArray = System.currentTimeMillis();
         System.out.println("Time: " + (endTimeArray-startTimeArray));
         for (AIPlayer p: astararray.getPath()) {
@@ -299,7 +295,7 @@ class AStarGrids {
 
         System.out.println("Beginning");
         long startTimeArray = System.currentTimeMillis();
-        astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+        astararray = new AStarArrayList<>(player, cost, heuristic, isGoal);
         long endTimeArray = System.currentTimeMillis();
         System.out.println("Time: " + (endTimeArray-startTimeArray));
         for (AIPlayer p: astararray.getPath()) {
@@ -320,7 +316,7 @@ class AStarGrids {
             tileBag.addTile(new Tile(c)); // add single tile
             player.grabTile(); // grab that tile 
             startTimeArray = System.currentTimeMillis();
-            astararray = new AStarArrayList<>(player.copy(), cost, heuristic, isGoal); // TODO make A star handle intiial copy with copyable interface
+            astararray = new AStarArrayList<>(player, cost, heuristic, isGoal);
             endTimeArray = System.currentTimeMillis();
             System.out.println("Time: " + (endTimeArray-startTimeArray));
             for (AIPlayer p: astararray.getPath()) {
