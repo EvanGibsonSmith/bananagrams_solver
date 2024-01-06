@@ -46,6 +46,10 @@ public class Player {
         return this.hand;
     }
 
+    public void setGame(Game g) {
+        this.game = g;
+    }
+
     @Override
     public String toString() {
         return "";
@@ -73,6 +77,25 @@ public class Player {
         Tile grabbedTile = bag.grabTile();
         this.hand.add(grabbedTile); 
         return grabbedTile;
+    }
+
+    /**
+     * Grabs number of tiles given bag and adds it to the players hand.
+     * In the context of a game, used to pass out the initial tiles at the beginning of the game
+     * There are no checks to see if the player can actually do this, (i.e) 
+     * another player is done or this player is done. That is the responsibility of the 
+     * game
+     * @param num the number of tiles to grab
+     * @return boolean if successful or not, false if not enough tiles to grab num of them
+     */
+    public boolean grabTile(int num) {
+        if (bag.size()>num) {return false;} // edge case
+
+        for (int i=0; i<num; ++i) {
+            Tile grabbedTile = bag.grabTile();
+            this.hand.add(grabbedTile); 
+        }
+        return true;
     }
 
     /**
@@ -125,7 +148,12 @@ public class Player {
         this.hand.add(tile); // adds tile from the grid to hand
     }
 
-    // TODO document
+    /**
+     * Removes all of the tiles from the grid, essentially resetting the grid.
+     * Technically, the grid object remains the same, and isn't simply replaced.
+     * The size of the grid is also not changed, so while the grid is now empty 
+     * it remains the size needed for the words that were placed in it.
+     */
     public void clearGrid() {
         Set<Location> filled = new HashSet<>(this.getGrid().filledLocations());
         for (Location loc: filled) {

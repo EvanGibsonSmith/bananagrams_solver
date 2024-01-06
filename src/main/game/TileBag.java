@@ -23,10 +23,7 @@ public class TileBag {
     }
 
     public TileBag(Tile[] tiles, int seed) {
-        this.tiles = tiles;
-        this.maxSize = tiles.length;
-        // since bag begins full nextIndex is the length
-        this.nextIndex = tiles.length;
+        this(tiles);
         this.random = new Random(seed);
     }
 
@@ -38,6 +35,16 @@ public class TileBag {
     public TileBag(int maxSize) { 
         this.tiles = new Tile[maxSize];
         this.maxSize = maxSize;
+    }
+
+    /**
+     * Initializes a bag with a max size given, but the bag
+     * begins empty (potentially to add stuff too)
+     * @param maxSize
+     */
+    public TileBag(int maxSize, int seed) { 
+        this(maxSize);
+        this.random = new Random(seed);
     }
 
     @Override
