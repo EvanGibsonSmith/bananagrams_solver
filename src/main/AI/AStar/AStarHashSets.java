@@ -1,25 +1,29 @@
-package src.main.AI;
+package src.main.AI.AStar;
 
+import src.data_structures.DynamicIndexMinPQ;
 import src.data_structures.IndexMinPQ;
+import src.main.AI.Branchable;
 
-import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.BiFunction;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
-
-public class AStarHashSets<T extends Branchable<T>> {
+public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
     HashMap<Integer, Integer> from = new HashMap<>(); // where each grid is "from" in result, used to trace path
     HashMap<Integer, T> objects = new HashMap<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
     HashMap<T, Integer> indexes = new HashMap<>();
-    HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
     HashSet<T> visited = new HashSet<>();
-    IndexMinPQ<Double> pq = new IndexMinPQ<>(100000); // TODO fix the size issue by altering or extending IndexMinPQ class
     Integer endIndex = null;
+    HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
+    IndexMinPQ<Double> pq; // will be fixed size in constructor if size given
 
-    public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
+    // this method runs in all of the constructors for this method and performs the A*. 
+    // it is not in the constructor itself since the type and size of pq needs to be defined before this runs
+    // and a call to another constructor must be the first line of another constuctor.
+    public void compute() {
         objects.put(0, start); // set index 0 to start
         indexes.put(start, 0); // set index 0 to start
         costTo.put(0, 0.0); // set index 0 to 0.0
@@ -37,8 +41,18 @@ public class AStarHashSets<T extends Branchable<T>> {
             currIdx = pq.delMin();
         }
     }
+    
+    public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
+        super(start, cost, heuristic, isGoal);
+        this.pq = new DynamicIndexMinPQ<>();
+    }
 
-    private void relax(int currIdx, T currObj, T branchObj, BiFunction<T, T, Double> cost, Function<T, Double> heuristic) { // technically redundant to have both, but it makes it easier
+    public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal, int size) {
+        super(start, cost, heuristic, isGoal);
+        this.pq = new IndexMinPQ<>(size); // define the set size here
+    }
+
+    protected void relax(int currIdx, T currObj, T branchObj, BiFunction<T, T, Double> cost, Function<T, Double> heuristic) {
         if (!visited.contains(branchObj)) {
             Integer branchIdx = objects.size();
             objects.put(branchIdx, branchObj);
@@ -58,12 +72,21 @@ public class AStarHashSets<T extends Branchable<T>> {
         }
     }
 
-    public HashMap<Integer, Integer> getFrom() {
-        return this.from;
-    }
+    public HashMap<Integer, Integer> getFrom() {return this.from;}
 
     public int visitedSize() {
-        return visited.size();
+        return this.visited.size();
+    }
+
+    public ArrayList<T> getPath() {
+        if (endIndex==null) {return null;}
+        ArrayList<T> path = new ArrayList<>();
+        for (int idx=endIndex; idx!=-1; idx=from.get(idx)) {
+            path.add(objects.get(idx));
+    }
+
+        Collections.reverse(path);
+        return path;
     }
 
     public void connected(int idx) {
@@ -75,17 +98,8 @@ public class AStarHashSets<T extends Branchable<T>> {
             }
         }
     }
-    
-    public ArrayList<T> getPath() {
-        if (endIndex==null) {return null;}
-        ArrayList<T> path = new ArrayList<>();
-        for (int idx=endIndex; idx!=-1; idx=from.get(idx)) {
-            path.add(objects.get(idx));
-        }
 
-        Collections.reverse(path);
-        return path;
+    public T getGoal() {
+        return this.objects.get(this.endIndex);
     }
-
-
 }
