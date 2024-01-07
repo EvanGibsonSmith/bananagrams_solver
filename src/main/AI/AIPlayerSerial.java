@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.BiFunction;
+import src.main.game.player.Hand;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
-import src.data_structures.MultiSet;
 
 public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
     
@@ -17,12 +17,12 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         super(game, grid, bag);
     }
 
-    public AIPlayerSerial(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
+    public AIPlayerSerial(Game game, Grid grid, TileBag bag, Hand hand) {
         super(game, grid, bag, hand);
     }
 
     public AIPlayerSerial copy() {
-        return new AIPlayerSerial(game, new Grid(getGrid()), getBag(), this.getHand().copy());
+        return new AIPlayerSerial(getGame(), new Grid(getGrid()), getBag(), this.getHand().copy());
     }
 
     private ArrayList<Integer> indexesOf(String word, String sub) {
@@ -40,7 +40,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
     private AIPlayerSerial placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
         AIPlayerSerial nextPlayer = this.copy();
-        MultiSet<Tile> nextHand = nextPlayer.getHand();
+        Hand nextHand = nextPlayer.getHand();
         Grid nextGrid = nextPlayer.getGrid();
         String currentGridFragment = ""; // represents the letters in the word from grid we are looking over
         for (int i=0; i<word.length(); ++i) {
@@ -177,7 +177,7 @@ public class AIPlayerSerial extends AIPlayer<AIPlayerSerial> {
         AIPlayerSerial nextPlayer = this.copy();
         Location cursor = new Location(0, 0);
         Grid grid = nextPlayer.getGrid();
-        MultiSet<Tile> hand = nextPlayer.getHand();
+        Hand hand = nextPlayer.getHand();
         Function<Location, Location> move;
         if (direction==0) {
             move = (loc) -> loc.right();

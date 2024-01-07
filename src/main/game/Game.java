@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import src.main.game.player.Player;
+
 public class Game {
     TileBag bag = defaultTileBag();
     int[] initPlayerTiles = new int[] {-1, -1, 21, 21, 21, 15, 15, 11, 11};

@@ -1,10 +1,8 @@
 package src.main.AI;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import src.main.game.Grid;
-import src.main.game.Location;
 
 public class WordSearchGrid extends Grid {
     public WordSearchGrid(HashSet<String> wordsSet) {

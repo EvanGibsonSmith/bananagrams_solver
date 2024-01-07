@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import src.data_structures.MultiSet;
+import src.main.game.player.Hand;
 import src.main.game.Game;
 import src.main.game.Location;
-import src.main.game.Player;
 import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.main.game.WordsSet;
+import src.main.game.player.Player;
 
 class GameTest {
 
@@ -32,7 +33,7 @@ class GameTest {
         Game game = new Game(3, tileBag, new WordsSet()); // words are not important for this test
 
         game.peel();
-        ArrayList<MultiSet<Tile>> playerTile = new ArrayList<>(); // each player will have one tile
+        ArrayList<Hand> playerTile = new ArrayList<>(); // each player will have one tile
         ArrayList<TileBag> playerBags = new ArrayList<>(); 
         for (Player p: game.getPlayers()) {
             playerBags.add(p.getBag());
@@ -40,7 +41,7 @@ class GameTest {
         }
 
         assertEquals(new HashSet<TileBag>(playerBags).size(), 1); // checks that all the bags are the same (as set size is therefore 1)
-        assertEquals(new HashSet<MultiSet<Tile>>(playerTile).size(), 3); // every tile should be unique for each player
+        assertEquals(new HashSet<Hand>(playerTile).size(), 3); // every tile should be unique for each player
     }
 
     @Test

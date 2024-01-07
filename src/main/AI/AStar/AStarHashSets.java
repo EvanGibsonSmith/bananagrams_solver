@@ -40,6 +40,7 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
             visited.add(currObj); // even if already visited, we can add this index
             currIdx = pq.delMin();
         }
+        endIndex = currIdx;
     }
     
     public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {

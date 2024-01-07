@@ -17,7 +17,7 @@ import src.main.game.TileBag;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
-import src.data_structures.MultiSet;
+import src.main.game.player.Hand;
 
 public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -26,12 +26,12 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         super(game, grid, bag);
     }
 
-    public AIPlayerParallel(Game game, Grid grid, TileBag bag, MultiSet<Tile> hand) {
+    public AIPlayerParallel(Game game, Grid grid, TileBag bag, Hand hand) {
         super(game, grid, bag, hand);
     }
 
     public AIPlayerParallel copy() {
-        return new AIPlayerParallel(game, new Grid(getGrid()), getBag(), this.getHand().copy());
+        return new AIPlayerParallel(getGame(), new Grid(getGrid()), getBag(), this.getHand().copy());
     }
 
     private ArrayList<Integer> indexesOf(String word, String sub) {
@@ -50,7 +50,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         Location cursor = new Location(wordStartLoc);
 
         AIPlayerParallel nextPlayer = this.copy();
-        MultiSet<Tile> nextHand = nextPlayer.getHand();
+        Hand nextHand = nextPlayer.getHand();
         Grid nextGrid = nextPlayer.getGrid();
 
         String currentGridFragment = ""; // represents the letters in the word from grid we are looking over
@@ -213,7 +213,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         AIPlayerParallel nextPlayer = this.copy();
         Location cursor = new Location(0, 0);
         Grid grid = nextPlayer.getGrid();
-        MultiSet<Tile> hand = nextPlayer.getHand();
+        Hand hand = nextPlayer.getHand();
         Function<Location, Location> move;
         if (direction==0) {
             move = (loc) -> loc.right();
