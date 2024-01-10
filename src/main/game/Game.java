@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import src.main.game.player.Player;
+import src.main.game.players.Player;
 
 public class Game {
     TileBag bag = defaultTileBag();

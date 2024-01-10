@@ -1,4 +1,4 @@
-package src.main.game.player;
+package src.main.game.players;
 
 import src.main.game.Grid;
 import src.main.game.Location;
@@ -21,6 +21,11 @@ class GridArranger implements Copyable<GridArranger>{
     public GridArranger(Grid grid) {
         this.grid = grid;
         this.hand = new Hand();
+    }
+
+    public GridArranger(HashSet<String> wordsSet, Hand hand) {
+        this.grid = new Grid(wordsSet);
+        this.hand = hand;
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+// TODO make this class not public so it can be tied tightly to the Grid object, can be set up with HashSet
 public class WordsSet implements Iterable<String>, Copyable<WordsSet> {
     protected HashSet<String> wordsSet;
 

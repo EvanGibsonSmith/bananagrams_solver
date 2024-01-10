@@ -1,26 +1,26 @@
-package src.main.AI;
+package src.main.game.players.AIPlayers.BranchPlayers;
 
 import java.util.Set;
 
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.game.player.Player;
+import src.main.game.players.Hand;
+import src.main.game.players.Player;
+import src.main.AI.Branchable;
 import src.main.game.Game;
 import src.main.game.Grid;
-import src.main.game.player.Hand;
 import src.main.game.Location;
 
-public abstract class AIPlayer<T extends AIPlayer<T>> extends Player implements Branchable<T> {
+// TODO should be protected since the AIPlayer is all that uses it?
+public abstract class AbstractBranchingPlayer<T extends AbstractBranchingPlayer<T>> extends Player implements Branchable<T> {
 
-    public AIPlayer(Game game, Grid grid, TileBag bag) {
+    public AbstractBranchingPlayer(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
     }
 
-    public AIPlayer(Game game, Grid grid, TileBag bag, Hand hand) {
+    public AbstractBranchingPlayer(Game game, Grid grid, TileBag bag, Hand hand) {
         super(game, grid, bag, hand);
     }
-
-    public abstract T copy();
 
     public abstract Set<T> branch();
     

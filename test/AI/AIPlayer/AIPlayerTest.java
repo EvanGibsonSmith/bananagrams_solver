@@ -13,7 +13,7 @@ import src.main.game.Game;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.game.player.Player;
+import src.main.game.players.Player;
 
 class AIPlayerTest {
     @Test

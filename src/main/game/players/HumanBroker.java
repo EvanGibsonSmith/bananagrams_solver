@@ -1,19 +1,20 @@
-package src.main.game.player;
+package src.main.game.players;
 
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.game.Copyable;
 import src.main.game.Game;
 
-class Broker implements Copyable<Broker> {
-    Hand hand;
-    Game game;
+class HumanBroker extends AbstractBroker<HumanBroker> {
     TileBag bag;
 
-    public Broker(TileBag bag, Game game, Hand hand) {
-        this.hand = hand;
+    public HumanBroker(Hand hand, Game game) {
+        super(hand);
+        this.bag = game.getBag();
+    }
+
+    public HumanBroker(Hand hand, TileBag bag) {
+        super(hand);
         this.bag = bag;
-        this.game = game;
     }
 
     /**
@@ -50,7 +51,7 @@ class Broker implements Copyable<Broker> {
         }
         return true;
     }
-
+    
     /**
      * Player drops one tile into the bag. This is not done during the game
      * without drawing three tiles. 
@@ -77,25 +78,13 @@ class Broker implements Copyable<Broker> {
         grabTile();
         return true;
     }
-
-    protected Game getGame() {
-        return this.game;
-    }
-
-    public Hand getHand() {
-        return this.hand;
-    }
     
     public TileBag getBag() {
         return this.bag;
     }
 
-    public void setGame(Game g) {
-        this.game = g;
-    }
-
     @Override
-    public Broker copy() {
-        return new Broker(bag, game, hand);
+    public HumanBroker copy() {
+        return new HumanBroker(hand, bag);
     }
 }

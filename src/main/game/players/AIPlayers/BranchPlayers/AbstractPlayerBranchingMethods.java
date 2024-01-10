@@ -1,40 +1,32 @@
-package src.main.AI;
+package src.main.game.players.AIPlayers.BranchPlayers;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import src.main.game.Tile;
-import src.main.game.TileBag;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
-import src.main.game.player.Hand;
+import src.main.game.Tile;
+import src.main.game.TileBag;
+import src.main.game.players.Hand;
 
-public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
-    private ExecutorService executorService = Executors.newFixedThreadPool(2);
+// visibility is only for other AIPlayer within this folder to use
+abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends AbstractPlayerBranchingMethods<ExtendingBranchPlayer>> extends AbstractBranchingPlayer<ExtendingBranchPlayer> {
 
-    public AIPlayerParallel(Game game, Grid grid, TileBag bag) {
+    public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
     }
 
-    public AIPlayerParallel(Game game, Grid grid, TileBag bag, Hand hand) {
+    public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBag bag, Hand hand) {
         super(game, grid, bag, hand);
     }
 
-    public AIPlayerParallel copy() {
-        return new AIPlayerParallel(getGame(), new Grid(getGrid()), getBag(), this.getHand().copy());
-    }
+    public abstract ExtendingBranchPlayer copy();
 
-    private ArrayList<Integer> indexesOf(String word, String sub) {
+    protected ArrayList<Integer> indexesOf(String word, String sub) {
         ArrayList<Integer> out = new ArrayList<>();
         int start = 0;
         while (start!=-1) {
@@ -46,10 +38,10 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return out;
     }
 
-    private AIPlayerParallel placeWord(String word, Location wordStartLoc, byte direction) {
+    protected ExtendingBranchPlayer placeWord(String word, Location wordStartLoc, byte direction) {
         Location cursor = new Location(wordStartLoc);
 
-        AIPlayerParallel nextPlayer = this.copy();
+        ExtendingBranchPlayer nextPlayer = this.copy();
         Hand nextHand = nextPlayer.getHand();
         Grid nextGrid = nextPlayer.getGrid();
 
@@ -83,7 +75,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return nextPlayer;
     }
 
-    public Set<AIPlayerParallel> branchForwardSingleDirection(byte direction) {
+    public Set<ExtendingBranchPlayer> branchForwardSingleDirection(byte direction) {
         BiFunction<Grid, Location, String> getGridFragmentFunction;
         HashSet<Location> startLocations;
         BiFunction<Location, Integer, Location> wordStartLocationFunction;
@@ -100,7 +92,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
 
-        Set<AIPlayerParallel> branchedPlayers = new HashSet<>();
+        Set<ExtendingBranchPlayer> branchedPlayers = new HashSet<>();
         HashSet<Grid> foundGrids = new HashSet<>(); // some duplicates may be found but set rids that
         startLocations.stream().parallel().forEach(loc -> {
             String gridFragment = getGridFragmentFunction.apply(grid, loc);
@@ -111,7 +103,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
                 for (int idx: idxs) { 
                     // given loc on grid we know the idx letter of the word goes there, so can get start of word
                     Location startWordLocation = wordStartLocationFunction.apply(loc, idx); // this function gets location of start of word based on direction
-                    AIPlayerParallel nextPlayer = placeWord(candidateWord, startWordLocation, direction);
+                    ExtendingBranchPlayer nextPlayer = placeWord(candidateWord, startWordLocation, direction);
                     // do not include if grid has been seen, no grid is present, OR the new work incidentally made the grid invalid
                     if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid()) && nextPlayer.getGrid().valid()) {
                         foundGrids.add(nextPlayer.getGrid());
@@ -124,33 +116,10 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return branchedPlayers;
     }
 
-    public Set<AIPlayerParallel> branchForward() {
-        List<Callable<Set<AIPlayerParallel>>> tasks = new ArrayList<>();
-        tasks.add(() -> branchForwardSingleDirection((byte) 1));
-        tasks.add(() -> branchForwardSingleDirection((byte) 0)); // just combine both directions
+    protected abstract Set<ExtendingBranchPlayer> branchForward();
 
-        // just adds the two sets from the threads
-        Set<AIPlayerParallel> out = new HashSet<>();
-        try {
-            List<Future<Set<AIPlayerParallel>>> futures = executorService.invokeAll(tasks);
-            for (Future<Set<AIPlayerParallel>> p: futures) {
-                try {
-                    out.addAll(p.get());
-                }
-                catch (InterruptedException| ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return out;
-    }
-
-    private AIPlayerParallel removeWord(Location loc, byte direction) {
-        AIPlayerParallel nextPlayer = this.copy();
+    protected ExtendingBranchPlayer removeWord(Location loc, byte direction) {
+        ExtendingBranchPlayer nextPlayer = this.copy();
         Grid grid = nextPlayer.getGrid();
         Function<Location, Location> move;
         Function<Location, Boolean> connectedToOtherWord;
@@ -176,7 +145,7 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return nextPlayer;
     }
 
-    public Set<AIPlayerParallel> branchBackwardSingleDirection(byte direction) {
+    public Set<ExtendingBranchPlayer> branchBackwardSingleDirection(byte direction) {
         HashSet<Location> startLocations;
         Grid grid = this.getGrid();
         HashSet<Grid> foundGrids = new HashSet<>();
@@ -189,9 +158,9 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         }
         else {throw new IllegalArgumentException("Direction must be 0 for right or 1 for down");}
         
-        Set<AIPlayerParallel> branchedPlayers = new HashSet<>();
+        Set<ExtendingBranchPlayer> branchedPlayers = new HashSet<>();
         for (Location loc: startLocations) { // get starts of words to remove
-            AIPlayerParallel nextPlayer = removeWord(loc, direction);
+            ExtendingBranchPlayer nextPlayer = removeWord(loc, direction);
             if (nextPlayer!=null && !foundGrids.contains(nextPlayer.getGrid())) {
                 branchedPlayers.add(nextPlayer);
                 foundGrids.add(nextPlayer.getGrid());
@@ -201,16 +170,16 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return branchedPlayers;
     }
 
-    public Set<AIPlayerParallel> branchBackward() {
-        Set<AIPlayerParallel> out = branchBackwardSingleDirection((byte) 1);
+    public Set<ExtendingBranchPlayer> branchBackward() {
+        Set<ExtendingBranchPlayer> out = branchBackwardSingleDirection((byte) 1);
         out.addAll(branchBackwardSingleDirection((byte) 0)); // just combine both directions
         return out;
     }
   
     // similar to place word, but with no extra checks of preexisting letters and no stipulation of connection.
     // always placed at the origin
-    private AIPlayerParallel placeFirstWord(String word, byte direction) {
-        AIPlayerParallel nextPlayer = this.copy();
+    protected ExtendingBranchPlayer placeFirstWord(String word, byte direction) {
+        ExtendingBranchPlayer nextPlayer = this.copy();
         Location cursor = new Location(0, 0);
         Grid grid = nextPlayer.getGrid();
         Hand hand = nextPlayer.getHand();
@@ -236,16 +205,16 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
         return nextPlayer;
     }
 
-    public Set<AIPlayerParallel> branchEmpty() {
-        Set<AIPlayerParallel> branchedPlayers = new HashSet<>();
+    public Set<ExtendingBranchPlayer> branchEmpty() {
+        Set<ExtendingBranchPlayer> branchedPlayers = new HashSet<>();
         for (String candidateWord: this.getGrid().getWordsSet()) {
             // below works, but may be slightly inefficient because placeWord has additional checks not needed 
-            AIPlayerParallel nextRightPlayer = placeFirstWord(candidateWord, (byte) 0);
+            ExtendingBranchPlayer nextRightPlayer = placeFirstWord(candidateWord, (byte) 0);
             if (nextRightPlayer!=null) {
                 branchedPlayers.add(nextRightPlayer);
             }
 
-            AIPlayerParallel nextDownPlayer = placeFirstWord(candidateWord, (byte) 1);
+            ExtendingBranchPlayer nextDownPlayer = placeFirstWord(candidateWord, (byte) 1);
             if (nextDownPlayer!=null) {
                 branchedPlayers.add(nextDownPlayer);
             }
@@ -254,12 +223,12 @@ public class AIPlayerParallel extends AIPlayer<AIPlayerParallel> {
     }
 
     @Override
-    public Set<AIPlayerParallel> branch() {
+    public Set<ExtendingBranchPlayer> branch() {
         if (this.getGrid().isEmpty()) {
             return branchEmpty(); // edge case for when the grid is empty
         }
-        Set<AIPlayerParallel> out = branchForward();
+        Set<ExtendingBranchPlayer> out = branchForward();
         out.addAll(branchBackward()); // just combine both directions
         return out;
-    }
+    }   
 }

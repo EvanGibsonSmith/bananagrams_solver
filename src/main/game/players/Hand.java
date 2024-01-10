@@ -1,4 +1,4 @@
-package src.main.game.player;
+package src.main.game.players;
 
 import java.util.Iterator;
 

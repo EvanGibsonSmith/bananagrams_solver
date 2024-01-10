@@ -16,22 +16,22 @@ import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import src.main.AI.AIPlayer;
-import src.main.AI.AIPlayerSerial;
 import src.main.AI.AStar.AStarArrayList;
 import src.main.AI.AStar.AStarHashSets;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
+import src.main.game.players.PlayerAI.AbstractBranchablePlayer;
+import src.main.game.players.PlayerAI.AIPlayerSerialBranch;
 
 class AStarGrids {
-    AIPlayer player;
-    final Function<AIPlayer, Double> heuristic = (p) -> (double) p.getHand().size();
-    final BiFunction<AIPlayer, AIPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();
-    final Function<AIPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
-    AStarHashSets<? extends AIPlayer> astarhash;
-    AStarArrayList<? extends AIPlayer> astararray;
+    AbstractBranchablePlayer player;
+    final Function<AbstractBranchablePlayer, Double> heuristic = (p) -> (double) p.getHand().size();
+    final BiFunction<AbstractBranchablePlayer, AbstractBranchablePlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();
+    final Function<AbstractBranchablePlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
+    AStarHashSets<? extends AbstractBranchablePlayer> astarhash;
+    AStarArrayList<? extends AbstractBranchablePlayer> astararray;
 
     @BeforeEach
     void resetPlayer() {
@@ -56,7 +56,7 @@ class AStarGrids {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -88,7 +88,7 @@ class AStarGrids {
             tiles[i] = new Tile(letters[i]);
         }
         TileBag tileBag = new TileBag(tiles, 1);
-        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         System.out.println("Player Hand: " + player.getHand());
 
@@ -99,7 +99,7 @@ class AStarGrids {
         astararray.compute();
         long endTimeArray = System.currentTimeMillis();
         System.out.println("Time: " + (endTimeArray-startTimeArray));
-        for (AIPlayer p: astararray.getPath()) {
+        for (AbstractBranchablePlayer p: astararray.getPath()) {
             System.out.println(p.getGrid());
         }
 
@@ -115,7 +115,7 @@ class AStarGrids {
             astararray.compute();
             endTimeArray = System.currentTimeMillis();
             System.out.println("Time: " + (endTimeArray-startTimeArray));
-            for (AIPlayer p: astararray.getPath()) {
+            for (AbstractBranchablePlayer p: astararray.getPath()) {
                 System.out.println("Hand: " + p.getHand());
                 System.out.println(p.getGrid());
             }
@@ -143,8 +143,8 @@ class AStarGrids {
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         astarhash.compute();
         System.out.println(astarhash.getFrom());
-        ArrayList<? extends AIPlayer> path = astarhash.getPath();
-        for (AIPlayer p: path) {
+        ArrayList<? extends AbstractBranchablePlayer> path = astarhash.getPath();
+        for (AbstractBranchablePlayer p: path) {
             System.out.println(p.getGrid());
         }
     }
@@ -167,8 +167,8 @@ class AStarGrids {
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         astarhash.compute();
         System.out.println(astarhash.getFrom());
-        ArrayList<? extends AIPlayer> path = astarhash.getPath();
-        for (AIPlayer p: path) {
+        ArrayList<? extends AbstractBranchablePlayer> path = astarhash.getPath();
+        for (AbstractBranchablePlayer p: path) {
             System.out.println(p.getGrid());
         }
     }
@@ -192,8 +192,8 @@ class AStarGrids {
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         astarhash.compute();
         System.out.println(astarhash.getFrom());
-        ArrayList<? extends AIPlayer> path = astarhash.getPath();
-        for (AIPlayer p: path) {
+        ArrayList<? extends AbstractBranchablePlayer> path = astarhash.getPath();
+        for (AbstractBranchablePlayer p: path) {
             System.out.println(p.getGrid());
         }
     }
@@ -218,8 +218,8 @@ class AStarGrids {
         astarhash = new AStarHashSets<>(player, cost, heuristic, isGoal);
         astarhash.compute();
         System.out.println(astarhash.getFrom());
-        ArrayList<? extends AIPlayer> path = astarhash.getPath();
-        for (AIPlayer p: path) {
+        ArrayList<? extends AbstractBranchablePlayer> path = astarhash.getPath();
+        for (AbstractBranchablePlayer p: path) {
             System.out.println(p.getGrid());
         }
     }
@@ -247,7 +247,7 @@ class AStarGrids {
             tiles[i] = new Tile(letters[i]);
         }
         TileBag tileBag = new TileBag(tiles, 1);
-        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         System.out.println("Player Hand: " + player.getHand());
 
@@ -257,7 +257,7 @@ class AStarGrids {
         astararray.compute();
         long endTimeArray = System.currentTimeMillis();
         System.out.println("Time: " + (endTimeArray-startTimeArray));
-        for (AIPlayer p: astararray.getPath()) {
+        for (AbstractBranchablePlayer p: astararray.getPath()) {
             System.out.println(p.getGrid());
         }
     }
@@ -288,7 +288,7 @@ class AStarGrids {
         }
 
         TileBag tileBag = new TileBag(tiles, 1);
-        player = new AIPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length-leftInBag; ++i) {player.grabTile();}
         System.out.println(player.getHand());
 
@@ -298,7 +298,7 @@ class AStarGrids {
         astararray.compute();
         long endTimeArray = System.currentTimeMillis();
         System.out.println("Time: " + (endTimeArray-startTimeArray));
-        for (AIPlayer p: astararray.getPath()) {
+        for (AbstractBranchablePlayer p: astararray.getPath()) {
             System.out.println(p.getGrid());
         }
 
@@ -321,7 +321,7 @@ class AStarGrids {
         astararray.compute();
         endTimeArray = System.currentTimeMillis();
         System.out.println("Peel Time: " + (endTimeArray-startTimeArray));
-        for (AIPlayer p: astararray.getPath()) {
+        for (AbstractBranchablePlayer p: astararray.getPath()) {
             System.out.println("Hand: " + p.getHand());
             System.out.println(p.getGrid());
         }

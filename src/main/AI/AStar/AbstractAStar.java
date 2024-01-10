@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.function.BiFunction;
 import java.util.ArrayList;
 
-abstract class AbstractAStar<T extends Branchable<T>> {
+public abstract class AbstractAStar<T extends Branchable<T>> {
     T start;
     BiFunction<T, T, Double> cost; 
     Function<T, Double> heuristic; 

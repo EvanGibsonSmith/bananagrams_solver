@@ -1,4 +1,4 @@
-package src.main.game.player;
+package src.main.game.players;
 
 import src.data_structures.MultiSet;
 import src.main.game.Location;
@@ -11,39 +11,43 @@ import src.main.game.Copyable;
 
 public class Player implements Copyable<Player> {
     GridArranger gridArranger;
-    Broker broker;
+    HumanBroker broker;
+    Game game;
 
-    private Player(GridArranger gridArranger, Broker broker) {
+    protected Player() {} // does nothing, allowing extending classes to change protected variables
+    
+    // used by extending classes to use other gridArrangers and brokers TODO should this be an interface then?
+    protected Player(GridArranger gridArranger, HumanBroker broker) {
         this.gridArranger = gridArranger;
         this.broker = broker;
     }
 
     public Player(Game game, WordsSet wordsSet, TileBag bag, Hand hand) {
-        this.gridArranger = new GridArranger(new Grid(wordsSet), hand);
-        this.broker = new Broker(bag, game, hand);
+        gridArranger = new GridArranger(new Grid(wordsSet), hand);
+        broker = new HumanBroker(hand, bag);
     }
 
     public Player(Game game, WordsSet wordsSet, TileBag bag, MultiSet<Tile> handSet) {
         Hand hand = new Hand(handSet);
-        this.gridArranger = new GridArranger(new Grid(wordsSet), hand);
-        this.broker = new Broker(bag, game, hand);
+        gridArranger = new GridArranger(new Grid(wordsSet), hand);
+        broker = new HumanBroker(hand, bag);
     }
 
     public Player(Game game, Grid grid, TileBag bag, Hand hand) {
-        this.gridArranger = new GridArranger(grid, hand);
-        this.broker = new Broker(bag, game, hand);
+        gridArranger = new GridArranger(grid, hand);
+        broker = new HumanBroker(hand, bag);
     }
 
     public Player(Game game, Grid grid, TileBag bag, MultiSet<Tile> handSet) {
         Hand hand = new Hand(handSet);
-        this.gridArranger = new GridArranger(grid, hand);
-        this.broker = new Broker(bag, game, hand);
+        gridArranger = new GridArranger(grid, hand);
+        broker = new HumanBroker(hand, bag);
     }
     
     public Player(Game game, Grid grid, TileBag bag) {
         Hand hand = new Hand();
-        this.gridArranger = new GridArranger(grid, hand);
-        this.broker = new Broker(bag, game, hand);
+        gridArranger = new GridArranger(grid, hand);
+        broker = new HumanBroker(hand, bag);
     }
 
     @Override
@@ -52,11 +56,11 @@ public class Player implements Copyable<Player> {
     }
 
     public void setGame(Game g) {
-        this.broker.setGame(g);
+        game = g;
     }
 
     public Hand getHand() {
-        return this.broker.getHand();
+        return broker.getHand();
     }
 
     @Override
@@ -80,7 +84,7 @@ public class Player implements Copyable<Player> {
 
     public TileBag getBag() {return broker.getBag();}
 
-    protected Game getGame() {return broker.getGame();}
+    protected Game getGame() {return game;}
 
     public Grid getGrid() {return gridArranger.getGrid();}
 
