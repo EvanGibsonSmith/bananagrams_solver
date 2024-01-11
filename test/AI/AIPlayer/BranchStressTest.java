@@ -14,7 +14,7 @@ import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.game.players.PlayerAI.AIPlayerParallelBranch;
+import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerParallel;
 
 
 public class BranchStressTest {
@@ -53,7 +53,7 @@ public class BranchStressTest {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerParallelBranch player = new AIPlayerParallelBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerParallel player = new BranchingPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -72,10 +72,10 @@ public class BranchStressTest {
 
         System.out.println(player.getGrid());
         long startTime = System.currentTimeMillis();
-        Set<AIPlayerParallelBranch> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
+        Set<BranchingPlayerParallel> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - startTime));
-        for (AIPlayerParallelBranch p: nextPlayers) {
+        for (BranchingPlayerParallel p: nextPlayers) {
             System.out.println(p.getGrid());
         }
     }
@@ -114,7 +114,7 @@ public class BranchStressTest {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerParallelBranch player = new AIPlayerParallelBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerParallel player = new BranchingPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -127,10 +127,10 @@ public class BranchStressTest {
 
         System.out.println(player.getGrid());
         long startTime = System.currentTimeMillis();
-        Set<AIPlayerParallelBranch> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
+        Set<BranchingPlayerParallel> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - startTime));
-        for (AIPlayerParallelBranch p: nextPlayers) {
+        for (BranchingPlayerParallel p: nextPlayers) {
             System.out.println(p.getGrid());
         }
     }

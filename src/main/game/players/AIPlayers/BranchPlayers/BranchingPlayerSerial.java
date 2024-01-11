@@ -8,7 +8,7 @@ import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
 
-public class BranchingPlayerSerial extends AbstractPlayerBranch<BranchingPlayerSerial> {
+public class BranchingPlayerSerial extends AbstractPlayerBranchingMethods<BranchingPlayerSerial> {
     
     public BranchingPlayerSerial(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);

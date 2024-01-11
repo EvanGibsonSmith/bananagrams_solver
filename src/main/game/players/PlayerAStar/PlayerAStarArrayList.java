@@ -4,17 +4,20 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import src.main.AI.AStar.AStarArrayList;
+import src.main.AI.AStar.AStarFactory;
+import src.main.AI.AStar.AbstractAStar;
 import src.main.game.Grid;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
+import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerFactory;
 
 public class PlayerAStarArrayList { // TODO fix the way generics are being done a bit to make this work. Should extend PlayerAStarable
-    // TODO complete these wrapper classes
-    /*final AStarArrayList astar; // TODO fix parameters
-    final Function<AbstractBranchablePlayer, Double> heuristic = (p) -> (double) p.getHand().size();
-    final BiFunction<AbstractBranchablePlayer, AbstractBranchablePlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();
-    final Function<AbstractBranchablePlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
+    final Function<AbstractBranchingPlayer, Double> heuristic = (p) -> (double) p.getHand().size();
+    final BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();
+    final Function<AbstractBranchingPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
 
-    public PlayerAStarArrayList() {
+    public PlayerAStarArrayList(AbstractBranchingPlayer branchingPlayerPrototype, AStarFactory abstractAStar) {
+        BranchingPlayerFactory branchFactory = new BranchingPlayerFactory(branchingPlayerPrototype); // TODO put proper parameters in here
+        AStarFactory branchFactory = new BranchingPlayerFactory(abstractAStar); // TODO put proper parameters in here
         super(new Grid(null), cost, heuristic, isGoal);
-    }*/
+    }
 }

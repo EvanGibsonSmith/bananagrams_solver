@@ -11,8 +11,8 @@ import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.game.players.PlayerAI.AbstractAIPlayer;
-import src.main.game.players.PlayerAI.AIPlayerSerialBranch;
+import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
+import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 import src.data_structures.MultiSet;
 
 public class Branch {
@@ -36,7 +36,7 @@ public class Branch {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AbstractAIPlayer player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        AbstractBranchingPlayer player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -54,9 +54,9 @@ public class Branch {
         assertTrue(player.gridValid());
 
         System.out.println(player.getGrid());
-        Set<? extends AbstractAIPlayer> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
+        Set<? extends AbstractBranchingPlayer> nextPlayers = player.branch(); // can add tap or pat to p, and remove act or tap
         
-        for (AbstractAIPlayer p: nextPlayers) {
+        for (AbstractBranchingPlayer p: nextPlayers) {
             System.out.println(p.getGrid());
         }
         assertEquals(nextPlayers.size(), 4);

@@ -12,11 +12,11 @@ import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.TileBag;
-import src.main.game.players.PlayerAI.AIPlayerSerialBranch;
+import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
 import src.data_structures.MultiSet;
 
 class BranchDown {
-    static Function <AIPlayerSerialBranch, Set<AIPlayerSerialBranch>> branchDown; // this will branch only down and add forward branches for these tests
+    static Function <BranchingPlayerSerial, Set<BranchingPlayerSerial>> branchDown; // this will branch only down and add forward branches for these tests
 
     @BeforeAll
     static void defineBranchDown() {
@@ -41,7 +41,7 @@ class BranchDown {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerSerialBranch player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerSerial player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -56,7 +56,7 @@ class BranchDown {
         player.placeTile(new Location(1, 0), new Tile('c'));
         player.placeTile(new Location(2, 0), new Tile('t'));
         
-        Set<AIPlayerSerialBranch> nextPlayers = branchDown.apply(player);
+        Set<BranchingPlayerSerial> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -83,7 +83,7 @@ class BranchDown {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerSerialBranch player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerSerial player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -98,7 +98,7 @@ class BranchDown {
         player.placeTile(new Location(1, 0), new Tile('c'));
         player.placeTile(new Location(2, 0), new Tile('t'));
         
-        Set<AIPlayerSerialBranch> nextPlayers = branchDown.apply(player);
+        Set<BranchingPlayerSerial> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -126,7 +126,7 @@ class BranchDown {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerSerialBranch player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerSerial player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -141,7 +141,7 @@ class BranchDown {
         player.placeTile(new Location(1, 0), new Tile('c'));
         player.placeTile(new Location(2, 0), new Tile('t'));
         
-        Set<AIPlayerSerialBranch> nextPlayers = branchDown.apply(player);
+        Set<BranchingPlayerSerial> nextPlayers = branchDown.apply(player);
 
         assertEquals(nextPlayers.size(), 3);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -170,7 +170,7 @@ class BranchDown {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerSerialBranch player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerSerial player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -185,7 +185,7 @@ class BranchDown {
         player.placeTile(new Location(0, 1), new Tile('a'));
         player.placeTile(new Location(0, 2), new Tile('t'));
         
-        Set<AIPlayerSerialBranch> nextPlayers = branchDown.apply(player);
+        Set<BranchingPlayerSerial> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -212,7 +212,7 @@ class BranchDown {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerSerialBranch player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerSerial player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -227,7 +227,7 @@ class BranchDown {
         player.placeTile(new Location(0, 2), new Tile('a'));
         player.placeTile(new Location(0, 3), new Tile('t'));
         
-        Set<AIPlayerSerialBranch> nextPlayers = branchDown.apply(player);
+        Set<BranchingPlayerSerial> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 1);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
@@ -258,7 +258,7 @@ class BranchDown {
         }
         TileBag tileBag = new TileBag(tiles, 1);
         
-        AIPlayerSerialBranch player = new AIPlayerSerialBranch(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        BranchingPlayerSerial player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -273,7 +273,7 @@ class BranchDown {
         player.placeTile(new Location(0, 2), new Tile('a'));
         player.placeTile(new Location(0, 3), new Tile('t'));
         
-        Set<AIPlayerSerialBranch> nextPlayers = branchDown.apply(player);
+        Set<BranchingPlayerSerial> nextPlayers = branchDown.apply(player);
         
         assertEquals(nextPlayers.size(), 7);
         MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();

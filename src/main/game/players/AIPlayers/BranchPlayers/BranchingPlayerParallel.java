@@ -15,7 +15,7 @@ import src.main.game.players.Hand;
 import src.main.game.Game;
 import src.main.game.Grid;
 
-public class BranchingPlayerParallel extends AbstractPlayerBranch<BranchingPlayerParallel> {
+public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<BranchingPlayerParallel> {
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public BranchingPlayerParallel(Game game, Grid grid, TileBag bag) {

@@ -38,4 +38,7 @@ public abstract class AbstractBranchingPlayer<T extends AbstractBranchingPlayer<
         }
     }
 
+    @Override
+    public AbstractBranchingPlayer<T> copy() {return copy();} // casts to AbstractBranchingPlayer
+
 }

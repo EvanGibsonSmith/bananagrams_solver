@@ -6,7 +6,7 @@ import src.main.game.players.PlayerAStar.PlayerAStarable;
 
 import java.util.HashSet;
 
-public class CheatPlayer {
+public class CheatPlayer extends AbstractAStar {
     // TODO note that the A star implementation going into this class should go into the AI Player class!!!
     AbstractAStar AIClass; // TODO AbstractAStar can't be parametrized with player becuase player isn't branchable. Get AIPlayer working
     // TODO this AI functionality should be moved into AIPlayer which can handle this and we can extend AIPLayer instead
