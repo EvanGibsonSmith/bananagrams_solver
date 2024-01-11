@@ -304,14 +304,14 @@ class AStarGrids {
 
         // with this big grid peel a tile
         player.playGrid(astararray.getGoal().getGrid());
-        assertEquals(player.getBag().size(), leftInBag);
+        assertEquals(((TileBag) player.getBag()).size(), leftInBag);
         assertEquals(player.getGrid(), astararray.getGoal().getGrid());
         assertEquals(player.getHand(), astararray.getGoal().getHand());
         assertTrue(player.getGrid().valid());
         assertTrue(player.canPeel());
         // player now has the A* grid placed
         player.grabTile(); // "peel" for this player
-        assertEquals(player.getBag().size(), leftInBag-1);
+        assertEquals(((TileBag) player.getBag()).size(), leftInBag-1);
         assertTrue(player.getGrid().valid());
         assertFalse(player.canPeel());
 

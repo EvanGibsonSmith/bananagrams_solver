@@ -25,7 +25,8 @@ public class AStarFactory<T extends Branchable<T>> implements Buildable<Abstract
                         Function<T, Boolean> isGoal) throws Exception {
         // get constructor for the unknown extending class and inject player dependencies
         // note we know Object will be type T
-        constructor = clazz.getDeclaredConstructor(new Class<?>[] {Object.class, BiFunction.class, Function.class, Function.class});
+        // TODO fix this bug causing test to fail
+        constructor = clazz.getDeclaredConstructor(new Class[] {Object.class, BiFunction.class, Function.class, Function.class});
 
         // save injected dependencies for builds TODO should this be a one time build factory or should we just use it that way? Seems like possible overkill
         this.start = start;

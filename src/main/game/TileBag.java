@@ -64,11 +64,11 @@ public class TileBag {
         return nextIndex;
     }
 
-    public Boolean isFull() {
+    public boolean isFull() {
         return (maxSize==size());
     }
 
-    public Boolean isEmpty() {
+    public boolean isEmpty() {
         return (size()==0);
     }
 

@@ -1,5 +1,5 @@
 package test.game;
 
-public class AIPlayerTest {
+public class TestAIPlayer {
     // TODO
 }

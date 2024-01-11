@@ -5,7 +5,8 @@ import java.util.Queue;
 
 import src.main.game.Tile;
 
-class CheatBroker extends AbstractBroker<CheatBroker> {
+// TODO probably shouldn't be public, the methods here should do into extending player classes?
+public class CheatBroker extends AbstractBroker<CheatBroker> {
     Queue<Tile> queue = new LinkedList<>();
 
     public CheatBroker(Hand hand) {
@@ -26,6 +27,8 @@ class CheatBroker extends AbstractBroker<CheatBroker> {
 
     public void setQueue(Queue<Tile> newQueue) {queue = newQueue;}
 
+    // TODO add grabTile() for tile that allows a tile to just be force placed into hand
+    
     /**
      * Grabs a tile from the bag and adds it to the players hand.
      * In the context of a game, this is essentially a one player peel.
@@ -82,5 +85,10 @@ class CheatBroker extends AbstractBroker<CheatBroker> {
     @Override
     public CheatBroker copy() {
         return new CheatBroker(hand);
+    }
+
+    @Override
+    public Queue<Tile> getBag() {
+        return this.queue; 
     }
 }

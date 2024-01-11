@@ -36,7 +36,7 @@ class GameTest {
         ArrayList<Hand> playerTile = new ArrayList<>(); // each player will have one tile
         ArrayList<TileBag> playerBags = new ArrayList<>(); 
         for (Player p: game.getPlayers()) {
-            playerBags.add(p.getBag());
+            playerBags.add((TileBag) p.getBag());
             playerTile.add(p.getHand());
         }
 

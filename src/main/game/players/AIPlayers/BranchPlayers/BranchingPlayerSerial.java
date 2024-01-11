@@ -19,7 +19,7 @@ public class BranchingPlayerSerial extends AbstractPlayerBranchingMethods<Branch
     }
 
     public BranchingPlayerSerial copy() {
-        return new BranchingPlayerSerial(getGame(), new Grid(getGrid()), getBag(), this.getHand().copy());
+        return new BranchingPlayerSerial(getGame(), new Grid(getGrid()), (TileBag) getBag(), this.getHand().copy());
     }
 
     public Set<BranchingPlayerSerial> branchForward() {

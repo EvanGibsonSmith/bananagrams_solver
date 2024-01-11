@@ -14,18 +14,19 @@ import src.main.game.TileBag;
 
 // TODO could this extend player instead of composition? Is that a good choice?
 // TODO rename from AIPlayer since this doesn't extend player?
+// TODO create an interface for some of the player methods this is required to implement
 public class AIPlayer {
     private final BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();   
     private final Function<AbstractBranchingPlayer, Double> heuristic = (p) -> (double) p.getHand().size();
     private final Function<AbstractBranchingPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
 
     private AStarFactory aStarFactory;
-    private AbstractAStar<AbstractBranchingPlayer> aStar; // specific class for implementation of these is given as parameter
-    private AbstractBranchingPlayer player; // the player created (type determines how branch works)
+    protected AbstractAStar<AbstractBranchingPlayer> aStar; // specific class for implementation of these is given as parameter
+    protected AbstractBranchingPlayer player; // the player created (type determines how branch works)
 
     private void setup(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
-                    Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass,
-                    Game game, Grid grid, TileBag bag) throws Exception {
+                       Class<? extends AbstractAStar> astarClass,
+                       Game game, Grid grid, TileBag bag) throws Exception {
         BranchingPlayerFactory branchingPlayerFactory = new BranchingPlayerFactory(branchingPlayerClass, game, grid, bag);
         player = branchingPlayerFactory.build();
 
@@ -34,7 +35,7 @@ public class AIPlayer {
     }
 
     public AIPlayer(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
-                    Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass,
+                    Class<? extends AbstractAStar> astarClass,
                     Game game, HashSet<String> words, TileBag bag) throws Exception {
         Grid grid = new Grid(words);
         setup(branchingPlayerClass, astarClass, game, grid, bag);
@@ -44,6 +45,12 @@ public class AIPlayer {
                     Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass,
                     Game game, Grid grid, TileBag bag) throws Exception {
         setup(branchingPlayerClass, astarClass, game, grid, bag);
+    }
+
+
+    // TODO add other appropriate methods here for extending classes like CheatPlayer. Maybe create a player interface instead of just the abstract object to enforce this?
+    public void grabTile() {
+        player.grabTile();
     }
 
     /*
@@ -62,11 +69,16 @@ public class AIPlayer {
         return aStar.getGoal();
     }
 
-    public void playSolution() throws Exception {
+    public void playSolution() {
         player = solveGrid();
         // TODO is building another A* good? It's not that inefficient since this isn't involved 
         // in the branching actions and it makes sense for A* to not be able to change
         aStarFactory.setStart(player); // make astar attached to this new player TODO instead of creating new object
-        aStar = aStarFactory.build(); // build new a* from this player
+        try {
+            aStar = aStarFactory.build(); // build new a* from this player
+        }
+        catch (Exception e) {
+            e.printStackTrace(); // TODO make these try and catches nicer
+        }
     }
 }

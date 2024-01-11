@@ -10,21 +10,21 @@ import src.main.game.WordsSet;
 import src.main.game.Copyable;
 
 public class Player implements Copyable<Player> {
-    GridArranger gridArranger;
-    HumanBroker broker; // TODO needs to be some extension a general broker?
+    protected GridArranger gridArranger; // TODO maybe broker could be better and not have to be passed to extending classes
+    protected AbstractBroker broker; // TODO needs to be some extension a general broker?
     Game game;
 
     protected Player() {} // does nothing, allowing extending classes to set/change protected variables
     
     // used by extending classes to use other gridArrangers and brokers TODO should this be an interface then?
-    protected Player(GridArranger gridArranger, HumanBroker broker) {
+    protected Player(GridArranger gridArranger, AbstractBroker broker) {
         this.gridArranger = gridArranger;
         this.broker = broker;
     }
     // TODO many constructors? Hand maybe should be hidden from outside world and initialized with MultiSet<Tile>
     public Player(Game game, WordsSet wordsSet, TileBag bag, Hand hand) {
         gridArranger = new GridArranger(new Grid(wordsSet), hand);
-        broker = new HumanBroker(hand, bag);
+        broker = new HumanBroker(hand, bag); // can be any implementation of abstract broker, but is HumanBroker by default
     }
 
     public Player(Game game, WordsSet wordsSet, TileBag bag, MultiSet<Tile> handSet) {
@@ -63,6 +63,12 @@ public class Player implements Copyable<Player> {
         return broker.getHand();
     }
 
+    // TODO type needs to be more specific again. Also not sure if I want this in player.
+    // It is currently being used in GameTest
+    public Object getBag() { 
+        return broker.getBag();
+    }
+
     @Override
     public String toString() {
         return "";
@@ -81,8 +87,6 @@ public class Player implements Copyable<Player> {
     public Tile grabTile() {return broker.grabTile();}
 
     public boolean grabTile(int num) {return broker.grabTile(num);}
-
-    public TileBag getBag() {return broker.getBag();}
 
     protected Game getGame() {return game;}
 

@@ -27,7 +27,7 @@ public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<Bran
     }
 
     public BranchingPlayerParallel copy() {
-        return new BranchingPlayerParallel(getGame(), new Grid(getGrid()), getBag(), this.getHand().copy());
+        return new BranchingPlayerParallel(getGame(), new Grid(getGrid()), (TileBag) getBag(), this.getHand().copy());
     }
 
     public Set<BranchingPlayerParallel> branchForward() {
