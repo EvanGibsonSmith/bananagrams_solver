@@ -6,14 +6,12 @@ import src.main.game.players.PlayerAStar.PlayerAStarable;
 
 import java.util.HashSet;
 
-public class CheatPlayer extends AbstractAStar {
-    // TODO note that the A star implementation going into this class should go into the AI Player class!!!
-    AbstractAStar AIClass; // TODO AbstractAStar can't be parametrized with player becuase player isn't branchable. Get AIPlayer working
-    // TODO this AI functionality should be moved into AIPlayer which can handle this and we can extend AIPLayer instead
+// CheatPlayer essentially just switches out the CheatBroker object for broker used when interacting with a real life game
+public class CheatPlayer extends AIPlayer {
     
     public CheatPlayer(HashSet<String> wordsSet, Hand hand, PlayerAStarable astar) {
         super.gridArranger = new GridArranger(wordsSet, hand);;
-        super.broker = new AIBroker(hand);
+        super.broker = new CheatBroker(hand);
         this.AIClass = AStarClass.newInstance();
     }
 

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+// TODO should we store the computed solution so it doesn't have to be recomputed?? Might be nice, but necessary?
 public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
     HashMap<Integer, Integer> from = new HashMap<>(); // where each grid is "from" in result, used to trace path
     HashMap<Integer, T> objects = new HashMap<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
@@ -19,29 +20,6 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
     Integer endIndex = null;
     HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
     IndexMinPQ<Double> pq; // will be fixed size in constructor if size given
-
-    // this method runs in all of the constructors for this method and performs the A*. 
-    // it is not in the constructor itself since the type and size of pq needs to be defined before this runs
-    // and a call to another constructor must be the first line of another constuctor.
-    public void compute() {
-        objects.put(0, start); // set index 0 to start
-        indexes.put(start, 0); // set index 0 to start
-        costTo.put(0, 0.0); // set index 0 to 0.0
-        pq.insert(objects.size()-1, heuristic.apply(start)); // estimated total distance is just heuristic
-        from.put(0, -1); // only the root is from -1
-
-        int currIdx = 0; // start at first object
-        while (!pq.isEmpty()) {
-            T currObj = objects.get(currIdx);
-            if (isGoal.apply(currObj)) {endIndex=currIdx; return;} // if goal reached we are done
-            for (T branchObj: currObj.branch()) {
-                relax(currIdx, currObj, branchObj, cost, heuristic);
-            }
-            visited.add(currObj); // even if already visited, we can add this index
-            currIdx = pq.delMin();
-        }
-        endIndex = currIdx;
-    }
     
     public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
         super(start, cost, heuristic, isGoal);
@@ -71,6 +49,30 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
                 from.put(branchIdx, currIdx);
             }
         }
+    }
+
+    // TODO DRY between these two? Create a small helper class for them both to use this
+    // this method runs in all of the constructors for this method and performs the A*. 
+    // it is not in the constructor itself since the type and size of pq needs to be defined before this runs
+    // and a call to another constructor must be the first line of another constuctor.
+    public void compute() {
+        objects.put(0, start); // set index 0 to start
+        indexes.put(start, 0); // set index 0 to start
+        costTo.put(0, 0.0); // set index 0 to 0.0
+        pq.insert(objects.size()-1, heuristic.apply(start)); // estimated total distance is just heuristic
+        from.put(0, -1); // only the root is from -1
+
+        int currIdx = 0; // start at first object
+        while (!pq.isEmpty()) {
+            T currObj = objects.get(currIdx);
+            if (isGoal.apply(currObj)) {endIndex=currIdx; return;} // if goal reached we are done
+            for (T branchObj: currObj.branch()) {
+                relax(currIdx, currObj, branchObj, cost, heuristic);
+            }
+            visited.add(currObj); // even if already visited, we can add this index
+            currIdx = pq.delMin();
+        }
+        endIndex = currIdx;
     }
 
     public HashMap<Integer, Integer> getFrom() {return this.from;}

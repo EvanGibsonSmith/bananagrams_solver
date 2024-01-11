@@ -11,17 +11,17 @@ import src.main.game.Copyable;
 
 public class Player implements Copyable<Player> {
     GridArranger gridArranger;
-    HumanBroker broker;
+    HumanBroker broker; // TODO needs to be some extension a general broker?
     Game game;
 
-    protected Player() {} // does nothing, allowing extending classes to change protected variables
+    protected Player() {} // does nothing, allowing extending classes to set/change protected variables
     
     // used by extending classes to use other gridArrangers and brokers TODO should this be an interface then?
     protected Player(GridArranger gridArranger, HumanBroker broker) {
         this.gridArranger = gridArranger;
         this.broker = broker;
     }
-
+    // TODO many constructors? Hand maybe should be hidden from outside world and initialized with MultiSet<Tile>
     public Player(Game game, WordsSet wordsSet, TileBag bag, Hand hand) {
         gridArranger = new GridArranger(new Grid(wordsSet), hand);
         broker = new HumanBroker(hand, bag);

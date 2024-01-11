@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.function.BiFunction;
 
+// TODO should we store the computed solution so it doesn't have to be recomputed?? Might be nice, but necessary?
 public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
     ArrayList<Integer> from = new ArrayList<>(); // where each grid is "from" in result, used to trace path
     ArrayList<T> objects = new ArrayList<>(); // creates correspondance between indexes in IndexMinPQ and grid objects
@@ -20,6 +21,16 @@ public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
     ArrayList<Double> costTo = new ArrayList<>(); // distance for each grid to start location (index 0)
     IndexMinPQ<Double> pq; // will be fixed size in constructor if size, otherwise dynamic
 
+    public AStarArrayList(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
+        super(start, cost, heuristic, isGoal);
+        this.pq = new DynamicIndexMinPQ<>();
+    }
+
+    public AStarArrayList(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal, int size) {
+        super(start, cost, heuristic, isGoal);
+        this.pq = new IndexMinPQ<>(size); // define the set size here
+    }
+    
     // this method runs in all of the constructors for this method and performs the A*. 
     // it is not in the constructor itself since the type and size of pq needs to be defined before this runs
     // and a call to another constructor must be the first line of another constuctor.
@@ -41,16 +52,6 @@ public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
             visited.add(currObj);
         }
         endIndex = currIdx;
-    }
-
-    public AStarArrayList(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
-        super(start, cost, heuristic, isGoal);
-        this.pq = new DynamicIndexMinPQ<>();
-    }
-
-    public AStarArrayList(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal, int size) {
-        super(start, cost, heuristic, isGoal);
-        this.pq = new IndexMinPQ<>(size); // define the set size here
     }
 
     protected void relax(int currIdx, T currObj, T branchObj, BiFunction<T, T, Double> cost, Function<T, Double> heuristic) {

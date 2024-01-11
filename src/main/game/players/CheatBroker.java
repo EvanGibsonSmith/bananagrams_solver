@@ -5,14 +5,14 @@ import java.util.Queue;
 
 import src.main.game.Tile;
 
-class AIBroker extends AbstractBroker<AIBroker> {
+class CheatBroker extends AbstractBroker<CheatBroker> {
     Queue<Tile> queue = new LinkedList<>();
 
-    public AIBroker(Hand hand) {
+    public CheatBroker(Hand hand) {
         super(hand);
     }
 
-    public AIBroker(Hand hand, Queue<Tile> queue) {
+    public CheatBroker(Hand hand, Queue<Tile> queue) {
         super(hand);
         this.queue = queue;
     }
@@ -80,7 +80,7 @@ class AIBroker extends AbstractBroker<AIBroker> {
     }
 
     @Override
-    public AIBroker copy() {
-        return new AIBroker(hand);
+    public CheatBroker copy() {
+        return new CheatBroker(hand);
     }
 }
