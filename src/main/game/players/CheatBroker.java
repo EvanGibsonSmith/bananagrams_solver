@@ -6,7 +6,7 @@ import java.util.Queue;
 import src.main.game.Tile;
 
 // TODO probably shouldn't be public, the methods here should do into extending player classes?
-public class CheatBroker extends AbstractBroker<CheatBroker> {
+public class CheatBroker extends AbstractBroker {
     Queue<Tile> queue = new LinkedList<>();
 
     public CheatBroker(Hand hand) {

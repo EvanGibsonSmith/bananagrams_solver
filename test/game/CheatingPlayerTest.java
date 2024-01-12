@@ -41,7 +41,9 @@ public class CheatingPlayerTest {
         catch (Exception e) {
             e.printStackTrace();
         }
-        CheatBroker broker = player.getBroker(); // TODO below should probably be player.addToQueue()
+       // CheatBroker broker = player.getBroker(); // TODO below should probably be player.addToQueue()
+       // TODO should do with CheatBroker eventually, but there are TileBag casting issues 
+        CheatBroker broker = player.getBroker();
         broker.addToQueue(new Tile('a')); // TODO this should probably be able to to take in characters as well
         broker.addToQueue(new Tile('c'));
         broker.addToQueue(new Tile('t'));
@@ -61,7 +63,8 @@ public class CheatingPlayerTest {
     @Test
     void cheatingPlayerEmptyBoardThreeWordsAway() {
         setupPlayer1();
-        
+
+        // TODO fix the TileBag and Queue need some shared data structure, or the Queue and TileBag need to be implementations of an interface
         player.playSolution(); // should have played entire solution
         ArrayList<? extends AbstractBranchingPlayer> path = player.getAStar().getPath();
         for (AbstractBranchingPlayer p: path) {

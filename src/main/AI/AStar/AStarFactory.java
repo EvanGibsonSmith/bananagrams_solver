@@ -7,6 +7,8 @@ import java.util.function.Function;
 
 import src.main.Buildable;
 import src.main.AI.Branchable;
+import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
+import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerParallel;
 
 // TODO create a general factory abstract class? These two factories are too similar....
 public class AStarFactory<T extends Branchable<T>> implements Buildable<AbstractAStar<T>> {
@@ -22,10 +24,17 @@ public class AStarFactory<T extends Branchable<T>> implements Buildable<Abstract
                         T start,
                         BiFunction<T, T, Double> cost, 
                         Function<T, Double> heuristic, 
-                        Function<T, Boolean> isGoal) throws Exception {
+                        Function<T, Boolean> isGoal) throws  Exception {
         // get constructor for the unknown extending class and inject player dependencies
         // note we know Object will be type T
         // TODO fix this bug causing test to fail
+        // TODO fix AbstractBranchingPlayer hardcoded ing
+        // TODOd delete this it's for debugging
+        //AStarArrayList newObj = new AStarArrayList<>(start, cost, heuristic, isGoal); // TODO fix generics so this can be nicer.
+        System.out.println(start.getClass());
+        System.out.println(cost.getClass());
+        System.out.println(heuristic.getClass());
+        System.out.println(isGoal.getClass());
         constructor = clazz.getDeclaredConstructor(new Class[] {Object.class, BiFunction.class, Function.class, Function.class});
 
         // save injected dependencies for builds TODO should this be a one time build factory or should we just use it that way? Seems like possible overkill

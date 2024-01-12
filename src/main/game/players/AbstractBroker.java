@@ -6,7 +6,7 @@ import src.main.game.Copyable;
 import src.main.game.Tile;
 
 // TODO document
-public abstract class AbstractBroker<T extends AbstractBroker<T>> implements Copyable<AbstractBroker<T>> {
+public abstract class AbstractBroker implements Copyable<AbstractBroker> {
     Hand hand;
 
     public AbstractBroker(Hand hand) {
@@ -23,7 +23,7 @@ public abstract class AbstractBroker<T extends AbstractBroker<T>> implements Cop
 
     abstract public boolean dump(Tile dropTile); 
 
-    abstract public AbstractBroker<T> copy();
+    abstract public AbstractBroker copy(); // TODO maybe copy could specifiy return type better? Probably not though
 
     public Hand getHand() {return this.hand;}
 

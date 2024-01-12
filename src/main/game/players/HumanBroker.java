@@ -4,7 +4,7 @@ import src.main.game.Tile;
 import src.main.game.TileBag;
 import src.main.game.Game;
 
-class HumanBroker extends AbstractBroker<HumanBroker> {
+class HumanBroker extends AbstractBroker {
     TileBag bag;
 
     public HumanBroker(Hand hand, Game game) {

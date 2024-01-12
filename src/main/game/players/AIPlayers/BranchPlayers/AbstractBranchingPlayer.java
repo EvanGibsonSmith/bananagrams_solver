@@ -12,7 +12,7 @@ import src.main.game.Grid;
 import src.main.game.Location;
 
 // TODO should be protected since the AIPlayer is all that uses it?
-public abstract class AbstractBranchingPlayer<T extends AbstractBranchingPlayer<T>> extends Player implements Branchable<T> {
+public abstract class AbstractBranchingPlayer extends Player implements Branchable<AbstractBranchingPlayer> {
 
     public AbstractBranchingPlayer(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
@@ -22,7 +22,7 @@ public abstract class AbstractBranchingPlayer<T extends AbstractBranchingPlayer<
         super(game, grid, bag, hand);
     }
 
-    public abstract Set<T> branch();
+    public abstract Set<? extends AbstractBranchingPlayer> branch();
     
     // allows a player to play an entire grid given in (assuming that the players has those tiles) 
     public void playGrid(Grid g) { 
@@ -39,6 +39,6 @@ public abstract class AbstractBranchingPlayer<T extends AbstractBranchingPlayer<
     }
 
     @Override
-    public AbstractBranchingPlayer<T> copy() {return copy();} // casts to AbstractBranchingPlayer
+    public AbstractBranchingPlayer copy() {return copy();} // casts to AbstractBranchingPlayer
 
 }

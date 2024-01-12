@@ -20,17 +20,16 @@ public class AIPlayer {
     private final Function<AbstractBranchingPlayer, Double> heuristic = (p) -> (double) p.getHand().size();
     private final Function<AbstractBranchingPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
 
-    private AStarFactory aStarFactory;
-    protected AbstractAStar<AbstractBranchingPlayer> aStar; // specific class for implementation of these is given as parameter
+    private AStarFactory<AbstractBranchingPlayer> aStarFactory;
+    protected AbstractAStar<? extends AbstractBranchingPlayer> aStar; // specific class for implementation of these is given as parameter
     protected AbstractBranchingPlayer player; // the player created (type determines how branch works)
 
     private void setup(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
-                       Class<? extends AbstractAStar> astarClass,
+                       Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass,
                        Game game, Grid grid, TileBag bag) throws Exception {
         BranchingPlayerFactory branchingPlayerFactory = new BranchingPlayerFactory(branchingPlayerClass, game, grid, bag);
         player = branchingPlayerFactory.build();
-
-        AStarFactory aStarFactory = new AStarFactory(astarClass, player, cost, heuristic, isGoal);
+        aStarFactory = new AStarFactory<AbstractBranchingPlayer>(astarClass, player, cost, heuristic, isGoal);
         aStar = aStarFactory.build();
     }
 
@@ -38,7 +37,7 @@ public class AIPlayer {
                     Class<? extends AbstractAStar> astarClass,
                     Game game, HashSet<String> words, TileBag bag) throws Exception {
         Grid grid = new Grid(words);
-        setup(branchingPlayerClass, astarClass, game, grid, bag);
+        setup(branchingPlayerClass, (Class<? extends AbstractAStar<AbstractBranchingPlayer>>) astarClass, game, grid, bag);
     }
 
     public AIPlayer(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 

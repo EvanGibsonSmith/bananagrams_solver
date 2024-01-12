@@ -15,7 +15,7 @@ import src.main.game.players.Hand;
 import src.main.game.Game;
 import src.main.game.Grid;
 
-public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<BranchingPlayerParallel> {
+public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods {
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public BranchingPlayerParallel(Game game, Grid grid, TileBag bag) {
@@ -32,8 +32,8 @@ public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<Bran
 
     public Set<BranchingPlayerParallel> branchForward() {
         List<Callable<Set<BranchingPlayerParallel>>> tasks = new ArrayList<>();
-        tasks.add(() -> branchForwardSingleDirection((byte) 1));
-        tasks.add(() -> branchForwardSingleDirection((byte) 0)); // just combine both directions
+        tasks.add(() ->  branchForwardSingleDirection((byte) 1));
+        tasks.add(() ->  branchForwardSingleDirection((byte) 0)); // just combine both directions
 
         // just adds the two sets from the threads
         Set<BranchingPlayerParallel> out = new HashSet<>();
@@ -52,16 +52,6 @@ public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<Bran
             e.printStackTrace();
         }
 
-        return out;
-    }
-
-    @Override
-    public Set<BranchingPlayerParallel> branch() {
-        if (this.getGrid().isEmpty()) {
-            return branchEmpty(); // edge case for when the grid is empty
-        }
-        Set<BranchingPlayerParallel> out = branchForward();
-        out.addAll(branchBackward()); // just combine both directions
         return out;
     }
 }

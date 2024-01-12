@@ -14,7 +14,7 @@ import src.main.game.TileBag;
 import src.main.game.players.Hand;
 
 // visibility is only for other AIPlayer within this folder to use
-abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends AbstractPlayerBranchingMethods<ExtendingBranchPlayer>> extends AbstractBranchingPlayer<ExtendingBranchPlayer> {
+abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends AbstractPlayerBranchingMethods<ExtendingBranchPlayer>> extends AbstractBranchingPlayer {
 
     public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBag bag) {
         super(game, grid, bag);
@@ -223,7 +223,7 @@ abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends Abst
     }
 
     @Override
-    public Set<ExtendingBranchPlayer> branch() {
+    public Set<? extends ExtendingBranchPlayer> branch() {
         if (this.getGrid().isEmpty()) {
             return branchEmpty(); // edge case for when the grid is empty
         }

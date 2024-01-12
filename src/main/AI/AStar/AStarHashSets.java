@@ -20,9 +20,10 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
     Integer endIndex = null;
     HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
     IndexMinPQ<Double> pq; // will be fixed size in constructor if size given
-    
-    public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
-        super(start, cost, heuristic, isGoal);
+
+    // TODO fix this yucky fix making start Object to make it work in factory finding construtor
+    public AStarHashSets(Object start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
+        super((T) start, cost, heuristic, isGoal);
         this.pq = new DynamicIndexMinPQ<>();
     }
 
