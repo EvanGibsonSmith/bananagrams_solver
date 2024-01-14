@@ -42,7 +42,7 @@ public class CheatingPlayerTest {
         
         try {
             AbstractBroker broker = new CheatBroker(new Hand());
-            AbstractBranchingPlayer playerPart = new BranchingPlayerSerial(null, new Grid(wordsSet), broker);
+            AbstractBranchingPlayer playerPart = new BranchingPlayerParallel(null, new Grid(wordsSet), broker);
             player = new CheatPlayer(AStarArrayList.class, playerPart); // game not needed for this test
         }
         catch (Exception e) {

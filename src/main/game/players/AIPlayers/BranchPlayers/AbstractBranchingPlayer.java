@@ -21,6 +21,10 @@ public abstract class AbstractBranchingPlayer extends Player implements Branchab
         super(game, new GridArranger(grid, broker.getHand()), broker); // TODO fix this weird hand this later? Is it needed?
     }
 
+    public AbstractBranchingPlayer(Game game, GridArranger gridArranger, AbstractBroker broker) {
+        super(game, gridArranger, broker); // TODO fix this weird hand this later? Is it needed?
+    }
+
     /* TODO delete comment of constructors when AbstractBranchingPlayer
     // TODO another bad no game constructor
     public AbstractBranchingPlayer(Grid grid, TileBagable bag, Hand hand) {
