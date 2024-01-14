@@ -14,6 +14,8 @@ public abstract class AbstractBroker implements Copyable<AbstractBroker> {
         this.bag = tileBag;
     }
 
+    // TODO add can grab tile to make things easier?
+    
     abstract public Tile grabTile();
     
     abstract public boolean grabTile(int num);

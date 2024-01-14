@@ -350,5 +350,19 @@ class AStarGrids {
         nextChars.add('n');
         playerInputSetup(letters, nextChars);
     }
+
+    @Test
+    void playerInputExampleMediumLarge() {
+        char[] letters = "ertsyuasfawf".toCharArray();
+        Queue<Character> nextChars = new LinkedList<>();
+
+        // note since this is a queue the order is reverse from the other test in AStarGrud
+        nextChars.add('g');
+        nextChars.add('f');
+        nextChars.add('s');
+        nextChars.add('s');
+        nextChars.add('t');
+        playerInputSetup(letters, nextChars);
+    }
 }
 

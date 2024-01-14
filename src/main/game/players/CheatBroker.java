@@ -1,5 +1,6 @@
 package src.main.game.players;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 import src.main.game.Tile;
@@ -11,10 +12,16 @@ public class CheatBroker extends AbstractBroker {
         super(hand, new CheatTileBag());
     }
 
+    // TODO should this constructor be public? Used in copy
+    public CheatBroker(Hand hand, CheatTileBag bag) {
+        super(hand, bag);
+    }
+
     public CheatBroker(Hand hand, Queue<Tile> queue) {
         super(hand, new CheatTileBag(queue));
     }
 
+    public boolean queueEmpty() {return bag.isEmpty();}
     /**
      * TODO DOCUMENT
      */
@@ -23,6 +30,14 @@ public class CheatBroker extends AbstractBroker {
     public void clearQueue() {((CheatTileBag) bag).clear();} // we know type since CheatBroker only accepts CheatTileBag
  
     public void setQueue(Queue<Tile> newQueue) {((CheatTileBag) bag).setBag(newQueue);}
+
+    public void setQueueCharQueue(Queue<Character> newQueue) {
+        Queue<Tile> newTileQueue = new LinkedList<>();
+        for (Character c: newQueue) {
+            newTileQueue.add(new Tile(c));
+        }
+        ((CheatTileBag) bag).setBag(newTileQueue);
+    }
 
     // TODO add grabTile() for tile that allows a tile to just be force placed into hand
     
@@ -76,7 +91,7 @@ public class CheatBroker extends AbstractBroker {
     @Override
     // TODO DOCUMENT NOTE THIS DOESN'T COPY HAND SO PLAYER CAN DO IT
     public CheatBroker copy() {
-        return new CheatBroker(hand);
+        return new CheatBroker(hand, (CheatTileBag) bag.copy());
     }
 
     @Override

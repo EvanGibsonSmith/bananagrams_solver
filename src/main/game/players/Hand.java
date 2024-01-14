@@ -11,6 +11,13 @@ public class Hand implements Copyable<Hand>, Iterable<Tile> {
 
     public Hand() {}
 
+    // TODO should this be here? It is convienent but not necessary 
+    public Hand(char[] charHand) {
+        for (char c: charHand) {
+            hand.add(new Tile(c));
+        }
+    }
+
     public Hand(MultiSet<Tile> hand) {
         this.hand = hand;
     }

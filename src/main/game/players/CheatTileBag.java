@@ -43,15 +43,25 @@ public class CheatTileBag implements TileBagable{
     
     public boolean isEmpty() {return queue.isEmpty();}
 
-    public boolean isFull() {return queue.size()==capacity;} // if capacity not set queue.size() is never negative 1
+    public boolean isFull() {return (queue.size()==capacity && capacity!=-1);} // if capacity not set queue.size() is never negative 1
 
     public int size() {return queue.size();}
 
-    public void addTile(Tile t) {queue.add(t);}
+    public void addTile(Tile t) {
+        if (!isFull()) {
+            queue.add(t);
+        }
+        // TODO make it throw something
+    }
 
     public void clear() {queue.clear();}
 
-    public void setBag(Queue<Tile> queue) {this.queue = queue;}
+    public void setBag(Queue<Tile> queue) {
+        if (!isFull()) {
+            this.queue = queue;
+        }
+        // TODO make it throw something
+    }
 
     public CheatTileBag copy() {return new CheatTileBag(new LinkedList<Tile>(queue));}
 }
