@@ -6,22 +6,18 @@ import src.main.game.Game;
 
 // TODO public?!
 public class HumanBroker extends AbstractBroker {
-    NormalTileBag bag;
     
     // TODO maybe create a dummy game instead of having to create this extra constructor.
     public HumanBroker(Hand hand, int bagSize) {
-        super(hand);
-        this.bag = new NormalTileBag(bagSize);
-    }
-
-    public HumanBroker(Hand hand, Game game) {
-        super(hand);
-        this.bag = game.getBag();
+        super(hand, new NormalTileBag(bagSize));
     }
 
     public HumanBroker(Hand hand, NormalTileBag bag) {
-        super(hand);
-        this.bag = bag;
+        super(hand, bag);
+    }
+
+    public HumanBroker(Hand hand, Game game) {
+        super(hand, game.getBag());
     }
 
     /**
@@ -87,11 +83,11 @@ public class HumanBroker extends AbstractBroker {
     }
     
     public NormalTileBag getBag() {
-        return this.bag;
+        return (NormalTileBag) this.bag; // we know this is normal tile bag since that is all HumanBroker accepts
     }
 
     @Override
     public HumanBroker copy() {
-        return new HumanBroker(hand, bag);
+        return new HumanBroker(hand, (NormalTileBag) bag);
     }
 }

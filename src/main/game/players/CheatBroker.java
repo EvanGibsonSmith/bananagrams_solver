@@ -6,7 +6,6 @@ import src.main.game.Tile;
 
 // TODO probably shouldn't be public, the methods here should do into extending player classes?
 public class CheatBroker extends AbstractBroker {
-    CheatTileBag bag = new CheatTileBag(); // essentially a queue that can be changed by user
 
     public CheatBroker(Hand hand) {
         super(hand, new CheatTileBag());
@@ -21,9 +20,9 @@ public class CheatBroker extends AbstractBroker {
      */
     public void addToQueue(Tile t) {bag.addTile(t);}
 
-    public void clearQueue() {bag.clear();}
-
-    public void setQueue(Queue<Tile> newQueue) {bag.setBag(newQueue);}
+    public void clearQueue() {((CheatTileBag) bag).clear();} // we know type since CheatBroker only accepts CheatTileBag
+ 
+    public void setQueue(Queue<Tile> newQueue) {((CheatTileBag) bag).setBag(newQueue);}
 
     // TODO add grabTile() for tile that allows a tile to just be force placed into hand
     
@@ -46,7 +45,7 @@ public class CheatBroker extends AbstractBroker {
      * @param num the number of tiles to grab
      * @return boolean if successful or not, false if not enough tiles to grab num of them
      */
-    public boolean grabTile(int num) {return bag.grabTile(num);}
+    public boolean grabTile(int num) {return ((CheatTileBag) bag).grabTile(num);}
     
     /**
      * TODO DOCUMENT
@@ -75,6 +74,6 @@ public class CheatBroker extends AbstractBroker {
 
     @Override
     public CheatTileBag getBag() {
-        return this.bag; 
+        return (CheatTileBag) this.bag; // we know this is normal tile bag since that is all HumanBroker accepts
     }
 }
