@@ -9,12 +9,19 @@ import src.main.game.Tile;
 import src.main.game.players.AbstractBroker;
 import src.main.game.players.GridArranger;
 import src.main.game.players.Hand;
+import src.main.game.players.HumanBroker;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
+import src.main.game.NormalTileBag;
 
 public class BranchingPlayerSerial extends AbstractBranchingPlayer {
-    
+
+    // TODO this a good constructor?
+    public BranchingPlayerSerial(Game game, Grid grid, NormalTileBag tileBag) {
+        super(game, grid, new HumanBroker(new Hand(), tileBag));
+    }
+
     public BranchingPlayerSerial(Game game, Grid grid, AbstractBroker broker) {
         super(game, grid, broker);
     }

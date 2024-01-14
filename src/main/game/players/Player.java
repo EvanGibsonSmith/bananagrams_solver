@@ -1,10 +1,12 @@
 package src.main.game.players;
 
 import src.main.game.Location;
+import src.main.game.NormalTileBag;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Tile;
 import src.main.game.TileBagable;
+import src.main.game.WordsSet;
 import src.main.game.Copyable;
 
 // TODO make this a "non broker player" or something? Maybe seperate broker implementor or allow extending classes to do it themselves?
@@ -15,14 +17,15 @@ public class Player implements Copyable<Player> {
 
     // TODO player doesn't handle broker at all except in protected constructor? Maybe rename or rework.
     protected Player() {} // does nothing, allowing extending classes to set/change protected variables
-    
+
     // used by extending classes to use other gridArrangers and brokers TODO should this be an interface then?
-    protected Player(Game game, GridArranger gridArranger, AbstractBroker broker) {
+    // TODO make this public?
+    public Player(Game game, GridArranger gridArranger, AbstractBroker broker) {
         this.game = game; // TODO what about game is needed? another constrcuctor for null?
         this.gridArranger = gridArranger;
         this.broker = broker;
     }
-    
+
     // TODO delete after after only using constructor in extending classes with associated brokers and gridarrangers
     /*// TODO so many of these constructors DON'T USE GAME. Fix this
     // TODO many constructors? Hand maybe should be hidden from outside world and initialized with MultiSet<Tile>

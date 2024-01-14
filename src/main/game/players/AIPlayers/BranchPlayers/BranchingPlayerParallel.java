@@ -16,15 +16,22 @@ import src.main.game.Tile;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
+import src.main.game.NormalTileBag;
 import src.main.game.players.AbstractBroker;
 import src.main.game.players.GridArranger;
 import src.main.game.players.Hand;
+import src.main.game.players.HumanBroker;
 
 public class BranchingPlayerParallel extends AbstractBranchingPlayer {
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public BranchingPlayerParallel(Game game, Grid grid, AbstractBroker broker) {
         super(game, grid, broker);
+    }
+
+    // TODO this a good constructor?
+    public BranchingPlayerParallel(Game game, Grid grid, NormalTileBag tileBag) {
+        super(game, grid, new HumanBroker(new Hand(), tileBag));
     }
 
     public BranchingPlayerParallel(Game game, GridArranger gridArranger, AbstractBroker broker) {

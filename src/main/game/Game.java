@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import src.main.game.players.GridArranger;
+import src.main.game.players.Hand;
+import src.main.game.players.HumanBroker;
 import src.main.game.players.Player;
 
 public class Game {
@@ -50,11 +53,12 @@ public class Game {
         this.numPlayers = numPlayers;
     }   
 
+    // TODO this is a bad constructor since a broker is a specific type?
     public Game(int numPlayers, NormalTileBag tiles, WordsSet validWords) {
         this(numPlayers, tiles);
         this.validWords = validWords;
         for (int i=0; i<numPlayers; ++i) {
-            players[i] = new Player(this, new Grid(this.validWords), this.bag);
+            players[i] = new Player(this, new GridArranger(new Grid(this.validWords)), new HumanBroker(new Hand(), this));
         }
     }
 
@@ -63,11 +67,13 @@ public class Game {
         this.initPlayerTiles = initPlayerTiles;
     }
 
+    // TODO these constructors needed?
     public Game(int numPlayers, NormalTileBag tiles, HashSet<String> validWords) {
         this(numPlayers, tiles);
         this.validWords = new WordsSet(validWords);
         for (int i=0; i<numPlayers; ++i) {
-            players[i] = new Player(this, new Grid(this.validWords), this.bag);
+            Hand newHand = new Hand();
+            players[i] = new Player(this, new GridArranger(new Grid(this.validWords), newHand), new HumanBroker(newHand, tiles));
         }
     }
 
