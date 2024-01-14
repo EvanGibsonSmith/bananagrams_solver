@@ -8,7 +8,7 @@ import java.util.Set;
 
 import src.main.game.Grid;
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 import src.data_structures.MultiSet;
@@ -35,7 +35,7 @@ public class BranchEmpty {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 1);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 1);
         
         AbstractBranchingPlayer player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
@@ -47,7 +47,7 @@ public class BranchEmpty {
         player.grabTile();
 
         System.out.println(player.getGrid());
-        Set<AbstractBranchingPlayer> nextPlayers = player.branch(); // the overall branch function should just call branchEmpty right now
+        Set<? extends AbstractBranchingPlayer> nextPlayers = player.branch(); // the overall branch function should just call branchEmpty right now
         
         for (AbstractBranchingPlayer p: nextPlayers) {
             System.out.println(p.getGrid());

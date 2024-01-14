@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +20,7 @@ class TileBagTest {
         for (char letter: letters.toCharArray()) {
             tiles.add(new Tile(letter));
         }
-        TileBag bag = new TileBag(tiles.toArray(new Tile[tiles.size()]));
+        NormalTileBag bag = new NormalTileBag(tiles.toArray(new Tile[tiles.size()]));
 
         assertTrue(bag.isFull());
 
@@ -45,7 +45,7 @@ class TileBagTest {
         for (char letter: letters.toCharArray()) {
             tiles.add(new Tile(letter));
         }
-        TileBag bag = new TileBag(tiles.toArray(new Tile[tiles.size()]));
+        NormalTileBag bag = new NormalTileBag(tiles.toArray(new Tile[tiles.size()]));
 
         assertFalse(bag.isEmpty());
 
@@ -78,7 +78,7 @@ class TileBagTest {
         for (char letter: letters.toCharArray()) {
             tiles.add(new Tile(letter));
         }
-        TileBag bag = new TileBag(tiles.toArray(new Tile[tiles.size()]));
+        NormalTileBag bag = new NormalTileBag(tiles.toArray(new Tile[tiles.size()]));
         assertTrue(bag.isFull()); // bag has only one element made so it begins full
 
         Tile nextTile;
@@ -111,7 +111,7 @@ class TileBagTest {
         for (char letter: letters.toCharArray()) {
             tiles.add(new Tile(letter));
         }
-        TileBag bag = new TileBag(tiles.toArray(new Tile[tiles.size()]), 31415);
+        NormalTileBag bag = new NormalTileBag(tiles.toArray(new Tile[tiles.size()]), 31415);
 
         while (!bag.isEmpty()) {
             Tile tile = bag.grabTile();

@@ -10,17 +10,28 @@ import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.TileBagable;
+import src.main.game.NormalTileBag;
 import src.main.game.players.Hand;
 
 // visibility is only for other AIPlayer within this folder to use
 abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends AbstractPlayerBranchingMethods<ExtendingBranchPlayer>> extends AbstractBranchingPlayer {
+    
+    // TODO is no game constructor bad? maybe a dummy game object would be better
+    public AbstractPlayerBranchingMethods(Grid grid, TileBagable bag) {
+        super(grid, bag);
+    }
 
-    public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBag bag) {
+    // TODO is no game constructor bad? maybe a dummy game object would be better
+    public AbstractPlayerBranchingMethods(Grid grid, TileBagable bag, Hand hand) {
+        super(grid, bag, hand);
+    }
+
+    public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBagable bag) {
         super(game, grid, bag);
     }
 
-    public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBag bag, Hand hand) {
+    public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBagable bag, Hand hand) {
         super(game, grid, bag, hand);
     }
 

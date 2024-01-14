@@ -10,7 +10,8 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
+import src.main.game.TileBagable;
 import src.main.game.players.Hand;
 import src.main.game.Game;
 import src.main.game.Grid;
@@ -18,16 +19,16 @@ import src.main.game.Grid;
 public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods {
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-    public BranchingPlayerParallel(Game game, Grid grid, TileBag bag) {
+    public BranchingPlayerParallel(Game game, Grid grid, TileBagable bag) {
         super(game, grid, bag);
     }
 
-    public BranchingPlayerParallel(Game game, Grid grid, TileBag bag, Hand hand) {
+    public BranchingPlayerParallel(Game game, Grid grid, TileBagable bag, Hand hand) {
         super(game, grid, bag, hand);
     }
 
     public BranchingPlayerParallel copy() {
-        return new BranchingPlayerParallel(getGame(), new Grid(getGrid()), (TileBag) getBag(), this.getHand().copy());
+        return new BranchingPlayerParallel(getGame(), new Grid(getGrid()), getBag(), this.getHand().copy());
     }
 
     public Set<BranchingPlayerParallel> branchForward() {

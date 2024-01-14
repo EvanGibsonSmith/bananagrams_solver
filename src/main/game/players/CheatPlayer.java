@@ -2,7 +2,7 @@ package src.main.game.players;
 
 import src.main.AI.AStar.AbstractAStar;
 import src.main.game.Game;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.AIPlayer;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 
@@ -17,7 +17,7 @@ public class CheatPlayer extends AIPlayer {
         // no game needed since CheatPlayer is for real life games, no bag since we override broker
         super(branchingPlayerClass, astarClass, null, words, null);  
         // TODO bad to "Reach" into player to swtich out Broker when player should be high level anyway
-        getPlayer().broker = new CheatBroker(getPlayer().broker.getHand()); // reach in and change broker type 
+        getPlayer().broker = new CheatBroker(new Hand()); // reach in and change broker type 
     }
 
     /*

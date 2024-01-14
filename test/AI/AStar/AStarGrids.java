@@ -21,7 +21,7 @@ import src.main.AI.AStar.AStarHashSets;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 
@@ -54,7 +54,7 @@ class AStarGrids {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 1);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 1);
         
         player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();
@@ -87,7 +87,7 @@ class AStarGrids {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 1);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 1);
         player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         System.out.println("Player Hand: " + player.getHand());
@@ -246,7 +246,7 @@ class AStarGrids {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 1);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 1);
         player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         System.out.println("Player Hand: " + player.getHand());
@@ -287,7 +287,7 @@ class AStarGrids {
             tiles[i] = new Tile(letters[i]);
         }
 
-        TileBag tileBag = new TileBag(tiles, 1);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 1);
         player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
         for (int i=0; i<letters.length-leftInBag; ++i) {player.grabTile();}
         System.out.println(player.getHand());
@@ -304,14 +304,14 @@ class AStarGrids {
 
         // with this big grid peel a tile
         player.playGrid(astararray.getGoal().getGrid());
-        assertEquals(((TileBag) player.getBag()).size(), leftInBag);
+        assertEquals(((NormalTileBag) player.getBag()).size(), leftInBag);
         assertEquals(player.getGrid(), astararray.getGoal().getGrid());
         assertEquals(player.getHand(), astararray.getGoal().getHand());
         assertTrue(player.getGrid().valid());
         assertTrue(player.canPeel());
         // player now has the A* grid placed
         player.grabTile(); // "peel" for this player
-        assertEquals(((TileBag) player.getBag()).size(), leftInBag-1);
+        assertEquals(((NormalTileBag) player.getBag()).size(), leftInBag-1);
         assertTrue(player.getGrid().valid());
         assertFalse(player.canPeel());
 

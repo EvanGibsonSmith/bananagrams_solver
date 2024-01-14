@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import src.main.AI.AIWordsSet;
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 
 import java.util.HashSet;
 import java.util.Scanner;

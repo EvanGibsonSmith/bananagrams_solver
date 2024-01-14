@@ -6,11 +6,13 @@ import java.util.HashSet;
 
 import src.main.AI.AStar.AStarFactory;
 import src.main.AI.AStar.AbstractAStar;
+import src.main.game.players.CheatBroker;
+import src.main.game.players.Hand;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerFactory;
 import src.main.game.Game;
 import src.main.game.Grid;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 
 // TODO could this extend player instead of composition? Is that a good choice?
 // TODO rename from AIPlayer since this doesn't extend player?
@@ -26,7 +28,7 @@ public class AIPlayer {
 
     private void setup(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
                        Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass,
-                       Game game, Grid grid, TileBag bag) throws Exception {
+                       Game game, Grid grid, NormalTileBag bag) throws Exception {
         BranchingPlayerFactory branchingPlayerFactory = new BranchingPlayerFactory(branchingPlayerClass, game, grid, bag);
         player = branchingPlayerFactory.build();
         aStarFactory = new AStarFactory<AbstractBranchingPlayer>(astarClass, player, cost, heuristic, isGoal);
@@ -35,14 +37,14 @@ public class AIPlayer {
 
     public AIPlayer(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
                     Class<? extends AbstractAStar> astarClass,
-                    Game game, HashSet<String> words, TileBag bag) throws Exception {
+                    Game game, HashSet<String> words, NormalTileBag bag) throws Exception {
         Grid grid = new Grid(words);
         setup(branchingPlayerClass, (Class<? extends AbstractAStar<AbstractBranchingPlayer>>) astarClass, game, grid, bag);
     }
 
     public AIPlayer(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
                     Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass,
-                    Game game, Grid grid, TileBag bag) throws Exception {
+                    Game game, Grid grid, NormalTileBag bag) throws Exception {
         setup(branchingPlayerClass, astarClass, game, grid, bag);
     }
 
@@ -64,6 +66,12 @@ public class AIPlayer {
      * Computers A*, so quite slow TODO mention A* storage on compute when done
      */
     public AbstractBranchingPlayer solveGrid() {
+        try {
+            aStar = aStarFactory.build(); // build new a* from this player
+        }
+        catch (Exception e) {
+            e.printStackTrace(); // TODO make these try and catches nicer
+        }
         aStar.compute();
         return aStar.getGoal();
     }
@@ -73,11 +81,6 @@ public class AIPlayer {
         // TODO is building another A* good? It's not that inefficient since this isn't involved 
         // in the branching actions and it makes sense for A* to not be able to change
         aStarFactory.setStart(player); // make astar attached to this new player TODO instead of creating new object
-        try {
-            aStar = aStarFactory.build(); // build new a* from this player
-        }
-        catch (Exception e) {
-            e.printStackTrace(); // TODO make these try and catches nicer
-        }
+        // not building new a star so info from this one cam be seen
     }
 }

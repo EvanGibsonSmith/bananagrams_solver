@@ -9,7 +9,7 @@ import java.util.Scanner;
 import src.main.game.players.Player;
 
 public class Game {
-    TileBag bag = defaultTileBag();
+    NormalTileBag bag = defaultTileBag();
     int[] initPlayerTiles = new int[] {-1, -1, 21, 21, 21, 15, 15, 11, 11};
     WordsSet validWords = defaultWordsSet(); 
     Player[] players;  // note that player doesn't have hashcode or equality. Every player is unique
@@ -32,10 +32,10 @@ public class Game {
         return new WordsSet(wordsSet);
     }
 
-    private TileBag defaultTileBag() {
+    private NormalTileBag defaultTileBag() {
         int[] alphabetAmounts = new int[] {13, 3, 3, 6, 18, 3, 4, 3, 12, 2, 2, 5, 3, 8, 11, 3, 2, 9, 6, 9, 6, 3, 3, 2, 3, 2};
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-        TileBag bag = new TileBag(Arrays.stream(alphabetAmounts).sum()); // size is just number of tiles total from sum
+        NormalTileBag bag = new NormalTileBag(Arrays.stream(alphabetAmounts).sum()); // size is just number of tiles total from sum
         for (int a=0; a<alphabet.length; ++a) {
             for (int b=0; b<alphabetAmounts[a]; ++b) {
                 bag.addTile(new Tile(alphabet[a]));
@@ -44,13 +44,13 @@ public class Game {
         return bag;
     }
 
-    private Game(int numPlayers, TileBag tiles) {
+    private Game(int numPlayers, NormalTileBag tiles) {
         this.bag = tiles;
         this.players = new Player[numPlayers];
         this.numPlayers = numPlayers;
     }   
 
-    public Game(int numPlayers, TileBag tiles, WordsSet validWords) {
+    public Game(int numPlayers, NormalTileBag tiles, WordsSet validWords) {
         this(numPlayers, tiles);
         this.validWords = validWords;
         for (int i=0; i<numPlayers; ++i) {
@@ -58,12 +58,12 @@ public class Game {
         }
     }
 
-    public Game(int numPlayers, TileBag tiles, WordsSet validWords, int[] initPlayerTiles) {
+    public Game(int numPlayers, NormalTileBag tiles, WordsSet validWords, int[] initPlayerTiles) {
         this(numPlayers, tiles, validWords);
         this.initPlayerTiles = initPlayerTiles;
     }
 
-    public Game(int numPlayers, TileBag tiles, HashSet<String> validWords) {
+    public Game(int numPlayers, NormalTileBag tiles, HashSet<String> validWords) {
         this(numPlayers, tiles);
         this.validWords = new WordsSet(validWords);
         for (int i=0; i<numPlayers; ++i) {
@@ -71,12 +71,12 @@ public class Game {
         }
     }
 
-    public Game(int numPlayers, TileBag tiles, HashSet<String> validWords, int[] initPlayerTiles) {
+    public Game(int numPlayers, NormalTileBag tiles, HashSet<String> validWords, int[] initPlayerTiles) {
         this(numPlayers, tiles, validWords);
         this.initPlayerTiles = initPlayerTiles;
     }
 
-    public Game(Player[] players, TileBag tiles, WordsSet validWords, int[] initPlayerTiles) {
+    public Game(Player[] players, NormalTileBag tiles, WordsSet validWords, int[] initPlayerTiles) {
         this(players);
         this.bag = tiles;
         this.numPlayers = players.length;
@@ -84,7 +84,7 @@ public class Game {
         this.initPlayerTiles = initPlayerTiles;
     }
 
-    public Game(Player[] players, TileBag tiles, HashSet<String> validWords, int[] initPlayerTiles) {
+    public Game(Player[] players, NormalTileBag tiles, HashSet<String> validWords, int[] initPlayerTiles) {
         this(players);
         this.bag = tiles;
         this.numPlayers = players.length;
@@ -108,7 +108,7 @@ public class Game {
         return this.players;
     }  
 
-    public TileBag getBag() {
+    public NormalTileBag getBag() {
         return this.bag;
     }
 

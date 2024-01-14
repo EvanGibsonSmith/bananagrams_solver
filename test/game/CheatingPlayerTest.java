@@ -6,7 +6,7 @@ import src.main.AI.AStar.AStarArrayList;
 import src.main.AI.AStar.AStarHashSets;
 import src.main.game.Grid;
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerParallel;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
@@ -41,6 +41,7 @@ public class CheatingPlayerTest {
         catch (Exception e) {
             e.printStackTrace();
         }
+
        // CheatBroker broker = player.getBroker(); // TODO below should probably be player.addToQueue()
        // TODO should do with CheatBroker eventually, but there are TileBag casting issues 
         CheatBroker broker = player.getBroker();
@@ -51,6 +52,7 @@ public class CheatingPlayerTest {
         broker.addToQueue(new Tile('p'));
         broker.addToQueue(new Tile('a'));
         broker.addToQueue(new Tile('t'));
+        
         player.grabTile();
         player.grabTile();
         player.grabTile();

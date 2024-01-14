@@ -2,7 +2,7 @@ package src.main.game;
 
 import java.util.Random;
 
-public class TileBag {
+public class NormalTileBag implements TileBagable {
     Tile[] tiles;
     int maxSize;
     int nextIndex;
@@ -14,7 +14,7 @@ public class TileBag {
      * bag. This makes sense for the application within the game
      * @param tiles
      */
-    public TileBag(Tile[] tiles) {
+    public NormalTileBag(Tile[] tiles) {
         this.tiles = tiles;
         this.maxSize = tiles.length;
         // since bag begins full nextIndex is the length
@@ -22,7 +22,7 @@ public class TileBag {
         this.random = new Random();
     }
 
-    public TileBag(Tile[] tiles, int seed) {
+    public NormalTileBag(Tile[] tiles, int seed) {
         this(tiles);
         this.random = new Random(seed);
     }
@@ -32,7 +32,7 @@ public class TileBag {
      * begins empty (potentially to add stuff too)
      * @param maxSize
      */
-    public TileBag(int maxSize) { 
+    public NormalTileBag(int maxSize) { 
         this.tiles = new Tile[maxSize];
         this.maxSize = maxSize;
     }
@@ -42,7 +42,7 @@ public class TileBag {
      * begins empty (potentially to add stuff too)
      * @param maxSize
      */
-    public TileBag(int maxSize, int seed) { 
+    public NormalTileBag(int maxSize, int seed) { 
         this(maxSize);
         this.random = new Random(seed);
     }

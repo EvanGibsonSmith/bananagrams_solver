@@ -7,7 +7,7 @@ import src.main.game.Tile;
 
 // TODO probably shouldn't be public, the methods here should do into extending player classes?
 public class CheatBroker extends AbstractBroker {
-    Queue<Tile> queue = new LinkedList<>();
+    CheatTileBag bag = new CheatTileBag(); // essentially a queue that can be changed by user
 
     public CheatBroker(Hand hand) {
         super(hand);
@@ -15,17 +15,17 @@ public class CheatBroker extends AbstractBroker {
 
     public CheatBroker(Hand hand, Queue<Tile> queue) {
         super(hand);
-        this.queue = queue;
+        this.bag = new CheatTileBag(queue);
     }
 
     /**
      * TODO DOCUMENT
      */
-    public void addToQueue(Tile t) {queue.add(t);}
+    public void addToQueue(Tile t) {bag.addTile(t);}
 
-    public void clearQueue() {queue.clear();}
+    public void clearQueue() {bag.clear();}
 
-    public void setQueue(Queue<Tile> newQueue) {queue = newQueue;}
+    public void setQueue(Queue<Tile> newQueue) {bag.setBag(newQueue);}
 
     // TODO add grabTile() for tile that allows a tile to just be force placed into hand
     
@@ -37,13 +37,7 @@ public class CheatBroker extends AbstractBroker {
      * game
      * @return Tile grabbed, null if no tile could be grabbed (bag empty)
      */
-    public Tile grabTile() {
-        if (queue.isEmpty()) {return null;} // edge case
-
-        Tile t = queue.poll();
-        hand.add(t);
-        return t;
-    }
+    public Tile grabTile() {return bag.grabTile();}
 
     /**
      * Grabs number of tiles given bag and adds it to the players hand.
@@ -54,13 +48,7 @@ public class CheatBroker extends AbstractBroker {
      * @param num the number of tiles to grab
      * @return boolean if successful or not, false if not enough tiles to grab num of them
      */
-    public boolean grabTile(int num) {
-        if (queue.size()<num) {return false;}
-        for (int i=0; i<num; ++i) {
-            grabTile();
-        }
-        return true;
-    }
+    public boolean grabTile(int num) {return bag.grabTile(num);}
     
     /**
      * TODO DOCUMENT
@@ -88,7 +76,7 @@ public class CheatBroker extends AbstractBroker {
     }
 
     @Override
-    public Queue<Tile> getBag() {
-        return this.queue; 
+    public CheatTileBag getBag() {
+        return this.bag; 
     }
 }

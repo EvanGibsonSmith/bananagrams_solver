@@ -1,18 +1,25 @@
 package src.main.game.players;
 
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.Game;
 
-class HumanBroker extends AbstractBroker {
-    TileBag bag;
+// TODO public?!
+public class HumanBroker extends AbstractBroker {
+    NormalTileBag bag;
+    
+    // TODO maybe create a dummy game instead of having to create this extra constructor.
+    public HumanBroker(Hand hand, int bagSize) {
+        super(hand);
+        this.bag = new NormalTileBag(bagSize);
+    }
 
     public HumanBroker(Hand hand, Game game) {
         super(hand);
         this.bag = game.getBag();
     }
 
-    public HumanBroker(Hand hand, TileBag bag) {
+    public HumanBroker(Hand hand, NormalTileBag bag) {
         super(hand);
         this.bag = bag;
     }
@@ -79,7 +86,7 @@ class HumanBroker extends AbstractBroker {
         return true;
     }
     
-    public TileBag getBag() {
+    public NormalTileBag getBag() {
         return this.bag;
     }
 

@@ -30,11 +30,6 @@ public class AStarFactory<T extends Branchable<T>> implements Buildable<Abstract
         // TODO fix this bug causing test to fail
         // TODO fix AbstractBranchingPlayer hardcoded ing
         // TODOd delete this it's for debugging
-        //AStarArrayList newObj = new AStarArrayList<>(start, cost, heuristic, isGoal); // TODO fix generics so this can be nicer.
-        System.out.println(start.getClass());
-        System.out.println(cost.getClass());
-        System.out.println(heuristic.getClass());
-        System.out.println(isGoal.getClass());
         constructor = clazz.getDeclaredConstructor(new Class[] {Object.class, BiFunction.class, Function.class, Function.class});
 
         // save injected dependencies for builds TODO should this be a one time build factory or should we just use it that way? Seems like possible overkill

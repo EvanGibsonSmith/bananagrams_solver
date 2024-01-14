@@ -9,7 +9,7 @@ import java.util.Set;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerParallel;
 import src.data_structures.MultiSet;
 
@@ -36,7 +36,7 @@ class BranchForward {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 42);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 42);
         
         BranchingPlayerParallel player = new BranchingPlayerParallel(null, new Grid(wordsSet), tileBag); // game not needed for this test
         player.grabTile();

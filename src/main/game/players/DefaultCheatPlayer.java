@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import src.main.AI.AStar.AbstractAStar;
 import src.main.game.Game;
-import src.main.game.TileBag;
+import src.main.game.NormalTileBag;
 import src.main.game.WordsSet;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerParallel;

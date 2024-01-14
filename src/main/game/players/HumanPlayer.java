@@ -5,56 +5,51 @@ import src.main.game.Location;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Tile;
-import src.main.game.TileBagable;
 import src.main.game.NormalTileBag;
 import src.main.game.WordsSet;
-import src.main.game.Copyable;
 
-// TODO make this a "non broker player" or something? Maybe seperate broker implementor or allow extending classes to do it themselves?
-public class Player implements Copyable<Player> {
+public class HumanPlayer extends Player {
     protected GridArranger gridArranger; // TODO maybe broker could be better and not have to be passed to extending classes
-    protected AbstractBroker broker; // TODO needs to be some extension a general broker?
+    protected HumanBroker broker; // TODO needs to be some extension a general broker?
     Game game;
-
-    // TODO player doesn't handle broker at all except in protected constructor? Maybe rename or rework.
-    protected Player() {} // does nothing, allowing extending classes to set/change protected variables
     
     // used by extending classes to use other gridArrangers and brokers TODO should this be an interface then?
-    protected Player(GridArranger gridArranger, AbstractBroker broker) {
+    protected HumanPlayer(GridArranger gridArranger, HumanBroker broker) {
         this.gridArranger = gridArranger;
         this.broker = broker;
     }
-
-    // TODO so many of these constructors DON'T USE GAME. Fix this
     // TODO many constructors? Hand maybe should be hidden from outside world and initialized with MultiSet<Tile>
-    public Player(Game game, WordsSet wordsSet, TileBagable bag, Hand hand) {
+    public HumanPlayer(Game game, WordsSet wordsSet, NormalTileBag bag, Hand hand) {
         gridArranger = new GridArranger(new Grid(wordsSet), hand);
-        // TODO make below abstract broker with broker factory?
-        //broker = new HumanBroker(hand, bag); // can be any implementation of abstract broker, but is HumanBroker by default
+        broker = new HumanBroker(hand, bag); // can be any implementation of abstract broker, but is HumanBroker by default
     }
 
-    public Player(Game game, WordsSet wordsSet, TileBagable bag, MultiSet<Tile> handSet) {
+    public HumanPlayer(Game game, WordsSet wordsSet, NormalTileBag bag, MultiSet<Tile> handSet) {
         Hand hand = new Hand(handSet);
         gridArranger = new GridArranger(new Grid(wordsSet), hand);
+        broker = new HumanBroker(hand, bag);
     }
 
-    public Player(Game game, Grid grid, TileBagable bag, Hand hand) {
+    public HumanPlayer(Game game, Grid grid, NormalTileBag bag, Hand hand) {
         gridArranger = new GridArranger(grid, hand);
+        broker = new HumanBroker(hand, bag);
     }
 
-    public Player(Game game, Grid grid, TileBagable bag, MultiSet<Tile> handSet) {
+    public HumanPlayer(Game game, Grid grid, NormalTileBag bag, MultiSet<Tile> handSet) {
         Hand hand = new Hand(handSet);
         gridArranger = new GridArranger(grid, hand);
+        broker = new HumanBroker(hand, bag);
     }
     
-    public Player(Game game, Grid grid, TileBagable bag) {
+    public HumanPlayer(Game game, Grid grid, NormalTileBag bag) {
         Hand hand = new Hand();
         gridArranger = new GridArranger(grid, hand);
+        broker = new HumanBroker(hand, bag);
     }
 
     @Override
-    public Player copy() {
-        return new Player(gridArranger.copy(), broker.copy());
+    public HumanPlayer copy() {
+        return new HumanPlayer(gridArranger.copy(), broker.copy());
     }
 
     public void setGame(Game g) {
@@ -67,7 +62,7 @@ public class Player implements Copyable<Player> {
 
     // TODO type needs to be more specific again. Also not sure if I want this in player.
     // It is currently being used in GameTest
-    public TileBagable getBag() { 
+    public NormalTileBag getBag() { 
         return broker.getBag();
     }
 
