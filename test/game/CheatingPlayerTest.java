@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import src.main.AI.AStar.AStarArrayList;
 import src.main.AI.AStar.AStarHashSets;
+import src.main.AI.AStar.AbstractAStar;
 import src.main.game.Grid;
 import src.main.game.Tile;
 import src.main.game.NormalTileBag;
@@ -11,6 +12,11 @@ import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerParallel;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
 import src.main.game.players.CheatPlayer;
+import src.main.game.players.CheatTileBag;
+import src.main.game.players.GridArranger;
+import src.main.game.players.Hand;
+import src.main.game.players.HumanBroker;
+import src.main.game.players.AbstractBroker;
 import src.main.game.players.CheatBroker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,8 +41,9 @@ public class CheatingPlayerTest {
         wordsSet.add("fact"); 
         
         try {
-            player = new CheatPlayer(BranchingPlayerParallel.class, 
-                                AStarArrayList.class, wordsSet); // game not needed for this test
+            AbstractBroker broker = new CheatBroker(new Hand());
+            AbstractBranchingPlayer playerPart = new BranchingPlayerSerial(null, new Grid(wordsSet), broker);
+            player = new CheatPlayer(AStarArrayList.class, playerPart); // game not needed for this test
         }
         catch (Exception e) {
             e.printStackTrace();

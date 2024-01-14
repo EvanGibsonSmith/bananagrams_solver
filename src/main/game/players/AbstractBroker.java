@@ -24,8 +24,11 @@ public abstract class AbstractBroker implements Copyable<AbstractBroker> {
 
     abstract public boolean dump(Tile dropTile); 
 
+    // TODO document. SHOULD NOT COPY HAND, right for the pla
     abstract public AbstractBroker copy(); // TODO maybe copy could specifiy return type better? Probably not though
 
     public Hand getHand() {return this.hand;}
+
+    public void setHand(Hand hand) {this.hand = hand;}
 
 } 

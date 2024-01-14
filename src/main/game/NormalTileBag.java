@@ -1,6 +1,9 @@
 package src.main.game;
 
+import java.util.LinkedList;
 import java.util.Random;
+
+import src.main.game.players.CheatTileBag;
 
 public class NormalTileBag implements TileBagable {
     Tile[] tiles;
@@ -87,4 +90,7 @@ public class NormalTileBag implements TileBagable {
         if (isFull()) {throw new ArrayIndexOutOfBoundsException("Bag is full, cannot add another tile");}
         ++this.nextIndex;
     }
+
+    public NormalTileBag copy() {return new NormalTileBag(this.tiles.clone());}
+
 }

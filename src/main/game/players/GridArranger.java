@@ -30,13 +30,18 @@ public class GridArranger implements Copyable<GridArranger>{
     }
 
     @Override
+    // TODO document. DOES NOT COPY HAND?! GOOD CHOICE?
     public GridArranger copy() {
-        return new GridArranger(grid.copy(), hand.copy());
+        return new GridArranger(grid.copy(), hand); 
     }
 
     public Grid getGrid() {
         return this.grid;
     }
+
+    public Hand getHand() {return hand;}
+    
+    public void setHand(Hand hand) {this.hand = hand;}
 
     /**
      * If the grid is valid

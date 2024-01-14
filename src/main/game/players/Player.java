@@ -1,12 +1,10 @@
 package src.main.game.players;
 
-import src.data_structures.MultiSet;
 import src.main.game.Location;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Tile;
 import src.main.game.TileBagable;
-import src.main.game.WordsSet;
 import src.main.game.Copyable;
 
 // TODO make this a "non broker player" or something? Maybe seperate broker implementor or allow extending classes to do it themselves?
@@ -54,8 +52,15 @@ public class Player implements Copyable<Player> {
     }*/
 
     @Override
+    // TODO document. Note that this doesn't copy game
     public Player copy() {
-        return new Player(this.game, gridArranger.copy(), broker.copy());
+        GridArranger newGridArranger = gridArranger.copy();
+        AbstractBroker newBroker = broker.copy();
+        Hand newHand = this.getHand().copy(); // this way both broker and gridArranger have same hand
+        newGridArranger.setHand(newHand);
+        newBroker.setHand(newHand);
+        
+        return new Player(this.game, newGridArranger, newBroker);
     }
 
     public void setGame(Game g) {

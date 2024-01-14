@@ -16,6 +16,11 @@ public class Hand implements Copyable<Hand>, Iterable<Tile> {
     }
 
     @Override
+    public String toString() {
+        return this.hand.toString();
+    }
+    
+    @Override
     public int hashCode() {
         return this.hand.hashCode();
     }

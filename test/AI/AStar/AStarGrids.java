@@ -23,6 +23,8 @@ import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.BranchPlayers.BranchingPlayerSerial;
+import src.main.game.players.Hand;
+import src.main.game.players.HumanBroker;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
 
 class AStarGrids {
@@ -56,7 +58,8 @@ class AStarGrids {
         }
         NormalTileBag tileBag = new NormalTileBag(tiles, 1);
         
-        player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        // TODO fix this stupid way of setting up player objects
+        player = new BranchingPlayerSerial(null, new Grid(wordsSet), new HumanBroker(new Hand(), tileBag)); // game not needed for this test
         player.grabTile();
         player.grabTile();
         player.grabTile();
@@ -88,7 +91,8 @@ class AStarGrids {
             tiles[i] = new Tile(letters[i]);
         }
         NormalTileBag tileBag = new NormalTileBag(tiles, 1);
-        player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        
+        player = new BranchingPlayerSerial(null, new Grid(wordsSet), new HumanBroker(new Hand(), tileBag)); // game not needed for this test
         for (int i=0; i<letters.length; ++i) {player.grabTile();}
         System.out.println("Player Hand: " + player.getHand());
 

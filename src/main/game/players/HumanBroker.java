@@ -87,7 +87,8 @@ public class HumanBroker extends AbstractBroker {
     }
 
     @Override
+    // TODO document. NOTE THIS DOESN'T COPY HAND FOR THE PLAYER TO USE
     public HumanBroker copy() {
-        return new HumanBroker(hand, (NormalTileBag) bag);
+        return new HumanBroker(hand, (NormalTileBag) bag.copy());
     }
 }

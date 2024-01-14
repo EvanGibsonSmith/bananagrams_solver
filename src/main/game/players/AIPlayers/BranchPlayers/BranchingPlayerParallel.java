@@ -19,11 +19,7 @@ public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<Bran
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public BranchingPlayerParallel(Game game, Grid grid, AbstractBroker broker) {
-        super(game, grid, broker);
-    }
-
-    public BranchingPlayerParallel copy() {
-        return new BranchingPlayerParallel(super.game, this.getGrid().copy(), this.broker.copy());
+        super(game, grid, broker, true);
     }
 
     public Set<BranchingPlayerParallel> branchForward() {
@@ -50,4 +46,6 @@ public class BranchingPlayerParallel extends AbstractPlayerBranchingMethods<Bran
 
         return out;
     }
+
+
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 import src.main.game.Tile;
 import src.main.game.players.AbstractBroker;
 import src.main.game.players.GridArranger;
+import src.main.game.players.Hand;
 import src.main.game.players.Player;
 import src.main.AI.Branchable;
 import src.main.game.Game;
@@ -15,8 +16,9 @@ import src.main.game.Location;
 public abstract class AbstractBranchingPlayer extends Player implements Branchable<AbstractBranchingPlayer> {
 
     // TODO is it good that this handles the "implementation part of a broker?"
+    // TODO this should probably not take a grid and instead take a grid arranger
     public AbstractBranchingPlayer(Game game, Grid grid, AbstractBroker broker) {
-        super(game, new GridArranger(grid), broker);
+        super(game, new GridArranger(grid, broker.getHand()), broker); // TODO fix this weird hand this later? Is it needed?
     }
 
     /* TODO delete comment of constructors when AbstractBranchingPlayer
@@ -58,8 +60,4 @@ public abstract class AbstractBranchingPlayer extends Player implements Branchab
             super.getHand().remove(t);
         }
     }
-
-    @Override
-    public AbstractBranchingPlayer copy() {return copy();} // casts to AbstractBranchingPlayer
-
 }

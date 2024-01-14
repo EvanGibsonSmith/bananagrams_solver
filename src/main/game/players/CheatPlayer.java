@@ -18,9 +18,10 @@ public class CheatPlayer extends AIPlayer {
         //getPlayer().broker = new CheatBroker(new Hand()); // reach in and change broker type 
     }*/
 
-    public CheatPlayer(Class<? extends AbstractAStar<AbstractBranchingPlayer>> aStarClass, AbstractBranchingPlayer player) 
+    // TODO AbstractAStar has no generic so class type can be passed more easily. This ok?
+    public CheatPlayer(Class<? extends AbstractAStar> aStarClass, AbstractBranchingPlayer player) 
             throws Exception {
-        super(aStarClass, player);
+        super((Class<? extends AbstractAStar<AbstractBranchingPlayer>>) aStarClass, player);
     }
 
     /*

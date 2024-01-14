@@ -52,4 +52,6 @@ public class CheatTileBag implements TileBagable{
     public void clear() {queue.clear();}
 
     public void setBag(Queue<Tile> queue) {this.queue = queue;}
+
+    public CheatTileBag copy() {return new CheatTileBag(new LinkedList<Tile>(queue));}
 }

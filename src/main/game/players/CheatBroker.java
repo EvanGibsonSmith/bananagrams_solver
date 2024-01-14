@@ -34,7 +34,13 @@ public class CheatBroker extends AbstractBroker {
      * game
      * @return Tile grabbed, null if no tile could be grabbed (bag empty)
      */
-    public Tile grabTile() {return bag.grabTile();}
+    public Tile grabTile() {
+        if (bag.isEmpty()) {return null;} // edge case
+
+        Tile grabbedTile = bag.grabTile();
+        this.hand.add(grabbedTile); 
+        return grabbedTile;
+    }
 
     /**
      * Grabs number of tiles given bag and adds it to the players hand.
@@ -68,6 +74,7 @@ public class CheatBroker extends AbstractBroker {
     }
 
     @Override
+    // TODO DOCUMENT NOTE THIS DOESN'T COPY HAND SO PLAYER CAN DO IT
     public CheatBroker copy() {
         return new CheatBroker(hand);
     }

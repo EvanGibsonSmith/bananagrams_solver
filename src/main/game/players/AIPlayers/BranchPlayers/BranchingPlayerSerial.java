@@ -4,17 +4,12 @@ import java.util.Set;
 import src.main.game.players.AbstractBroker;
 import src.main.game.Game;
 import src.main.game.Grid;
-import src.main.game.TileBagable;
 
 // TODO eventually create an extension of this that has more "Normal" player constructors for the tests that works without explicitly passing in the broker?
 public class BranchingPlayerSerial extends AbstractPlayerBranchingMethods<BranchingPlayerSerial> {
 
     public BranchingPlayerSerial(Game game, Grid grid, AbstractBroker broker) {
-        super(game, grid, broker);
-    }
-
-    public BranchingPlayerSerial copy() {
-        return new BranchingPlayerSerial(super.game, this.getGrid().copy(), this.broker.copy());
+        super(game, grid, broker, false);
     }
 
     public Set<BranchingPlayerSerial> branchForward() {

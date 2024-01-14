@@ -6,18 +6,24 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import src.main.game.Copyable;
 import src.main.game.Game;
 import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
 import src.main.game.players.Hand;
+import src.main.game.players.Player;
 import src.main.game.players.AbstractBroker;
+import src.main.game.players.GridArranger;
 
 // visibility is only for other AIPlayer within this folder to use
+// TODO should something like this be static methods instead?
 abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends AbstractPlayerBranchingMethods<ExtendingBranchPlayer>> extends AbstractBranchingPlayer {
-    
-    public AbstractPlayerBranchingMethods(Game game, Grid grid, AbstractBroker broker) {
+    boolean isParallel; // used for copy, taking into account two cases
+
+    public AbstractPlayerBranchingMethods(Game game, Grid grid, AbstractBroker broker, boolean isParallel) {
         super(game, grid, broker);
+        this.isParallel = isParallel;
     }
     
     // TODO is no game constructor bad? maybe a dummy game object would be better
@@ -37,8 +43,6 @@ abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends Abst
     public AbstractPlayerBranchingMethods(Game game, Grid grid, TileBagable bag, Hand hand) {
         super(game, grid, bag, hand);
     }*/
-
-    public abstract ExtendingBranchPlayer copy();
 
     protected ArrayList<Integer> indexesOf(String word, String sub) {
         ArrayList<Integer> out = new ArrayList<>();
@@ -245,4 +249,14 @@ abstract class AbstractPlayerBranchingMethods<ExtendingBranchPlayer extends Abst
         out.addAll(branchBackward()); // just combine both directions
         return out;
     }   
+
+    // TODO a little too quick and dirty rather than breaking into fancy reflection Factory class?
+    @Override
+    // TODO this copy is bad
+    public ExtendingBranchPlayer copy() {
+        if (isParallel) {
+            return (ExtendingBranchPlayer) new BranchingPlayerParallel(game, getGrid().copy(), broker);
+        }
+        return (ExtendingBranchPlayer) new BranchingPlayerSerial(game, getGrid().copy(), broker);
+    }
 }
