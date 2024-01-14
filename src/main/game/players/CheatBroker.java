@@ -1,6 +1,5 @@
 package src.main.game.players;
 
-import java.util.LinkedList;
 import java.util.Queue;
 
 import src.main.game.Tile;
@@ -10,12 +9,11 @@ public class CheatBroker extends AbstractBroker {
     CheatTileBag bag = new CheatTileBag(); // essentially a queue that can be changed by user
 
     public CheatBroker(Hand hand) {
-        super(hand);
+        super(hand, new CheatTileBag());
     }
 
     public CheatBroker(Hand hand, Queue<Tile> queue) {
-        super(hand);
-        this.bag = new CheatTileBag(queue);
+        super(hand, new CheatTileBag(queue));
     }
 
     /**

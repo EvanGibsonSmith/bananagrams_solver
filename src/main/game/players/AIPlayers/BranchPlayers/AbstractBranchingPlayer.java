@@ -3,10 +3,8 @@ package src.main.game.players.AIPlayers.BranchPlayers;
 import java.util.Set;
 
 import src.main.game.Tile;
-import src.main.game.TileBagable;
-import src.main.game.NormalTileBag;
-import src.main.game.players.HumanBroker;
-import src.main.game.players.Hand;
+import src.main.game.players.AbstractBroker;
+import src.main.game.players.GridArranger;
 import src.main.game.players.Player;
 import src.main.AI.Branchable;
 import src.main.game.Game;
@@ -16,14 +14,12 @@ import src.main.game.Location;
 // TODO should be protected since the AIPlayer is all that uses it?
 public abstract class AbstractBranchingPlayer extends Player implements Branchable<AbstractBranchingPlayer> {
 
-    // TODO this seems bad. Maybe a dummy game to not need these constructors for when game is null
-    public AbstractBranchingPlayer(Grid grid, TileBagable bag) {
-        super(null, grid, bag);
-
-        // TODO kind of dumb that this broker implementation gets overridden by AIPlayer or fine?
-        super.broker = new HumanBroker(new Hand(), (NormalTileBag) bag); // TODO ridiculous cast
+    // TODO is it good that this handles the "implementation part of a broker?"
+    public AbstractBranchingPlayer(Game game, Grid grid, AbstractBroker broker) {
+        super(game, new GridArranger(grid), broker);
     }
 
+    /* TODO delete comment of constructors when AbstractBranchingPlayer
     // TODO another bad no game constructor
     public AbstractBranchingPlayer(Grid grid, TileBagable bag, Hand hand) {
         super(null, grid, bag);
@@ -45,6 +41,7 @@ public abstract class AbstractBranchingPlayer extends Player implements Branchab
         // TODO kind of dumb that this broker implementation gets overridden by AIPlayer or fine?
         super.broker = new HumanBroker(new Hand(), game);
     }
+    */
 
     public abstract Set<? extends AbstractBranchingPlayer> branch();
     

@@ -1,7 +1,5 @@
 package src.main.game.players;
 
-import java.util.Collection;
-
 import src.main.game.Copyable;
 import src.main.game.Tile;
 import src.main.game.TileBagable;
@@ -9,9 +7,11 @@ import src.main.game.TileBagable;
 // TODO document
 public abstract class AbstractBroker implements Copyable<AbstractBroker> {
     Hand hand;
+    TileBagable bag;
 
-    public AbstractBroker(Hand hand) {
+    public AbstractBroker(Hand hand, TileBagable tileBag) {
         this.hand = hand;
+        this.bag = tileBag;
     }
 
     abstract public Tile grabTile();

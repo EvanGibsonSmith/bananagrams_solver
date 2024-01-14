@@ -1,23 +1,26 @@
 package src.main.game.players;
 
 import src.main.AI.AStar.AbstractAStar;
-import src.main.game.Game;
-import src.main.game.NormalTileBag;
 import src.main.game.players.AIPlayers.AIPlayer;
 import src.main.game.players.AIPlayers.BranchPlayers.AbstractBranchingPlayer;
-
-import java.util.HashSet;
 
 // CheatPlayer essentially just switches out the CheatBroker object for broker used when interacting with a real life game
 public class CheatPlayer extends AIPlayer {
     
-    public CheatPlayer(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
-                       Class<? extends AbstractAStar> astarClass, // TODO fix generics. This helped passing in arguments though
+    // TOOD maybe CheatPlayer can use the branching factory to create a player for AIPlayer in this constructor
+    /*public CheatPlayer(Class<? extends AbstractBranchingPlayer> branchingPlayerClass, 
+                       Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass, // TODO fix generics. This helped passing in arguments though
                        HashSet<String> words) throws Exception {
+        super(branchingPlayerClass, astarClass, null, null, null);
         // no game needed since CheatPlayer is for real life games, no bag since we override broker
-        super(branchingPlayerClass, astarClass, null, words, null);  
+        //super(branchingPlayerClass, astarClass, null, words, null);  
         // TODO bad to "Reach" into player to swtich out Broker when player should be high level anyway
-        getPlayer().broker = new CheatBroker(new Hand()); // reach in and change broker type 
+        //getPlayer().broker = new CheatBroker(new Hand()); // reach in and change broker type 
+    }*/
+
+    public CheatPlayer(Class<? extends AbstractAStar<AbstractBranchingPlayer>> aStarClass, AbstractBranchingPlayer player) 
+            throws Exception {
+        super(aStarClass, player);
     }
 
     /*
@@ -32,7 +35,7 @@ public class CheatPlayer extends AIPlayer {
     }
 
     // TODO maybe make the methods accessed here do through a more develeped AIPlayer instead of just grabbing the object itself
-    public AbstractAStar getAStar() {
+    public AbstractAStar<AbstractBranchingPlayer> getAStar() {
         return super.aStar;
     }
 }

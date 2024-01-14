@@ -9,7 +9,8 @@ import java.util.Set;
 
 import src.main.game.Copyable;
 
-class GridArranger implements Copyable<GridArranger>{
+// TODO probably will change visibility when packages are reorganized
+public class GridArranger implements Copyable<GridArranger>{
     Grid grid;
     Hand hand; // represents hand player has and how much of each tile
 

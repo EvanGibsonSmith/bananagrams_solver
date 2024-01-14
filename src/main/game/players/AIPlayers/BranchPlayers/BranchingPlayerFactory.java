@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import src.main.Buildable;
 import src.main.game.Game;
 import src.main.game.Grid;
-import src.main.game.NormalTileBag;
 import src.main.game.TileBagable;
 
 // TODO create a general factory abstract class?
