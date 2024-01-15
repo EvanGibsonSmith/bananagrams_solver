@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import src.main.game.players.GridArranger;
-import src.main.game.players.Hand;
-import src.main.game.players.HumanBroker;
-import src.main.game.players.Player;
+import src.main.game.players.bags.NormalTileBag;
+import src.main.game.players.brokers.HumanBroker;
+import src.main.game.players.gridarrangers.GridArranger;
+import src.main.game.players.hand.Hand;
+import src.main.game.players.types.Player;
+import src.main.game.wordssets.WordsSet;
 
 public class Game {
     NormalTileBag bag = defaultTileBag();
