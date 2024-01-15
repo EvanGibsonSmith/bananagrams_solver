@@ -53,9 +53,6 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
     }
 
     // TODO DRY between these two? Create a small helper class for them both to use this
-    // this method runs in all of the constructors for this method and performs the A*. 
-    // it is not in the constructor itself since the type and size of pq needs to be defined before this runs
-    // and a call to another constructor must be the first line of another constuctor.
     public void compute() {
         objects.put(0, start); // set index 0 to start
         indexes.put(start, 0); // set index 0 to start

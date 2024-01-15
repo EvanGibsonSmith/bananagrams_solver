@@ -32,9 +32,6 @@ public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
         this.pq = new IndexMinPQ<>(size); // define the set size here
     }
     
-    // this method runs in all of the constructors for this method and performs the A*. 
-    // it is not in the constructor itself since the type and size of pq needs to be defined before this runs
-    // and a call to another constructor must be the first line of another constuctor.
     public void compute() {
         objects.add(start); // set index 0 to start
         indexes.put(start, 0);
