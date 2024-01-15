@@ -1,9 +1,9 @@
 package src.main.game.players.gridarrangers;
 
 import src.interfaces.Copyable;
-import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 import src.main.game.players.hand.Hand;
 
 import java.util.HashSet;

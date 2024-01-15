@@ -3,6 +3,7 @@ package src.main.game.players.bags;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import src.interfaces.TileBagable;
 import src.main.game.Tile;
@@ -24,6 +25,14 @@ public class CheatTileBag implements TileBagable{
 
     public CheatTileBag(Queue<Tile> queue) {
         this.queue = queue;
+    }
+
+    public CheatTileBag(char[] chars) {
+        Queue<Tile> newQueue = new LinkedList<>();
+        for (char c: chars) {
+            newQueue.add(new Tile(c));
+        }
+        this.queue = newQueue;
     }
 
     public CheatTileBag(Queue<Tile> queue, int capacity) {

@@ -1,9 +1,9 @@
 package src.main.game.players.brokers;
 
+import src.main.game.Game;
 import src.main.game.Tile;
 import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.hand.Hand;
-import src.main.game.Game;
 
 // TODO public?!
 public class HumanBroker extends AbstractBroker {

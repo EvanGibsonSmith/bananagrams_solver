@@ -5,7 +5,7 @@ import java.lang.reflect.Constructor;
 import src.interfaces.Buildable;
 import src.interfaces.TileBagable;
 import src.main.game.Game;
-import src.main.game.Grid;
+import src.main.game.grids.Grid;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 
 // TODO create a general factory abstract class?

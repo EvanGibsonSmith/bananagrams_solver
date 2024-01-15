@@ -1,4 +1,4 @@
-package src.main.game;
+package src.main.game.grids;
 
 import java.util.HashSet;
 import java.util.Queue;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 import src.data_structures.MultiSet;
+import src.main.game.Location;
+import src.main.game.Tile;
 import src.main.game.wordssets.WordsSet;
 
 public class Grid {
@@ -171,8 +173,8 @@ public class Grid {
         String out = "";
         if (topLeft==null || bottomRight==null) {return "";}
 
-        int rowMin = topLeft.row; int rowMax = bottomRight.row;
-        int colMin = topLeft.column; int colMax = bottomRight.column;
+        int rowMin = topLeft.getRow(); int rowMax = bottomRight.getRow();
+        int colMin = topLeft.getColumn(); int colMax = bottomRight.getColumn();
         for (int row=rowMin; row<=rowMax; ++row) {
             for (int col=colMin; col<=colMax; ++col) {
                 Location thisLoc = new Location(row, col);

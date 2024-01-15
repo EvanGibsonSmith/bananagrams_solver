@@ -18,9 +18,9 @@ import java.util.function.Function;
 
 import src.algorithms.astar.AStarArrayList;
 import src.algorithms.astar.AStarHashSets;
-import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 import src.main.game.players.brokers.HumanBroker;
 import src.main.game.players.hand.Hand;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;

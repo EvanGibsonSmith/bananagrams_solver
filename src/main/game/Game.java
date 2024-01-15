@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import src.main.game.grids.Grid;
 import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.brokers.HumanBroker;
 import src.main.game.players.gridarrangers.GridArranger;

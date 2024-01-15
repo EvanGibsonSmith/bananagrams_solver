@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.BiFunction;
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.brokers.AbstractBroker;
 import src.main.game.players.brokers.HumanBroker;
 import src.main.game.players.gridarrangers.GridArranger;
 import src.main.game.players.hand.Hand;
 import src.main.game.Game;
-import src.main.game.Grid;
 import src.main.game.Location;
 
 public class BranchingPlayerSerial extends AbstractBranchingPlayer {

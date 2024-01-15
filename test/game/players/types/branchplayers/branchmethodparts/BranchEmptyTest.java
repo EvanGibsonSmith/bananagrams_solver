@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
-import src.main.game.Grid;
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 import src.main.game.players.types.branchplayers.BranchingPlayerSerial;

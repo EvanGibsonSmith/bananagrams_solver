@@ -6,6 +6,7 @@ import src.algorithms.astar.AbstractAStar;
 import src.main.game.players.brokers.CheatBroker;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 
+// TODO have this be a super class of CheatPlayer so that CheatPlayer can just be a specific heuristic of this?
 // CheatPlayer essentially just switches out the CheatBroker object for broker used when interacting with a real life game
 public class CheatPlayerHeuristicWrapper extends CheatPlayerWrapper {
 

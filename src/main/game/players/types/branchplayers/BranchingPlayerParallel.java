@@ -13,8 +13,8 @@ import java.util.function.Function;
 import java.util.function.BiFunction;
 
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 import src.main.game.Game;
-import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.brokers.AbstractBroker;

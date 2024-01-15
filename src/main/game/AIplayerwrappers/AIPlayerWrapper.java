@@ -78,11 +78,17 @@ public abstract class AIPlayerWrapper {
         return aStar.getGoal();
     }
 
+    // TODO is this reasonable or a bad workaround when public?
+    private void setStart() {
+        aStarFactory.setStart(player);
+        // make astar attached to this new player TODO instead of creating new object
+    }
+
     public void playSolution() {
         player = solveGrid();
         // TODO is building another A* good? It's not that inefficient since this isn't involved 
         // in the branching actions and it makes sense for A* to not be able to change
-        aStarFactory.setStart(player); // make astar attached to this new player TODO instead of creating new object
+        setStart();
         // not building new a star so info from this one cam be seen
     }
 }

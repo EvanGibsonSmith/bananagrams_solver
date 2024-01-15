@@ -23,6 +23,8 @@ public class CheatBroker extends AbstractBroker {
         super(hand, new CheatTileBag(queue));
     }
 
+    public void setHand(Hand hand) {this.hand=hand;}
+
     public boolean queueEmpty() {return bag.isEmpty();}
     /**
      * TODO DOCUMENT
@@ -39,6 +41,11 @@ public class CheatBroker extends AbstractBroker {
             newTileQueue.add(new Tile(c));
         }
         ((CheatTileBag) bag).setBag(newTileQueue);
+    }
+
+    // TODO document
+    public void forceAddTile(Tile t) {
+        hand.add(t);
     }
 
     // TODO add grabTile() for tile that allows a tile to just be force placed into hand

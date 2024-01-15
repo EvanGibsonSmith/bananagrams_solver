@@ -3,9 +3,9 @@ package test.game.AIplayerwrappers;
 import org.junit.jupiter.api.Test;
 
 import src.algorithms.astar.AStarArrayList;
-import src.main.game.Grid;
 import src.main.game.Tile;
 import src.main.game.AIplayerwrappers.CheatPlayerWrapper;
+import src.main.game.grids.Grid;
 import src.main.game.players.brokers.AbstractBroker;
 import src.main.game.players.brokers.CheatBroker;
 import src.main.game.players.hand.Hand;

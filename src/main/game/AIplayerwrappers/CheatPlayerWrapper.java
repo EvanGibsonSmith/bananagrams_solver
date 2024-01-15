@@ -8,6 +8,7 @@ import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 public class CheatPlayerWrapper extends AIPlayerWrapper {
 
     // TODO AbstractAStar has no generic so class type can be passed more easily. This ok?
+    // TODO need to make an actual CheatPlayer that has the weird broker?
     public CheatPlayerWrapper(Class<? extends AbstractAStar> aStarClass, AbstractBranchingPlayer player) 
             throws Exception {
         super((Class<? extends AbstractAStar<AbstractBranchingPlayer>>) aStarClass, player);

@@ -25,6 +25,19 @@ public class NormalTileBag implements TileBagable {
         this.random = new Random();
     }
 
+    // TODO document/is tihs a good constructor or should it be more of a method?
+    public NormalTileBag(char[] chars) {
+        Tile[] newTiles = new Tile[chars.length];
+        for (int i=0; i<chars.length; ++i) {
+            newTiles[i] = new Tile(chars[i]);
+        }
+        this.tiles = newTiles;
+        this.maxSize = tiles.length;
+        // since bag begins full nextIndex is the length
+        this.nextIndex = tiles.length;
+        this.random = new Random();
+    }
+
     public NormalTileBag(Tile[] tiles, int seed) {
         this(tiles);
         this.random = new Random(seed);

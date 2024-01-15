@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import src.data_structures.MultiSet;
-import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

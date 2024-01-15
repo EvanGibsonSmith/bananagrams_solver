@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
-import src.main.game.Grid;
 import src.main.game.Location;
 import src.main.game.Tile;
+import src.main.game.grids.Grid;
 import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.types.branchplayers.BranchingPlayerSerial;
 import src.data_structures.MultiSet;
