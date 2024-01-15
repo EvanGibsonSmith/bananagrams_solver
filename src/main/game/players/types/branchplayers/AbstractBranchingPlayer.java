@@ -5,7 +5,6 @@ import java.util.Set;
 import src.main.game.Tile;
 import src.main.game.players.brokers.AbstractBroker;
 import src.main.game.players.gridarrangers.GridArranger;
-import src.main.game.players.hand.Hand;
 import src.main.game.players.types.Player;
 import src.interfaces.Branchable;
 import src.main.game.Game;

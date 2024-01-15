@@ -29,7 +29,6 @@ public class BranchingPlayerFactory implements Buildable<AbstractBranchingPlayer
 
     // TODO fix this up so it actually builds well and takes in build parameters
     public AbstractBranchingPlayer build() throws Exception {
-        // TODO For testing 
         return constructor.newInstance(game, grid, bag); // TODO fix generics so this can be nicer.
     }
 }

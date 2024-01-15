@@ -8,8 +8,6 @@ import java.util.function.Function;
 import src.algorithms.astar.AbstractAStar;
 import src.interfaces.Branchable;
 import src.interfaces.Buildable;
-import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
-import src.main.game.players.types.branchplayers.BranchingPlayerParallel;
 
 // TODO create a general factory abstract class? These two factories are too similar....
 public class AStarFactory<T extends Branchable<T>> implements Buildable<AbstractAStar<T>> {
