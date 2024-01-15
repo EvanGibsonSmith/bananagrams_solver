@@ -1,16 +1,21 @@
 package src.main.game.AIplayerwrappers;
 
+import java.util.function.Function;
+
 import src.algorithms.astar.AbstractAStar;
 import src.main.game.players.brokers.CheatBroker;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 
 // CheatPlayer essentially just switches out the CheatBroker object for broker used when interacting with a real life game
-public class CheatPlayerWrapper extends AIPlayerWrapper {
+public class CheatPlayerHeuristicWrapper extends CheatPlayerWrapper {
 
     // TODO AbstractAStar has no generic so class type can be passed more easily. This ok?
-    public CheatPlayerWrapper(Class<? extends AbstractAStar> aStarClass, AbstractBranchingPlayer player) 
-            throws Exception {
+    public CheatPlayerHeuristicWrapper(Class<? extends AbstractAStar> aStarClass, 
+                                       AbstractBranchingPlayer player,
+                                       Function<AbstractBranchingPlayer, Double> heuristic) 
+                    throws Exception {
         super((Class<? extends AbstractAStar<AbstractBranchingPlayer>>) aStarClass, player);
+        super.heuristic = heuristic;
     }
 
     /*
