@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import src.data_structures.MultiSet;
+import src.main.game.wordssets.WordsSet;
 
 public class Grid {
     protected Location topLeft = null;

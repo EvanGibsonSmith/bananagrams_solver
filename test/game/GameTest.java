@@ -8,14 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import src.data_structures.MultiSet;
-import src.main.game.player.Hand;
 import src.main.game.Game;
 import src.main.game.Location;
 import src.main.game.Tile;
-import src.main.game.TileBag;
-import src.main.game.WordsSet;
-import src.main.game.player.Player;
+import src.main.game.players.bags.NormalTileBag;
+import src.main.game.players.hand.Hand;
+import src.main.game.players.types.Player;
+import src.main.game.wordssets.WordsSet;
 
 class GameTest {
 
@@ -28,19 +27,19 @@ class GameTest {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 3314159);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 3314159);
         assertEquals(tileBag.toString(), "a b c d e");
         Game game = new Game(3, tileBag, new WordsSet()); // words are not important for this test
 
         game.peel();
         ArrayList<Hand> playerTile = new ArrayList<>(); // each player will have one tile
-        ArrayList<TileBag> playerBags = new ArrayList<>(); 
+        ArrayList<NormalTileBag> playerBags = new ArrayList<>(); 
         for (Player p: game.getPlayers()) {
-            playerBags.add(p.getBag());
+            playerBags.add((NormalTileBag) p.getBag());
             playerTile.add(p.getHand());
         }
 
-        assertEquals(new HashSet<TileBag>(playerBags).size(), 1); // checks that all the bags are the same (as set size is therefore 1)
+        assertEquals(new HashSet<NormalTileBag>(playerBags).size(), 1); // checks that all the bags are the same (as set size is therefore 1)
         assertEquals(new HashSet<Hand>(playerTile).size(), 3); // every tile should be unique for each player
     }
 
@@ -56,7 +55,7 @@ class GameTest {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 3314159);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 3314159);
         Game game = new Game(2, tileBag, validWords); // words are not important for this test
         Player[] players = game.getPlayers();
 
@@ -145,7 +144,7 @@ class GameTest {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 314159);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 314159);
         Game game = new Game(2, tileBag, validWords); // words are not important for this test
 
         // start game, give each player three tiles
@@ -185,7 +184,7 @@ class GameTest {
         for (int i=0; i<letters.length; ++i) {
             tiles[i] = new Tile(letters[i]);
         }
-        TileBag tileBag = new TileBag(tiles, 271828);
+        NormalTileBag tileBag = new NormalTileBag(tiles, 271828);
         Game game = new Game(2, tileBag, validWords); // words are not important for this test
 
         // start game, give each player three tiles
