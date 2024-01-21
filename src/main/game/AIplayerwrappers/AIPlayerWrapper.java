@@ -12,9 +12,10 @@ import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 // TODO create an interface for some of the player methods this is required to implement
 // TODO make abstract since it doesn't handle the broker in any way?
 public abstract class AIPlayerWrapper {
-    protected final BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();   
+    // TODO make the cost and heuristic final by assigning them within a private blank constructor 
+    protected BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();   
     protected Function<AbstractBranchingPlayer, Double> heuristic = (p) -> (double) p.getHand().size(); // TODO made this not final for potential setting in extending classes. Better way?
-    protected final Function<AbstractBranchingPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
+    protected Function<AbstractBranchingPlayer, Boolean> isGoal = (p) -> p.getHand().size()==0;
 
     protected AStarFactory<AbstractBranchingPlayer> aStarFactory;
     protected AbstractAStar<AbstractBranchingPlayer> aStar; // specific class for implementation of these is given as parameter

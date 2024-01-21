@@ -1,19 +1,12 @@
-package src.main.game.AIplayerwrappers;
+package src.main.run;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 import src.algorithms.astar.AStarArrayList;
-import src.main.game.Game;
 import src.main.game.Tile;
+import src.main.game.AIplayerwrappers.CheatPlayerWrapper;
 import src.main.game.grids.DefaultGrid;
-import src.main.game.grids.Grid;
-import src.main.game.players.bags.CheatTileBag;
-import src.main.game.players.bags.NormalTileBag;
 import src.main.game.players.brokers.CheatBroker;
-import src.main.game.players.brokers.HumanBroker;
 import src.main.game.players.hand.Hand;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 import src.main.game.players.types.branchplayers.BranchingPlayerSerial;
@@ -35,6 +28,7 @@ public class RunCheatPlayer {
         while (true) {
             System.out.println("Press enter to solve");
             scnr.nextLine();
+            System.out.println("Solving...");
             cheatPlayer.playSolution();
             // display the result now that player has updated to solution
             System.out.println("Hand: " + cheatPlayer.getBroker().getHand());

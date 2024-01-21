@@ -1,6 +1,7 @@
 package src.main.game.AIplayerwrappers;
 
 import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import src.algorithms.astar.AbstractAStar;
 import src.main.game.players.brokers.CheatBroker;
@@ -8,15 +9,17 @@ import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 
 // TODO have this be a super class of CheatPlayer so that CheatPlayer can just be a specific heuristic of this?
 // CheatPlayer essentially just switches out the CheatBroker object for broker used when interacting with a real life game
-public class CheatPlayerHeuristicWrapper extends CheatPlayerWrapper {
+public class CheatPlayerManualAStarWrapper extends CheatPlayerWrapper {
 
     // TODO AbstractAStar has no generic so class type can be passed more easily. This ok?
-    public CheatPlayerHeuristicWrapper(Class<? extends AbstractAStar> aStarClass, 
+    public CheatPlayerManualAStarWrapper(Class<? extends AbstractAStar> aStarClass, 
                                        AbstractBranchingPlayer player,
-                                       Function<AbstractBranchingPlayer, Double> heuristic) 
+                                       Function<AbstractBranchingPlayer, Double> heuristic,
+                                       BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost) 
                     throws Exception {
         super((Class<? extends AbstractAStar<AbstractBranchingPlayer>>) aStarClass, player);
         super.heuristic = heuristic;
+        super.cost = cost;
     }
 
     /*

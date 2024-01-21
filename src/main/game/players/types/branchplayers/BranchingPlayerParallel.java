@@ -41,7 +41,7 @@ public class BranchingPlayerParallel extends AbstractBranchingPlayer {
     public BranchingPlayerParallel copy() {
         GridArranger newGridArranger = gridArranger.copy();
         AbstractBroker newBroker = broker.copy();
-        Hand newHand = this.getHand().copy(); // this way both broker and gridArranger have same hand
+        Hand newHand = this.getHand().copy(); // both broker and gridArranger point to same hand object
         newGridArranger.setHand(newHand);
         newBroker.setHand(newHand);
         
@@ -53,7 +53,7 @@ public class BranchingPlayerParallel extends AbstractBranchingPlayer {
         int start = 0;
         while (start!=-1) {
             int newIndex = word.indexOf(sub, start);
-            if (newIndex==-1) {break;}; // if new index is "real index" add
+            if (newIndex==-1) {break;}; // if new index isnt present
             out.add(newIndex);
             start = newIndex+sub.length();
         }

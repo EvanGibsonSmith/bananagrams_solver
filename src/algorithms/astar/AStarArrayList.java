@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.function.BiFunction;
 
-// TODO should we store the computed solution so it doesn't have to be recomputed?? Might be nice, but necessary?
 public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
     ArrayList<Integer> from = new ArrayList<>(); // where each grid is "from" in result, used to trace path
     ArrayList<T> objects = new ArrayList<>(); // creates correspondance between indexes in IndexMinPQ and grid objects

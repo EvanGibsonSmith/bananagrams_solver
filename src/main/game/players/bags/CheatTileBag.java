@@ -3,7 +3,6 @@ package src.main.game.players.bags;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 
 import src.interfaces.TileBagable;
 import src.main.game.Tile;
