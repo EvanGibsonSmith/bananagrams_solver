@@ -20,7 +20,6 @@ public class RunCheatPlayer {
         CheatBroker initialCheatBroker = new CheatBroker(new Hand());
         AbstractBranchingPlayer branchablePlayer = new BranchingPlayerSerial(null, new DefaultGrid(), initialCheatBroker);
         CheatPlayerWrapper cheatPlayer = new CheatPlayerWrapper(AStarArrayList.class, branchablePlayer);
-
         System.out.println("Please put in the initial bananagrams characters you drew:");
         Hand initialHand = new Hand(scnr.nextLine().toCharArray());
         initialCheatBroker.setHand(initialHand);
@@ -29,7 +28,9 @@ public class RunCheatPlayer {
             System.out.println("Press enter to solve");
             scnr.nextLine();
             System.out.println("Solving...");
+            long startTimeMilliseconds = System.currentTimeMillis();
             cheatPlayer.playSolution();
+            System.out.println("Time for this step: " + (System.currentTimeMillis() - startTimeMilliseconds));
             // display the result now that player has updated to solution
             System.out.println("Hand: " + cheatPlayer.getBroker().getHand());
             System.out.println("Grid: \n" + cheatPlayer.getPlayer().getGrid());

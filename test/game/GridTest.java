@@ -140,6 +140,21 @@ public class GridTest {
         assertEquals(g.getTile(new Location(0, 0)), new Tile('a'));
     }
     
+    @Test 
+    void twoLetterWordValid() {
+        HashSet<String> wordsSet = new HashSet<String>();
+        wordsSet.add("it");
+        wordsSet.add("qi");
+
+        Grid g = new Grid(wordsSet); // words not important for this test
+        g.placeUnsafe(new Location(0, 0), new Tile('q'));
+        g.placeUnsafe(new Location(1, 0), new Tile('i'));
+        g.placeUnsafe(new Location(1, 1), new Tile('t'));
+
+        System.out.println(g);
+        assertTrue(g.validWords());
+    }
+    
     @Test
     void copyTest() {
         Grid g1 = new Grid(new HashSet<>());

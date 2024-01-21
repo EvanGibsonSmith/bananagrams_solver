@@ -67,6 +67,5 @@ class BranchForwardTest {
 
         assertEquals(nextPlayers.size(), 0);   
     }
-
 }
 

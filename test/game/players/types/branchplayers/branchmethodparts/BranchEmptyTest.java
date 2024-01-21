@@ -79,4 +79,37 @@ public class BranchEmptyTest {
         expectedHands.add(new MultiSet<Character>(new Character[] {'a', 'c', 'a', 't'})); // played pat
         assertEquals(BranchMethodsTest.getAllHandsCharacters(nextPlayers), expectedHands);
     }
+
+    @Test 
+    void singleTwoLetterWord() {
+        HashSet<String> wordsSet = new HashSet<String>();
+        wordsSet.add("as");
+        wordsSet.add("cat");
+
+        char[] letters = "as".toCharArray();
+        Tile[] tiles = new Tile[letters.length];
+        for (int i=0; i<letters.length; ++i) {
+            tiles[i] = new Tile(letters[i]);
+        }
+        NormalTileBag tileBag = new NormalTileBag(tiles, 1);
+        
+        AbstractBranchingPlayer player = new BranchingPlayerSerial(null, new Grid(wordsSet), tileBag); // game not needed for this test
+        player.grabTile();
+        player.grabTile();
+
+        System.out.println(player.getGrid());
+        Set<? extends AbstractBranchingPlayer> nextPlayers = player.branch(); // the overall branch function should just call branchEmpty right now
+        
+        for (AbstractBranchingPlayer p: nextPlayers) {
+            System.out.println(p.getGrid());
+        }
+
+        assertEquals(nextPlayers.size(), 2);
+        MultiSet<MultiSet<String>> expected = new MultiSet<MultiSet<String>>();
+        expected.add(new MultiSet<String>(new String[] {"as"}));
+        expected.add(new MultiSet<String>(new String[] {"as"}));
+
+        BranchMethodsTest.getAllWordsPlayed(nextPlayers);
+        assertEquals(BranchMethodsTest.getAllWordsPlayed(nextPlayers), expected);
+    }
 }

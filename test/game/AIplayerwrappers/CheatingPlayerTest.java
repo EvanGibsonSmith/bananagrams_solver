@@ -33,9 +33,7 @@ public class CheatingPlayerTest {
             scnr.useDelimiter("\n");
             while (scnr.hasNext()) {
                 String next = scnr.next();
-                if (next.length()-1>2) {
-                    wordsSet.add(next.substring(0, next.length()-1));
-                }
+                wordsSet.add(next.substring(0, next.length()-1));
             }
         }
         catch (FileNotFoundException e) {
@@ -112,6 +110,7 @@ public class CheatingPlayerTest {
         }
         System.out.println("Total Time " + (System.currentTimeMillis()-totalTimeStart));
     }
+
     @Test
     void cheatingPlayerEmptyBoardThreeWordsAway() {
         setupPlayer1();
@@ -132,6 +131,19 @@ public class CheatingPlayerTest {
         }
         // now hand has actually been playerd so it's empty
         assertTrue(player.getBroker().getHand().isEmpty());
+    }
+
+    @Test
+    void singleTwoLetterWord() throws Exception {
+        char[] letters = "as".toCharArray();
+        
+        HashSet<String> wordsSet = getScrabbleWords();
+        // setup player
+        AbstractBroker broker = new CheatBroker(new Hand(letters));
+        AbstractBranchingPlayer playerPart = new BranchingPlayerSerial(null, new Grid(wordsSet), broker);
+        player = new CheatPlayerWrapper(AStarArrayList.class, playerPart); // game not needed for this test
+
+        runTestPrintOut();
     }
     
     @Test

@@ -8,7 +8,6 @@ import java.util.function.Function;
 import src.algorithms.astar.AStarArrayList;
 import src.main.game.Tile;
 import src.main.game.AIplayerwrappers.CheatPlayerManualAStarWrapper;
-import src.main.game.AIplayerwrappers.CheatPlayerWrapper;
 import src.main.game.grids.DefaultGrid;
 import src.main.game.players.brokers.CheatBroker;
 import src.main.game.players.hand.Hand;
@@ -62,7 +61,9 @@ public class RunScrabbleHeuristicCheatPlayer {
             System.out.println("Press enter to solve");
             scnr.nextLine();
             System.out.println("Solving...");
+            long startTimeMilliseconds = System.currentTimeMillis();
             cheatPlayer.playSolution();
+            System.out.println("Time for this step: " + (System.currentTimeMillis() - startTimeMilliseconds));
             // display the result now that player has updated to solution
             System.out.println("Hand: " + cheatPlayer.getBroker().getHand());
             System.out.println("Grid: \n" + cheatPlayer.getPlayer().getGrid());
