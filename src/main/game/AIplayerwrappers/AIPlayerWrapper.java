@@ -11,7 +11,7 @@ import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 // TODO rename from AIPlayer since this doesn't extend player?
 // TODO create an interface for some of the player methods this is required to implement
 // TODO make abstract since it doesn't handle the broker in any way?
-public abstract class AIPlayerWrapper {
+public class AIPlayerWrapper {
     // TODO make the cost and heuristic final by assigning them within a private blank constructor 
     protected BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost = (p, q) -> (double) q.getHand().size() - p.getHand().size();   
     protected Function<AbstractBranchingPlayer, Double> heuristic = (p) -> (double) p.getHand().size(); // TODO made this not final for potential setting in extending classes. Better way?
@@ -21,10 +21,13 @@ public abstract class AIPlayerWrapper {
     protected AbstractAStar<AbstractBranchingPlayer> aStar; // specific class for implementation of these is given as parameter
     protected AbstractBranchingPlayer player; // the player created (type determines how branch works)
 
-    public AIPlayerWrapper(Class<? extends AbstractAStar<AbstractBranchingPlayer>> astarClass, AbstractBranchingPlayer player) 
+    // TODO the aStarClass should extend AbstractAStar<AbstractBranchingPlayer> but passing generics 
+    // in classes doesn't really work. If possible try and find a workaround.
+    public AIPlayerWrapper(Class<? extends AbstractAStar> astarClass, AbstractBranchingPlayer player) 
                         throws Exception {
         this.player = player;
-        aStarFactory = new AStarFactory<AbstractBranchingPlayer>(astarClass, player, cost, heuristic, isGoal);
+        // because of this generic issue for passing classes cast to proper type here.
+        aStarFactory = new AStarFactory<AbstractBranchingPlayer>((Class<? extends AbstractAStar<AbstractBranchingPlayer>>) astarClass, player, cost, heuristic, isGoal);
         aStar = aStarFactory.build();
     }
 
