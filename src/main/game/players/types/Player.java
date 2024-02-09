@@ -13,6 +13,7 @@ import src.main.game.players.hand.Hand;
 // TODO make this a "non broker player" or something? Maybe seperate broker implementor or allow extending classes to do it themselves?
 public class Player implements Copyable<Player> {
     protected Game game;
+    // TODO make gridArranger and broker protected getter methods instead of fields
     protected GridArranger gridArranger; // TODO maybe broker could be better and not have to be passed to extending classes
     protected AbstractBroker broker; // TODO needs to be some extension a general broker?
 

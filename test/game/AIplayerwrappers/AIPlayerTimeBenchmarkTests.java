@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import src.algorithms.astar.AStarArrayList;
 import src.interfaces.TileBagable;
 import src.main.game.AIplayerwrappers.AIPlayerWrapper;
+import src.main.game.AIplayerwrappers.AIPlayerWrapperDefaultHeuristic;
 import src.main.game.grids.DefaultGrid;
 import src.main.game.players.bags.DefaultTileBag;
 import src.main.game.players.brokers.AbstractBroker;
@@ -18,13 +19,13 @@ public class AIPlayerTimeBenchmarkTests {
 
     @Test
     void runOneHand() throws Exception {
-        final int HAND_SIZE = 30;
+        final int HAND_SIZE = 40;
         // TODO NUM_PLAYERS has some kind of bug because it works when I remove it
         final boolean VERBOSE = true; // if the grids at each step will be printed out
         // setup player
         AbstractBroker broker = new HumanBroker(new Hand(), new DefaultTileBag()); // TODO create DefaultHumanBroker?
         AbstractBranchingPlayer playerPart = new BranchingPlayerSerial(null, new DefaultGrid(), broker);
-        player = new AIPlayerWrapper(AStarArrayList.class, playerPart); // game not needed for this test
+        player = new AIPlayerWrapperDefaultHeuristic(AStarArrayList.class, playerPart); // game not needed for this test
         TileBagable bag = player.getPlayer().getBag();
         for (int i=0; i<HAND_SIZE; ++i) { // TODO make a setup hand or something in player?
             player.grabTile();

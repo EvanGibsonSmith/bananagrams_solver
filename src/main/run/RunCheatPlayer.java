@@ -6,10 +6,13 @@ import src.algorithms.astar.AStarArrayList;
 import src.main.game.Tile;
 import src.main.game.AIplayerwrappers.CheatPlayerWrapper;
 import src.main.game.grids.DefaultGrid;
+import src.main.game.grids.Grid;
 import src.main.game.players.brokers.CheatBroker;
 import src.main.game.players.hand.Hand;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 import src.main.game.players.types.branchplayers.BranchingPlayerSerial;
+import src.main.game.wordssets.DefaultWordsSet;
+import src.main.game.wordssets.NoTwoLetterWordsSet;
 
 public class RunCheatPlayer {
     
@@ -18,7 +21,7 @@ public class RunCheatPlayer {
         Scanner scnr = new Scanner(System.in);
 
         CheatBroker initialCheatBroker = new CheatBroker(new Hand());
-        AbstractBranchingPlayer branchablePlayer = new BranchingPlayerSerial(null, new DefaultGrid(), initialCheatBroker);
+        AbstractBranchingPlayer branchablePlayer = new BranchingPlayerSerial(null, new Grid(new DefaultWordsSet()), initialCheatBroker);
         CheatPlayerWrapper cheatPlayer = new CheatPlayerWrapper(AStarArrayList.class, branchablePlayer);
         System.out.println("Please put in the initial bananagrams characters you drew:");
         Hand initialHand = new Hand(scnr.nextLine().toCharArray());
