@@ -29,7 +29,6 @@ public class BranchingPlayerParallel extends AbstractBranchingPlayer {
         super(game, grid, broker);
     }
 
-    // TODO this a good constructor?
     public BranchingPlayerParallel(Game game, Grid grid, NormalTileBag tileBag) {
         super(game, grid, new HumanBroker(new Hand(), tileBag));
     }

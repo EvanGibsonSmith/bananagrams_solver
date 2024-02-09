@@ -17,7 +17,6 @@ import src.main.game.Location;
 
 public class BranchingPlayerSerial extends AbstractBranchingPlayer {
 
-    // TODO this a good constructor?
     public BranchingPlayerSerial(Game game, Grid grid, NormalTileBag tileBag) {
         super(game, grid, new HumanBroker(new Hand(), tileBag));
     }
@@ -228,6 +227,7 @@ public class BranchingPlayerSerial extends AbstractBranchingPlayer {
         }
         return branchedPlayers;
     }
+    
     @Override
     public Set<BranchingPlayerSerial> branch() {
         if (this.getGrid().isEmpty()) {

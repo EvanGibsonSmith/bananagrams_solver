@@ -55,6 +55,18 @@ public class Grid {
     public HashMap<Location, Tile> getFilledSquares() {
         return this.filledSquares;
     }
+
+    /***
+     * Gets a MultiSet of all of tiles that are being used for this grid.
+     * @return MultiSet<Tile> of tiles played on grid
+     */
+    public MultiSet<Tile> getTiles() {
+        MultiSet<Tile> tileSet = new MultiSet<>();
+        for (Location loc : this.filledSquares.keySet()) {
+            tileSet.add(this.filledSquares.get(loc));
+        }
+        return tileSet;
+    }
   
     /**
      * Gets the top left location bounding the letters
@@ -328,7 +340,11 @@ public class Grid {
     }
 
     /**
-     * Checks if the grid is in a valid state. This includes no floating letters, 
+     * Checks if the grid is in a valid state. This means 
+     * 1. that there are no "floating letters"
+     * 2. every word in the grid is in the dictionary given
+     * 
+     * For more information about those conditions look to those methods
      * @return if the Grid is in a valid configuration
      */
     public Boolean valid() { // this function may be able to be improved by short circuiting with easy conditions to check first

@@ -44,7 +44,7 @@ public class GridArranger implements Copyable<GridArranger>{
     public void setHand(Hand hand) {this.hand = hand;}
 
     /**
-     * If the grid is valid
+     * If the grid is valid, allowing the player to peel or win
      * @return boolean true or false if the grid 
      */
     public boolean gridValid() {
