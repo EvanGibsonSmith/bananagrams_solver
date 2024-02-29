@@ -1,6 +1,10 @@
-This is here to keep me accountable and to not forget it later. 
 
-The idea of this is to create a little GUI of bananagrams, maybe for a player to play, or maybe just to demonstrate the capabilites of a computer in this game. Using a life of words and creating a method for creating valid words (checking all the added words to see if valid etc etc.) we can try and solve this quickly as a computer. Since the solution space is incredibly large and there are many solutions, an A star search (maybe in Java or another language of that sort?) will be best with a heuristic function based on the number of letters left. This can always be an underestimate too because of dumping I think but I'll have to look into it more later.
+This project has the purpose of creating a bananagrams solver using A*. This is still a work in progress at the moment.
+Currently, running src/main/game/run/runCheatPlayer allows you to add the tiles from the game you would be playing in real life and 
+solve it for a solution. There are still some shortcomings in it's capabilites, which could likely be improved with optimizations and better
+heuristics. To quantify this performance better, benchmark tests could be created. While much of the game is implemented, the "game" object that would handle a game between players on the computer is not completed. Because of this, at the moment there is no GUI (except for the outputs to show you what to play within the terminal) or playable game within the code. Of course, all of the critical pieces are there, because they are needed to create a solver.
 
 Dependencies:
-I haven't set up Maven or anything but unit is required for the test files. Otherwise nothing
+    junit5
+
+Since this project only uses standard java libraries, aside from junit5, there is no dependency manager used.
