@@ -3,7 +3,7 @@ package src.main.game.players.types;
 import src.main.game.Location;
 import src.data_structures.MultiSet;
 import src.interfaces.Copyable;
-import src.interfaces.TileBagable;
+import src.interfaces.TileBaggable;
 import src.main.game.Game;
 import src.main.game.Tile;
 import src.main.game.grids.Grid;
@@ -49,7 +49,7 @@ public class Player implements Copyable<Player> {
         return broker.getHand();
     }
 
-    public TileBagable getBag() { 
+    public TileBaggable getBag() { 
         return broker.getBag();
     }
 

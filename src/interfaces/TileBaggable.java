@@ -2,7 +2,7 @@ package src.interfaces;
 
 import src.main.game.Tile;
 
-public interface TileBagable extends Copyable<TileBagable> {
+public interface TileBaggable extends Copyable<TileBaggable> {
     public int size();
 
     public boolean isFull();

@@ -3,7 +3,7 @@ package src.factories;
 import java.lang.reflect.Constructor;
 
 import src.interfaces.Buildable;
-import src.interfaces.TileBagable;
+import src.interfaces.TileBaggable;
 import src.main.game.Game;
 import src.main.game.grids.Grid;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
@@ -13,13 +13,13 @@ public class BranchingPlayerFactory implements Buildable<AbstractBranchingPlayer
     private Constructor<? extends AbstractBranchingPlayer> constructor; 
     private Game game;
     private Grid grid; 
-    private TileBagable bag;
+    private TileBaggable bag;
 
     // TODO build this with prototype design to copy a given object extending from AbstractBranchingPlayer
 
-    public BranchingPlayerFactory(Class<? extends AbstractBranchingPlayer> clazz, Game game, Grid grid, TileBagable bag) throws Exception {
+    public BranchingPlayerFactory(Class<? extends AbstractBranchingPlayer> clazz, Game game, Grid grid, TileBaggable bag) throws Exception {
         // get constructor for the unknown extending class and inject player dependencies
-        constructor = clazz.getDeclaredConstructor(new Class<?>[] {Game.class, Grid.class, TileBagable.class}); 
+        constructor = clazz.getDeclaredConstructor(new Class<?>[] {Game.class, Grid.class, TileBaggable.class}); 
 
         // save injected dependencies for builds TODO should this be a one time build factory or should we just use it that way? Seems like possible overkill
         this.game = game;

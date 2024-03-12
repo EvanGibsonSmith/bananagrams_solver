@@ -4,11 +4,11 @@ package src.main.game.players.bags;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import src.interfaces.TileBagable;
+import src.interfaces.TileBaggable;
 import src.main.game.Tile;
 
 // TODO document
-public class CheatTileBag implements TileBagable{
+public class CheatTileBag implements TileBaggable{
     int capacity = -1;
     Queue<Tile> queue;
     // TODO complete to work with cheatBroker

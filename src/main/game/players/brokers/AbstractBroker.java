@@ -1,16 +1,16 @@
 package src.main.game.players.brokers;
 
 import src.interfaces.Copyable;
-import src.interfaces.TileBagable;
+import src.interfaces.TileBaggable;
 import src.main.game.Tile;
 import src.main.game.players.hand.Hand;
 
 // TODO document
 public abstract class AbstractBroker implements Copyable<AbstractBroker> {
     Hand hand;
-    TileBagable bag;
+    TileBaggable bag;
 
-    public AbstractBroker(Hand hand, TileBagable tileBag) {
+    public AbstractBroker(Hand hand, TileBaggable tileBag) {
         this.hand = hand;
         this.bag = tileBag;
     }
@@ -23,7 +23,7 @@ public abstract class AbstractBroker implements Copyable<AbstractBroker> {
 
     // TODO not sure if the higher broker object should have getBag or if it's too revealing.
     // The only issue with removing it, which is easy to resolve with protected fields is BranchingPlayers using it for copy
-    abstract public TileBagable getBag();
+    abstract public TileBaggable getBag();
 
     abstract public boolean dump(Tile dropTile); 
 

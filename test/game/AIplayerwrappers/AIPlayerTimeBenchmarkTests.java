@@ -3,7 +3,7 @@ package test.game.AIplayerwrappers;
 import org.junit.jupiter.api.Test;
 
 import src.algorithms.astar.AStarArrayList;
-import src.interfaces.TileBagable;
+import src.interfaces.TileBaggable;
 import src.main.game.AIplayerwrappers.AIPlayerWrapper;
 import src.main.game.AIplayerwrappers.AIPlayerWrapperDefaultHeuristic;
 import src.main.game.grids.DefaultGrid;
@@ -26,7 +26,7 @@ public class AIPlayerTimeBenchmarkTests {
         AbstractBroker broker = new HumanBroker(new Hand(), new DefaultTileBag()); // TODO create DefaultHumanBroker?
         AbstractBranchingPlayer playerPart = new BranchingPlayerSerial(null, new DefaultGrid(), broker);
         player = new AIPlayerWrapperDefaultHeuristic(AStarArrayList.class, playerPart); // game not needed for this test
-        TileBagable bag = player.getPlayer().getBag();
+        TileBaggable bag = player.getPlayer().getBag();
         for (int i=0; i<HAND_SIZE; ++i) { // TODO make a setup hand or something in player?
             player.grabTile();
         }

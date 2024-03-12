@@ -2,10 +2,10 @@ package src.main.game.players.bags;
 
 import java.util.Random;
 
-import src.interfaces.TileBagable;
+import src.interfaces.TileBaggable;
 import src.main.game.Tile;
 
-public class NormalTileBag implements TileBagable {
+public class NormalTileBag implements TileBaggable {
     Tile[] tiles;
     int maxSize;
     int nextIndex;
