@@ -40,7 +40,7 @@ public class AStarFactory<T extends Branchable<T>> implements Buildable<Abstract
 
     // TODO fix this up so it actually builds well and takes in build parameters
     public AbstractAStar<T> build() throws Exception {
-        return constructor.newInstance(start, cost, heuristic, isGoal); // TODO fix generics so this can be nicer.
+        return constructor.newInstance(start, cost, heuristic, isGoal); 
     }
 
     public void setStart(T newStart) {start = newStart;}

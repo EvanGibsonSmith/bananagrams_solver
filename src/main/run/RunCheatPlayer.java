@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import src.algorithms.astar.AStarArrayList;
 import src.main.game.Tile;
+import src.main.game.AIplayerwrappers.AIPlayerAStarFunctions;
+import src.main.game.AIplayerwrappers.CheatPlayerManualAStarWrapper;
 import src.main.game.AIplayerwrappers.CheatPlayerWrapper;
 import src.main.game.grids.DefaultGrid;
 import src.main.game.grids.Grid;
@@ -17,12 +19,18 @@ import src.main.game.wordssets.NoTwoLetterWordsSet;
 public class RunCheatPlayer {
     
     public static void main(String[] args) throws Exception{
-        // TODO use scanner to make the cheat player easy to use here with user input
         Scanner scnr = new Scanner(System.in);
 
         CheatBroker initialCheatBroker = new CheatBroker(new Hand());
         AbstractBranchingPlayer branchablePlayer = new BranchingPlayerSerial(null, new Grid(new DefaultWordsSet()), initialCheatBroker);
-        CheatPlayerWrapper cheatPlayer = new CheatPlayerWrapper(AStarArrayList.class, branchablePlayer);
+        CheatPlayerManualAStarWrapper cheatPlayer = new CheatPlayerManualAStarWrapper(
+            AStarArrayList.class, 
+            branchablePlayer,
+            AIPlayerAStarFunctions.handScrabbleCost(),
+            AIPlayerAStarFunctions.handScrabbleHeuristic(),
+            AIPlayerAStarFunctions.emptyHandGoal()
+        );
+        
         System.out.println("Please put in the initial bananagrams characters you drew:");
         Hand initialHand = new Hand(scnr.nextLine().toCharArray());
         initialCheatBroker.setHand(initialHand);

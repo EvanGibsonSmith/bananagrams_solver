@@ -12,7 +12,7 @@ public class AIPlayerWrapperDefaultHeuristic extends AIPlayerWrapper {
         throws Exception {
         super(astarClass, player, 
                 AIPlayerAStarFunctions.handSizeCost(), 
-                AIPlayerAStarFunctions.handSizeHeuristic(), 
+                AIPlayerAStarFunctions.handScrabbleHeuristic(), 
                 AIPlayerAStarFunctions.emptyHandGoal());
     }
 }

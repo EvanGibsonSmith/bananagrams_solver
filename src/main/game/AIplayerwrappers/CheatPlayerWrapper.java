@@ -15,7 +15,6 @@ public class CheatPlayerWrapper extends AIPlayerWrapperDefaultHeuristic {
     }
 
     /*
-     * TODO document
      * The broker can be accessed in this player because
      * the tiles should represent the tiles the tiles the player
      * got in a real life game, so they can control tile flow.

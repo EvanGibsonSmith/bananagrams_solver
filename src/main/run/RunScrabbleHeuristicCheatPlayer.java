@@ -14,7 +14,7 @@ import src.main.game.players.hand.Hand;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 import src.main.game.players.types.branchplayers.BranchingPlayerSerial;
 
-// TODO dry with the pther run cheat player class?
+// TODO this file should not be needed anymore
 public class RunScrabbleHeuristicCheatPlayer {
     
     private static HashMap<Character, Integer> getScrabbleMap() {
@@ -48,10 +48,11 @@ public class RunScrabbleHeuristicCheatPlayer {
         // set heuristic and cost
         Function<AbstractBranchingPlayer, Double> heuristic = (p) -> scrabbleHeuristic(p);
         BiFunction<AbstractBranchingPlayer, AbstractBranchingPlayer, Double> cost = (p, q) -> scrabbleCost(p, q);
+        Function<AbstractBranchingPlayer, Boolean> isGoal = (p) -> p.getHand().isEmpty();
 
         CheatBroker initialCheatBroker = new CheatBroker(new Hand());
         AbstractBranchingPlayer branchablePlayer = new BranchingPlayerSerial(null, new DefaultGrid(), initialCheatBroker);
-        CheatPlayerManualAStarWrapper cheatPlayer = new CheatPlayerManualAStarWrapper(AStarArrayList.class, branchablePlayer, heuristic, cost);
+        CheatPlayerManualAStarWrapper cheatPlayer = new CheatPlayerManualAStarWrapper(AStarArrayList.class, branchablePlayer, cost, heuristic, isGoal);
 
         System.out.println("Please put in the initial bananagrams characters you drew:");
         Hand initialHand = new Hand(scnr.nextLine().toCharArray());
