@@ -72,6 +72,8 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
         endIndex = null;
     }
 
+    public boolean solved() {return endIndex!=null;}
+
     public HashMap<Integer, Integer> getFrom() {return this.from;}
 
     public int visitedSize() {

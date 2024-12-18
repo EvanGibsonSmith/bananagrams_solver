@@ -70,6 +70,8 @@ public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
         }
     }
 
+    public boolean solved() {return endIndex!=null;}
+    
     public ArrayList<Integer> getFrom() {return this.from;}
 
     public int visitedSize() {
