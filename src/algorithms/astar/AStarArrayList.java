@@ -20,7 +20,6 @@ public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
     ArrayList<Double> costTo = new ArrayList<>(); // distance for each grid to start location (index 0)
     IndexMinPQ<Double> pq; // will be fixed size in constructor if size, otherwise dynamic
     
-    // TODO fix this yucky object getting passed and then cast the bug is in finding the constructor in the factory if you change it to T
     public AStarArrayList(Object start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
         super((T) start, cost, heuristic, isGoal);
         this.pq = new DynamicIndexMinPQ<>();
@@ -48,7 +47,7 @@ public class AStarArrayList<T extends Branchable<T>> extends AbstractAStar<T> {
             }
             visited.add(currObj);
         }
-        endIndex = currIdx;
+        endIndex = null;
     }
 
     protected void relax(int currIdx, T currObj, T branchObj, BiFunction<T, T, Double> cost, Function<T, Double> heuristic) {

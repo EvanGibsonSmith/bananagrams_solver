@@ -21,8 +21,7 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
     HashMap<Integer, Double> costTo = new HashMap<>(); // distance for each grid to start location (index 0)
     IndexMinPQ<Double> pq; // will be fixed size in constructor if size given
 
-    // TODO fix this yucky fix making start Object to make it work in factory finding construtor
-    public AStarHashSets(Object start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
+    public AStarHashSets(T start, BiFunction<T, T, Double> cost, Function<T, Double> heuristic, Function<T, Boolean> isGoal) {
         super((T) start, cost, heuristic, isGoal);
         this.pq = new DynamicIndexMinPQ<>();
     }
@@ -70,7 +69,7 @@ public class AStarHashSets<T extends Branchable<T>> extends AbstractAStar<T> {
             visited.add(currObj); // even if already visited, we can add this index
             currIdx = pq.delMin();
         }
-        endIndex = currIdx;
+        endIndex = null;
     }
 
     public HashMap<Integer, Integer> getFrom() {return this.from;}

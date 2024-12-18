@@ -26,6 +26,7 @@ public class CheatBroker extends AbstractBroker {
     public void setHand(Hand hand) {this.hand=hand;}
 
     public boolean queueEmpty() {return bag.isEmpty();}
+    
     /**
      * TODO DOCUMENT
      */

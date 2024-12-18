@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import src.algorithms.astar.AStarHashSets;
 import test.helperobjects.Maze;
 
+// Used to test the A* implementation 
 public class AStarMaze {
 
     @Test
@@ -34,7 +35,7 @@ public class AStarMaze {
         //m.grid[3][4]=true; m.grid[3][3]=true;
         //m.grid[4][4]=true;
         BiFunction<Maze, Maze, Double> cost = (m1, m2) -> (double) (m2.moves - m1.moves);
-        Function<Maze, Double> heuristic = (m1) -> (double) (Math.abs(m1.playerRow-m1.rows+1) + Math.abs(m1.playerColumn));
+        Function<Maze, Double> heuristic = (m1) -> (double) (Math.abs(m1.playerRow-m1.rows+1) + Math.abs(m1.playerColumn-m1.columns+1)); // manhattan distance
         Function<Maze, Boolean> isGoal = (ma) -> ((ma.playerRow==ma.rows-1) && (ma.playerColumn==ma.columns-1));
         AStarHashSets<Maze> astar = new AStarHashSets<Maze>(m, cost, heuristic, isGoal);
         astar.compute();

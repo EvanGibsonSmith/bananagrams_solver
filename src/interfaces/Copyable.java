@@ -1,5 +1,5 @@
 package src.interfaces;
 
-public interface Copyable<E> { // TODO made this too broad
+public interface Copyable<E> { 
     E copy();
 }
