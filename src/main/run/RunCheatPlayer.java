@@ -3,6 +3,7 @@ package src.main.run;
 import java.util.Scanner;
 
 import src.algorithms.astar.AStarArrayList;
+import src.algorithms.astar.AStarArrayListStats;
 import src.main.game.Tile;
 import src.main.game.AIplayerwrappers.AIPlayerAStarFunctions;
 import src.main.game.AIplayerwrappers.CheatPlayerManualAStarWrapper;
@@ -13,6 +14,7 @@ import src.main.game.players.brokers.CheatBroker;
 import src.main.game.players.hand.Hand;
 import src.main.game.players.types.branchplayers.AbstractBranchingPlayer;
 import src.main.game.players.types.branchplayers.BranchingPlayerSerial;
+import src.main.game.players.types.branchplayers.ForwardBranchingPlayerSerial;
 import src.main.game.wordssets.DefaultWordsSet;
 import src.main.game.wordssets.NoTwoLetterWordsSet;
 
@@ -22,11 +24,11 @@ public class RunCheatPlayer {
         Scanner scnr = new Scanner(System.in);
 
         CheatBroker initialCheatBroker = new CheatBroker(new Hand());
-        AbstractBranchingPlayer branchablePlayer = new BranchingPlayerSerial(null, new Grid(new DefaultWordsSet()), initialCheatBroker);
+        AbstractBranchingPlayer branchablePlayer = new ForwardBranchingPlayerSerial(null, new Grid(new DefaultWordsSet()), initialCheatBroker);
         CheatPlayerManualAStarWrapper cheatPlayer = new CheatPlayerManualAStarWrapper(
-            AStarArrayList.class, 
+            AStarArrayListStats.class, 
             branchablePlayer,
-            (a1, a2) -> 0.0, // cost returning 0 is greedy heuristic
+            (a1, a2) -> 0.0, // cost returning 0 is greedy best first search
             AIPlayerAStarFunctions.handScrabbleHeuristic(),
             AIPlayerAStarFunctions.emptyHandGoal()
         );
@@ -45,6 +47,7 @@ public class RunCheatPlayer {
             // display the result now that player has updated to solution
             System.out.println("Hand: " + cheatPlayer.getBroker().getHand());
             System.out.println("Grid: \n" + cheatPlayer.getPlayer().getGrid());
+            System.out.println("Effective Branching Factor: " + ((AStarArrayListStats) cheatPlayer.getAStar()).getApproximateEffectiveBranchingFactor());
 
             System.out.println("Enter any new tiles added to hand");
             char[] newChars = scnr.nextLine().toCharArray();
