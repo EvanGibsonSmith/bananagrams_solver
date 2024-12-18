@@ -26,7 +26,7 @@ public class RunCheatPlayer {
         CheatPlayerManualAStarWrapper cheatPlayer = new CheatPlayerManualAStarWrapper(
             AStarArrayList.class, 
             branchablePlayer,
-            AIPlayerAStarFunctions.handScrabbleCost(),
+            (a1, a2) -> 0.0, // cost returning 0 is greedy heuristic
             AIPlayerAStarFunctions.handScrabbleHeuristic(),
             AIPlayerAStarFunctions.emptyHandGoal()
         );
