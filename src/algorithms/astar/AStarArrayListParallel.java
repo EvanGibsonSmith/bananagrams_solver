@@ -28,7 +28,7 @@ public class AStarArrayListParallel<T extends Branchable<T>> extends AStarArrayL
         from.add(-1); // only the root is from -1
 
         int currIdx = 0; // start at first object
-        while (!pq.isEmpty()) { // TODO make this parallelized LATER
+        while (!pq.isEmpty()) {
             currIdx = pq.delMin();
             T currObj = objects.get(currIdx);
             if (isGoal.apply(currObj)) {endIndex=currIdx; return;} // if goal reached we are done
@@ -37,6 +37,6 @@ public class AStarArrayListParallel<T extends Branchable<T>> extends AStarArrayL
             }
             visited.add(currObj);
         }
-        endIndex = currIdx;
+        endIndex = null;
     }
 }
